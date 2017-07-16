@@ -35,6 +35,13 @@ class Persona
      */
     private $apellido;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="dni", type="bigint", unique=true)
+     */
+    private $dni;
+
 
     /**
      * Get id
@@ -92,6 +99,30 @@ class Persona
     public function getApellido()
     {
         return $this->apellido;
+    }
+
+    /**
+     * Set dni
+     *
+     * @param integer $dni
+     *
+     * @return Persona
+     */
+    public function setDni($dni)
+    {
+        $this->dni = $dni;
+
+        return $this;
+    }
+
+    /**
+     * Get dni
+     *
+     * @return int
+     */
+    public function getDni()
+    {
+        return $this->dni;
     }
 }
 
