@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Titulars list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Dni</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for titular in titulars %}
+            <tr>
+                <td><a href="{{ path('titular_show', { 'id': titular.id }) }}">{{ titular.id }}</a></td>
+                <td>{{ titular.nombre }}</td>
+                <td>{{ titular.apellido }}</td>
+                <td>{{ titular.dni }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('titular_show', { 'id': titular.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('titular_edit', { 'id': titular.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('titular_new') }}">Create a new titular</a>
+        </li>
+    </ul>
+{% endblock %}

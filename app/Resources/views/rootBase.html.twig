@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>{% block title %}SysGA{% endblock %}</title>
+
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link href="{{ asset('lib/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="{{ asset('lib/materialize/css/materialize.min.css') }}"  media="screen,projection"/>
+		<link type="text/css" rel="stylesheet" href="{{ asset('lib/animate-css/animate.css') }}" />
+		<link type="text/css" rel="stylesheet" href="{{ asset('css/base.css') }}" />
+		{% block stylesheets %}{% endblock %}
+		<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	</head>
+
+	<header>
+		<div class="navbar-fixed">
+		   <nav>
+				<div class="nav-wrapper">
+					<a href="{{ path('homepage') }}" class="brand-logo">{# <i class="material-icons">swap_vertical_circle</i> #}SysGA</a>
+					<a href="#" data-activates="mobile-sideNav" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
+					<!-- <ul class="right hide-on-med-and-down">
+						<li><a href="#" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Mapa de Semáforos"><i class="material-icons">map</i></a></li>
+						<li><a href="#" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Semáforos Registrados"><i class="material-icons">traffic</i></a></li>
+						<li><a href="#" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Calles más Transitadas"><i class="material-icons">format_list_bulleted</i></a></li>
+					</ul> -->
+				</div>
+			</nav>
+		</div>
+	  <ul class="side-nav" id="mobile-sideNav">
+			<li><a href="{{ path('titular_index') }}"><i class="material-icons">map</i> Titulares</a></li>
+			<li><a href="{{ path('concesionaria_index') }}"><i class="material-icons">traffic</i> Concesionarias</a></li>
+			<li><a href="{{ path('registrodelautomotor_index') }}"><i class="material-icons">format_list_bulleted</i> Registros del automotor</a></li>
+			<li><a href="{{ path('tramite_index') }}"><i class="material-icons">format_list_bulleted</i> Tramites</a></li>
+			<li><a href="{{ path('movimiento_index') }}"><i class="material-icons">format_list_bulleted</i> Movimientos</a></li>
+		</ul>
+	</header>
+
+	<body>
+		<div class="body-wrapper fadeInUp animated">
+			{% block defaultBody %}{% endblock %}
+		</div>
+
+		<script type="text/javascript" src="{{ asset('lib/jquery/jquery.min.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('lib/materialize/js/materialize.min.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('js/sidebar.js') }}"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $(".button-collapse").sideNav();
+            });
+        </script>
+		{% block javascripts %}{% endblock %}
+	</body>
+</html>

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Registrodelautomotors list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for registroDelAutomotor in registroDelAutomotors %}
+            <tr>
+                <td><a href="{{ path('registrodelautomotor_show', { 'id': registroDelAutomotor.id }) }}">{{ registroDelAutomotor.id }}</a></td>
+                <td>{{ registroDelAutomotor.nombre }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('registrodelautomotor_show', { 'id': registroDelAutomotor.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('registrodelautomotor_edit', { 'id': registroDelAutomotor.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('registrodelautomotor_new') }}">Create a new registroDelAutomotor</a>
+        </li>
+    </ul>
+{% endblock %}

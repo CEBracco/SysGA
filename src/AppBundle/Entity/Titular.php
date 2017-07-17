@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Persona
+ * Titular
  *
- * @ORM\Table(name="persona")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PersonaRepository")
+ * @ORM\Table(name="titular")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TitularRepository")
  */
-class Persona
+class Titular
 {
     /**
      * @var int
@@ -58,7 +58,7 @@ class Persona
      *
      * @param string $nombre
      *
-     * @return Persona
+     * @return Titular
      */
     public function setNombre($nombre)
     {
@@ -82,7 +82,7 @@ class Persona
      *
      * @param string $apellido
      *
-     * @return Persona
+     * @return Titular
      */
     public function setApellido($apellido)
     {
@@ -106,7 +106,7 @@ class Persona
      *
      * @param integer $dni
      *
-     * @return Persona
+     * @return Titular
      */
     public function setDni($dni)
     {
@@ -125,4 +125,3 @@ class Persona
         return $this->dni;
     }
 }
-

@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Tramites list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Gastoarancel</th>
+                <th>Impuestospatente</th>
+                <th>Sellados</th>
+                <th>Honorarios</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tramite in tramites %}
+            <tr>
+                <td><a href="{{ path('tramite_show', { 'id': tramite.id }) }}">{{ tramite.id }}</a></td>
+                <td>{{ tramite.gastoArancel }}</td>
+                <td>{{ tramite.impuestosPatente }}</td>
+                <td>{{ tramite.sellados }}</td>
+                <td>{{ tramite.honorarios }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('tramite_show', { 'id': tramite.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('tramite_edit', { 'id': tramite.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('tramite_new') }}">Create a new tramite</a>
+        </li>
+    </ul>
+{% endblock %}
