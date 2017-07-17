@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if edit is not defined or edit == false %}
+        <h4>Nueva Concesionaria</h4>
+    {% else %}
+        <h4>Editar Concesionaria</h4>
+    {% endif %}
+
+    {{ form_start(form) }}
+
+        <div class="row">
+            <div class="col s12">
+                <div class="input-field">
+                    {{ form_widget(form.nombre) }}
+                    {{ form_label(form.nombre) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="center-align">
+            <button class="btn waves-effect waves-light" type="submit"><i class="material-icons left">save</i>Guardar</button>
+            <a href="{{ path('concesionaria_index') }}"><button type="button" class="btn-flat waves-effect waves-light">Cancelar</button></a>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

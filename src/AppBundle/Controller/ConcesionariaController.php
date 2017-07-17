@@ -51,7 +51,7 @@ class ConcesionariaController extends Controller
             return $this->redirectToRoute('concesionaria_show', array('id' => $concesionaria->getId()));
         }
 
-        return $this->render('concesionaria/new.html.twig', array(
+        return $this->render('concesionaria/form.html.twig', array(
             'concesionaria' => $concesionaria,
             'form' => $form->createView(),
         ));
@@ -65,11 +65,8 @@ class ConcesionariaController extends Controller
      */
     public function showAction(Concesionaria $concesionaria)
     {
-        $deleteForm = $this->createDeleteForm($concesionaria);
-
         return $this->render('concesionaria/show.html.twig', array(
             'concesionaria' => $concesionaria,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -81,56 +78,34 @@ class ConcesionariaController extends Controller
      */
     public function editAction(Request $request, Concesionaria $concesionaria)
     {
-        $deleteForm = $this->createDeleteForm($concesionaria);
         $editForm = $this->createForm('AppBundle\Form\ConcesionariaType', $concesionaria);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('concesionaria_edit', array('id' => $concesionaria->getId()));
+            return $this->redirectToRoute('concesionaria_index', array('id' => $concesionaria->getId()));
         }
 
-        return $this->render('concesionaria/edit.html.twig', array(
+        return $this->render('concesionaria/form.html.twig', array(
             'concesionaria' => $concesionaria,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form' => $editForm->createView(),
+            'edit' => true,
         ));
     }
 
     /**
      * Deletes a concesionaria entity.
      *
-     * @Route("/{id}", name="concesionaria_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="concesionaria_delete")
+     * @Method("GET")
      */
     public function deleteAction(Request $request, Concesionaria $concesionaria)
     {
-        $form = $this->createDeleteForm($concesionaria);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($concesionaria);
-            $em->flush();
-        }
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($concesionaria);
+        $em->flush();
 
         return $this->redirectToRoute('concesionaria_index');
-    }
-
-    /**
-     * Creates a form to delete a concesionaria entity.
-     *
-     * @param Concesionaria $concesionaria The concesionaria entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Concesionaria $concesionaria)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('concesionaria_delete', array('id' => $concesionaria->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
     }
 }

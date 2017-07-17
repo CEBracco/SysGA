@@ -1,43 +1,35 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Concesionarias list</h1>
+    <h4>Concesionarias</h4>
 
-    <table>
+    <table class="responsive-table striped highlight">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nombre</th>
-                <th>Saldodepositado</th>
-                <th>Saldoenregistro</th>
-                <th>Actions</th>
+                <th>Saldo Depositado</th>
+                <th>Saldo en Registro</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-        {% for concesionarium in concesionarias %}
+        {% for concesionaria in concesionarias %}
             <tr>
-                <td><a href="{{ path('concesionaria_show', { 'id': concesionarium.id }) }}">{{ concesionarium.id }}</a></td>
-                <td>{{ concesionarium.nombre }}</td>
-                <td>{{ concesionarium.saldoDepositado }}</td>
-                <td>{{ concesionarium.saldoEnRegistro }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('concesionaria_show', { 'id': concesionarium.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('concesionaria_edit', { 'id': concesionarium.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                <td>{{ concesionaria.nombre }}</td>
+                <td>${{ concesionaria.saldoDepositado }}</td>
+                <td>${{ concesionaria.saldoEnRegistro }}</td>
+                <td class="fit">
+                    <a href="{{ path('concesionaria_edit', { 'id': concesionaria.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
+                    <a href="{{ path('concesionaria_delete', { 'id': concesionaria.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('concesionaria_new') }}">Create a new concesionarium</a>
-        </li>
-    </ul>
+    <div class="fixed-action-btn">
+        <a href="{{ path('concesionaria_new') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
+            <i class="large material-icons">add</i>
+        </a>
+    </div>
 {% endblock %}

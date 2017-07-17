@@ -36,3 +36,17 @@ table.highlight > tbody > tr:hover {
 .collapse{
 	display: none;
 }
+
+.row .col{
+    padding: 0px;
+}
+
+.btn.no-lateral-padding{
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.fit{
+    width:1%;
+    white-space:nowrap;
+}

@@ -43,6 +43,11 @@ class Concesionaria
     private $saldoEnRegistro;
 
 
+    function __construct() {
+        $this->saldoDepositado=0;
+        $this->saldoEnRegistro=0;
+    }
+
     /**
      * Get id
      *
@@ -125,4 +130,3 @@ class Concesionaria
         return $this->saldoEnRegistro;
     }
 }
-

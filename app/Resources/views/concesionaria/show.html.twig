@@ -1,25 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Concesionarium</h1>
+    <h1>Concesionaria</h1>
 
     <table>
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ concesionarium.id }}</td>
+                <td>{{ concesionaria.id }}</td>
             </tr>
             <tr>
                 <th>Nombre</th>
-                <td>{{ concesionarium.nombre }}</td>
+                <td>{{ concesionaria.nombre }}</td>
             </tr>
             <tr>
                 <th>Saldodepositado</th>
-                <td>{{ concesionarium.saldoDepositado }}</td>
+                <td>{{ concesionaria.saldoDepositado }}</td>
             </tr>
             <tr>
                 <th>Saldoenregistro</th>
-                <td>{{ concesionarium.saldoEnRegistro }}</td>
+                <td>{{ concesionaria.saldoEnRegistro }}</td>
             </tr>
         </tbody>
     </table>
@@ -29,7 +29,7 @@
             <a href="{{ path('concesionaria_index') }}">Back to the list</a>
         </li>
         <li>
-            <a href="{{ path('concesionaria_edit', { 'id': concesionarium.id }) }}">Edit</a>
+            <a href="{{ path('concesionaria_edit', { 'id': concesionaria.id }) }}">Edit</a>
         </li>
         <li>
             {{ form_start(delete_form) }}
