@@ -21,6 +21,7 @@ class MovimientoType extends AbstractType
                         'widget' => 'single_text',
                         'html5' => true,
                         'attr' => ['class' => 'datepicker'],
+                        'format' => 'dd-MM-yyyy',
                 ))
                 ->add('tipo', ChoiceType::class, array(
                         'choices' => array(

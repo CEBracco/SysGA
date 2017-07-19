@@ -5,7 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Movimiento;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Movimiento controller.
@@ -44,11 +45,12 @@ class MovimientoController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            var_dump($movimiento);
             $em = $this->getDoctrine()->getManager();
             $em->persist($movimiento);
             $em->flush();
 
-            return $this->redirectToRoute('movimiento_show', array('id' => $movimiento->getId()));
+            return $this->redirectToRoute('movimiento_index');
         }
 
         return $this->render('movimiento/form.html.twig', array(
@@ -84,7 +86,7 @@ class MovimientoController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('movimiento_edit', array('id' => $movimiento->getId()));
+            return $this->redirectToRoute('movimiento_index');
         }
 
         return $this->render('movimiento/form.html.twig', array(
