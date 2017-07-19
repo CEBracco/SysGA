@@ -1,43 +1,35 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Movimientos list</h1>
+    <h4>Movimientos</h4>
 
-    <table>
+    <table class="responsive-table striped highlight">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Monto</th>
                 <th>Fecha</th>
                 <th>Tipo</th>
-                <th>Actions</th>
+                <th>Monto</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
         {% for movimiento in movimientos %}
             <tr>
-                <td><a href="{{ path('movimiento_show', { 'id': movimiento.id }) }}">{{ movimiento.id }}</a></td>
-                <td>{{ movimiento.monto }}</td>
-                <td>{% if movimiento.fecha %}{{ movimiento.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if movimiento.fecha %}{{ movimiento.fecha|date('d/m/Y') }}{% endif %}</td>
                 <td>{{ movimiento.tipo }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('movimiento_show', { 'id': movimiento.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('movimiento_edit', { 'id': movimiento.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                <td>${{ movimiento.monto }}</td>
+                <td class="fit">
+                    <a href="{{ path('movimiento_edit', { 'id': movimiento.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
+                    <a href="{{ path('movimiento_delete', { 'id': movimiento.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('movimiento_new') }}">Create a new movimiento</a>
-        </li>
-    </ul>
+    <div class="fixed-action-btn">
+        <a href="{{ path('movimiento_new') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
+            <i class="large material-icons">add</i>
+        </a>
+    </div>
 {% endblock %}

@@ -6,6 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
 class MovimientoType extends AbstractType
 {
     /**
@@ -13,9 +16,21 @@ class MovimientoType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('monto')->add('fecha')->add('tipo');
+        $builder->add('monto')
+                ->add('fecha',DateType::class,array(
+                        'widget' => 'single_text',
+                        'html5' => true,
+                        'attr' => ['class' => 'datepicker'],
+                ))
+                ->add('tipo', ChoiceType::class, array(
+                        'choices' => array(
+                            'Entrada' => 'Entrada',
+                            'Salida' => 'Salida',
+                            'Deposito en registro' => 'Deposito en registro',
+                        )
+                ));
     }
-    
+
     /**
      * {@inheritdoc}
      */

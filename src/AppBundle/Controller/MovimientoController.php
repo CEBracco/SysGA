@@ -51,7 +51,7 @@ class MovimientoController extends Controller
             return $this->redirectToRoute('movimiento_show', array('id' => $movimiento->getId()));
         }
 
-        return $this->render('movimiento/new.html.twig', array(
+        return $this->render('movimiento/form.html.twig', array(
             'movimiento' => $movimiento,
             'form' => $form->createView(),
         ));
@@ -65,11 +65,8 @@ class MovimientoController extends Controller
      */
     public function showAction(Movimiento $movimiento)
     {
-        $deleteForm = $this->createDeleteForm($movimiento);
-
         return $this->render('movimiento/show.html.twig', array(
             'movimiento' => $movimiento,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -81,7 +78,6 @@ class MovimientoController extends Controller
      */
     public function editAction(Request $request, Movimiento $movimiento)
     {
-        $deleteForm = $this->createDeleteForm($movimiento);
         $editForm = $this->createForm('AppBundle\Form\MovimientoType', $movimiento);
         $editForm->handleRequest($request);
 
@@ -91,46 +87,26 @@ class MovimientoController extends Controller
             return $this->redirectToRoute('movimiento_edit', array('id' => $movimiento->getId()));
         }
 
-        return $this->render('movimiento/edit.html.twig', array(
+        return $this->render('movimiento/form.html.twig', array(
             'movimiento' => $movimiento,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form' => $editForm->createView(),
+            'edit' => true,
         ));
     }
 
     /**
      * Deletes a movimiento entity.
      *
-     * @Route("/{id}", name="movimiento_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="movimiento_delete")
+     * @Method("GET")
      */
     public function deleteAction(Request $request, Movimiento $movimiento)
     {
-        $form = $this->createDeleteForm($movimiento);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($movimiento);
-            $em->flush();
-        }
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($movimiento);
+        $em->flush();
 
         return $this->redirectToRoute('movimiento_index');
-    }
-
-    /**
-     * Creates a form to delete a movimiento entity.
-     *
-     * @param Movimiento $movimiento The movimiento entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Movimiento $movimiento)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('movimiento_delete', array('id' => $movimiento->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
     }
 }

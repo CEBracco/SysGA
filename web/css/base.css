@@ -37,8 +37,12 @@ table.highlight > tbody > tr:hover {
 	display: none;
 }
 
-.row .col{
+/*.row .col{
     padding: 0px;
+}*/
+
+h1,h2,h3,h4,h5 {
+    padding: 0 .75rem;
 }
 
 .btn.no-lateral-padding{
