@@ -18,8 +18,12 @@
 		<div class="navbar-fixed">
 		   <nav>
 				<div class="nav-wrapper">
-					<a href="{{ path('homepage') }}" class="brand-logo right">{# <i class="material-icons">swap_vertical_circle</i> #}SysGA</a>
-					<a href="#" data-activates="mobile-sideNav" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
+					<a href="{{ path('homepage') }}" class="brand-logo right">SysGA <i class="material-icons right">widgets</i></a>
+
+					{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+						<a href="#" data-activates="mobile-sideNav" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
+					{% endif %}
+
 					<!-- <ul class="right hide-on-med-and-down">
 						<li><a href="#" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Mapa de Semáforos"><i class="material-icons">map</i></a></li>
 						<li><a href="#" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Semáforos Registrados"><i class="material-icons">traffic</i></a></li>
@@ -28,13 +32,27 @@
 				</div>
 			</nav>
 		</div>
-	  <ul class="side-nav" id="mobile-sideNav">
-			<li><a href="{{ path('titular_index') }}"><i class="material-icons">map</i> Titulares</a></li>
-			<li><a href="{{ path('concesionaria_index') }}"><i class="material-icons">traffic</i> Concesionarias</a></li>
-			<li><a href="{{ path('registrodelautomotor_index') }}"><i class="material-icons">format_list_bulleted</i> Registros del automotor</a></li>
-			<li><a href="{{ path('tramite_index') }}"><i class="material-icons">format_list_bulleted</i> Tramites</a></li>
-			<li><a href="{{ path('movimiento_index') }}"><i class="material-icons">format_list_bulleted</i> Movimientos</a></li>
-		</ul>
+
+		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+		  	<ul class="side-nav" id="mobile-sideNav">
+			  <li><div class="user-view">
+					<div class="background">
+					  <img src="{{ asset('img/profile_background.jpg') }}">
+					</div>
+					<a href="#!user"><img class="circle" src="{{ asset('img/default_user.jpg') }}"></a>
+					<a href="#!name"><span class="white-text name">{{ app.user.nombre }} {{ app.user.apellido }}</span></a>
+					<a href="#!email"><span class="white-text email">{{ app.user.getRolAImprimir() }}</span></a>
+				</div></li>
+				<li><a href="{{ path('concesionaria_index') }}"><i class="material-icons">store</i> Concesionarias</a></li>
+				<li><a href="{{ path('movimiento_index') }}"><i class="material-icons">local_atm</i> Movimientos</a></li>
+				<li><a href="{{ path('registrodelautomotor_index') }}"><i class="material-icons">account_balance</i> Registros del automotor</a></li>
+				<li><a href="{{ path('titular_index') }}"><i class="material-icons">recent_actors</i> Titulares</a></li>
+				<li><a href="{{ path('tramite_index') }}"><i class="material-icons">assignment</i> Tramites</a></li>
+				<li><a href="{{ path('fos_user_registration_register') }}"><i class="material-icons">supervisor_account</i> Crear Usuario</a></li>
+				<li><div class="divider"></div></li>
+				<li><a href="{{ path('fos_user_security_logout') }}"><i class="material-icons">exit_to_app</i> Cerrar Sesión</a></li>
+			</ul>
+		{% endif %}
 	</header>
 
 	<body>
@@ -42,9 +60,11 @@
 			{% block defaultBody %}{% endblock %}
 		</div>
 
+		{% block modals %}{% endblock %}
+
 		<script type="text/javascript" src="{{ asset('lib/jquery/jquery.min.js') }}"></script>
 		<script type="text/javascript" src="{{ asset('lib/materialize/js/materialize.min.js') }}"></script>
-		<script type="text/javascript" src="{{ asset('js/sidebar.js') }}"></script>
+		<!-- <script type="text/javascript" src="{{ asset('js/sidebar.js') }}"></script> -->
 
         <script type="text/javascript">
             $(document).ready(function(){

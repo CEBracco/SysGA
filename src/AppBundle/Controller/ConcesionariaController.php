@@ -48,7 +48,7 @@ class ConcesionariaController extends Controller
             $em->persist($concesionaria);
             $em->flush();
 
-            return $this->redirectToRoute('concesionaria_show', array('id' => $concesionaria->getId()));
+            return $this->redirectToRoute('concesionaria_index');
         }
 
         return $this->render('concesionaria/form.html.twig', array(
@@ -84,7 +84,7 @@ class ConcesionariaController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('concesionaria_index', array('id' => $concesionaria->getId()));
+            return $this->redirectToRoute('concesionaria_index');
         }
 
         return $this->render('concesionaria/form.html.twig', array(

@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+{% if edit is not defined or edit == false %}
+    <h4 class="title">Nuevo Trámite</h4>
+{% else %}
+    <h4 class="title">Editar Trámite</h4>
+{% endif %}
+
+{{ form_start(form) }}
+
+    <div class="row">
+        <div class="col m12">
+            <div class="input-field">
+                {{ form_widget(form.fecha) }}
+                {{ form_label(form.fecha) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col m3">
+            <div class="input-field">
+                {{ form_widget(form.gastoArancel) }}
+                {{ form_label(form.gastoArancel) }}
+            </div>
+        </div>
+
+        <div class="col m3">
+            <div class="input-field">
+                {{ form_widget(form.impuestosPatente) }}
+                {{ form_label(form.impuestosPatente) }}
+            </div>
+        </div>
+
+        <div class="col m3">
+            <div class="input-field">
+                {{ form_widget(form.sellados) }}
+                {{ form_label(form.sellados) }}
+            </div>
+        </div>
+
+        <div class="col m3">
+            <div class="input-field">
+                {{ form_widget(form.honorarios) }}
+                {{ form_label(form.honorarios) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="center-align">
+        <button class="btn waves-effect waves-light" type="submit"><i class="material-icons left">save</i>Guardar</button>
+        <a href="{{ path('tramite_index') }}"><button type="button" class="btn-flat waves-effect waves-light">Cancelar</button></a>
+    </div>
+{{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    $(document).ready(function() {
+        $('.datepicker').pickadate({
+            labelMonthNext: 'Mes Siguiente',
+            labelMonthPrev: 'Mes Anterior',
+            labelMonthSelect: 'Seleccione un mes',
+            labelYearSelect: 'Seleccione un año',
+            monthsFull: [ 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembrr', 'Octubre', 'Noviembre', 'Diciembre' ],
+            monthsShort: [ 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic' ],
+            weekdaysFull: [ 'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado' ],
+            weekdaysShort: [ 'Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb' ],
+            weekdaysLetter: [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
+            today: 'Hoy',
+            clear: 'Limpiar',
+            close: 'Cerrar',
+            selectMonths: true,
+            selectYears: 15,
+            format: 'dd/mm/yyyy',
+            onStart: function (){
+                var date = new Date();
+                this.set('select', [date.getFullYear(), date.getMonth() + 1, date.getDate()]);
+            }
+        });
+        $('select').material_select();
+    });
+</script>
+{% endblock %}

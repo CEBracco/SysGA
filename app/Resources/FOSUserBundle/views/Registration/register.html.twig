@@ -1,0 +1,75 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% block fos_user_content %}
+<h4>Nuevo Usuario</h4>
+
+{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+
+    <div class="row">
+        <div class="col m6">
+            <div class="input-field">
+                {{ form_widget(form.nombre) }}
+                {{ form_label(form.nombre) }}
+            </div>
+        </div>
+        <div class="col m6">
+            <div class="input-field">
+                {{ form_widget(form.apellido) }}
+                {{ form_label(form.apellido) }}
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col m6">
+            <div class="input-field">
+                {{ form_widget(form.username) }}
+                {{ form_label(form.username) }}
+            </div>
+        </div>
+        <div class="col m6">
+            <div class="input-field">
+                {{ form_widget(form.email) }}
+                {{ form_label(form.email) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <div class="input-field">
+                {{ form_widget(form.rol) }}
+                {{ form_label(form.rol) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col m6">
+            <div class="input-field">
+                {{ form_widget(form.plainPassword.first) }}
+                {{ form_label(form.plainPassword.first) }}
+            </div>
+        </div>
+        <div class="col m6">
+            <div class="input-field">
+                {{ form_widget(form.plainPassword.second) }}
+                {{ form_label(form.plainPassword.second) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="center-align">
+        <input class="btn waves-effect waves-light" type="submit" id="_submit" name="_submit" value="Enviar" />
+    </div>
+{{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    $(document).ready(function() {
+        $('select').material_select();
+    });
+</script>
+{% endblock %}

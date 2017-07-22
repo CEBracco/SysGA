@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block defaultBody %}
+<div class="row">
+    <div class="col s8 offset-s2">
+        <div class="card-panel center-align">
+			<h4>{{ title }}</h4>
+			<br/>
+			<strong>{{ msj }}</strong>
+			<br/>
+			<br/>
+
+			{% for button in buttons %}
+				<a class="btn {{ button.class }}" href="{{ button.path }}" style="margin-right: 15px;">{{ button.text }}</a>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}

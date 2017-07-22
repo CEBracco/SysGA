@@ -49,6 +49,27 @@ class Tramite
      */
     private $honorarios;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha", type="datetime")
+     */
+    private $fecha;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="estado", type="string", length=255)
+     */
+    private $estado;
+
+    function __construct() {
+        $this->gastoArancel=0;
+        $this->impuestosPatente=0;
+        $this->sellados=0;
+        $this->honorarios=0;
+        $this->estado="esperando";
+    }
 
     /**
      * Get id
@@ -155,5 +176,52 @@ class Tramite
     {
         return $this->honorarios;
     }
-}
 
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     *
+     * @return Movimiento
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param string $estado
+     *
+     * @return Tramite
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+}

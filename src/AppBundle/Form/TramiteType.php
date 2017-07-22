@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+
 class TramiteType extends AbstractType
 {
     /**
@@ -13,9 +15,27 @@ class TramiteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('gastoArancel')->add('impuestosPatente')->add('sellados')->add('honorarios');
+        $builder
+            ->add('gastoArancel',null,array(
+                    'required'   => false
+            ))
+            ->add('impuestosPatente',null,array(
+                    'required'   => false
+            ))
+            ->add('sellados',null,array(
+                    'required'   => false
+            ))
+            ->add('honorarios',null,array(
+                    'required'   => false
+            ))
+            ->add('fecha',DateType::class,array(
+                    'widget' => 'single_text',
+                    'html5' => true,
+                    'attr' => ['class' => 'datepicker'],
+                    'format' => 'dd-MM-yyyy',
+            ));
     }
-    
+
     /**
      * {@inheritdoc}
      */

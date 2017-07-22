@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Tramite;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Tramite controller.
@@ -48,10 +50,10 @@ class TramiteController extends Controller
             $em->persist($tramite);
             $em->flush();
 
-            return $this->redirectToRoute('tramite_show', array('id' => $tramite->getId()));
+            return $this->redirectToRoute('tramite_index');
         }
 
-        return $this->render('tramite/new.html.twig', array(
+        return $this->render('tramite/form.html.twig', array(
             'tramite' => $tramite,
             'form' => $form->createView(),
         ));
@@ -69,7 +71,6 @@ class TramiteController extends Controller
 
         return $this->render('tramite/show.html.twig', array(
             'tramite' => $tramite,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -81,56 +82,50 @@ class TramiteController extends Controller
      */
     public function editAction(Request $request, Tramite $tramite)
     {
-        $deleteForm = $this->createDeleteForm($tramite);
         $editForm = $this->createForm('AppBundle\Form\TramiteType', $tramite);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('tramite_edit', array('id' => $tramite->getId()));
+            return $this->redirectToRoute('tramite_index');
         }
 
-        return $this->render('tramite/edit.html.twig', array(
+        return $this->render('tramite/form.html.twig', array(
             'tramite' => $tramite,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form' => $editForm->createView(),
         ));
     }
 
     /**
      * Deletes a tramite entity.
      *
-     * @Route("/{id}", name="tramite_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="tramite_delete")
+     * @Method("GET")
      */
     public function deleteAction(Request $request, Tramite $tramite)
     {
-        $form = $this->createDeleteForm($tramite);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($tramite);
-            $em->flush();
-        }
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($tramite);
+        $em->flush();
 
         return $this->redirectToRoute('tramite_index');
     }
 
     /**
-     * Creates a form to delete a tramite entity.
+     * Deletes a tramite entity.
      *
-     * @param Tramite $tramite The tramite entity
-     *
-     * @return \Symfony\Component\Form\Form The form
+     * @Route("/{id}/change_status", name="change_status")
+     * @Method("POST")
      */
-    private function createDeleteForm(Tramite $tramite)
+    public function changeStatusAction(Request $request, Tramite $tramite)
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('tramite_delete', array('id' => $tramite->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
+        $status=$request->request->get('status');
+        $tramite->setEstado($status);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+
+        return new JsonResponse(array('status' => 'ok'));
     }
 }

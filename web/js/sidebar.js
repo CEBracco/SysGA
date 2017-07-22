@@ -4,7 +4,7 @@ $.fn.ignore = function(sel){
   return this.clone().find(sel||">*").remove().end();
 };
 
-var items = $('#mobile-sideNav li').get();
+var items = $('#mobile-sideNav li .order').get();
 items.sort(function(a,b){
   var keyA = $(a).ignore("i").text();
   var keyB = $(b).ignore("i").text();
