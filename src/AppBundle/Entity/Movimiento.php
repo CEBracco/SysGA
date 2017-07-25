@@ -48,12 +48,23 @@ class Movimiento
      */
      private $concesionaria;
 
-     /**
-       * @var \DateTime $deletedAt
-       *
-       * @ORM\Column(name="deleted_at", type="date", nullable=true)
-       */
-      private $deletedAt;
+    /**
+    * @var \DateTime $deletedAt
+    *
+    * @ORM\Column(name="deleted_at", type="date", nullable=true)
+    */
+    private $deletedAt;
+
+    /**
+    * @var bool
+    *
+    * @ORM\Column(name="is_contramovimiento", type="boolean")
+    */
+    private $isContramovimiento;
+
+    function __construct() {
+        $this->isContramovimiento=false;
+    }
 
     /**
      * Get id
@@ -183,5 +194,41 @@ class Movimiento
     public function getDeletedAt()
     {
         return $this->deletedAt;
+    }
+
+    /**
+     * Set isContramovimiento
+     *
+     * @param boolean $isContramovimiento
+     *
+     * @return Cooperativista
+     */
+    public function setIsContramovimiento($isContramovimiento){
+        $this->isContramovimiento = $isContramovimiento;
+        return $this;
+    }
+
+    /**
+     * Get isContramovimiento
+     *
+     * @return bool
+     */
+    public function getIsContramovimiento(){
+        return $this->isContramovimiento;
+    }
+
+    public function getTipoCanonical(){
+        switch ($this->tipo) {
+            case 1:
+                return 'Entrada';
+            case 2:
+                return 'Salida';
+            case 3:
+                return 'Entrada en registro';
+            case 4:
+                return 'Salida en registro';
+            default:
+                return 'N/A';
+        }
     }
 }

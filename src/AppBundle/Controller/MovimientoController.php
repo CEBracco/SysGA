@@ -80,7 +80,8 @@ class MovimientoController extends Controller
         $contramovimiento->setMonto($movimiento->getMonto() * -1);
         $contramovimiento->setConcesionaria($movimiento->getConcesionaria());
         $contramovimiento->setFecha($movimiento->getFecha());
-        $contramovimiento->setTipo("Contramovimiento - ".$movimiento->getTipo());
+        $contramovimiento->setTipo($movimiento->getTipo());
+        $contramovimiento->setIsContramovimiento(true);
 
         $movimiento->setDeletedAt(new \DateTime());
 
@@ -91,7 +92,20 @@ class MovimientoController extends Controller
 
     private function aplicarMonto(Movimiento $movimiento){
         $concesionaria=$movimiento->getConcesionaria();
-        $concesionaria->setSaldoDepositado($concesionaria->getSaldoDepositado() + $movimiento->getMonto());
+        switch ($movimiento->getTipo()) {
+            case 1:
+                $concesionaria->setSaldoDepositado($concesionaria->getSaldoDepositado() + $movimiento->getMonto());
+                break;
+            case 2:
+                $concesionaria->setSaldoDepositado($concesionaria->getSaldoDepositado() - $movimiento->getMonto());
+                break;
+            case 3:
+                $concesionaria->setSaldoEnRegistro($concesionaria->getSaldoEnRegistro() + $movimiento->getMonto());
+                break;
+            case 4:
+                $concesionaria->setSaldoEnRegistro($concesionaria->getSaldoEnRegistro() - $movimiento->getMonto());
+                break;
+        }
     }
 
     private function saveMovimiento(Movimiento $movimiento){
