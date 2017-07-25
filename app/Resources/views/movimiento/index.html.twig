@@ -7,6 +7,7 @@
         <thead>
             <tr>
                 <th>Fecha</th>
+                <th>Concesionaria</th>
                 <th>Tipo</th>
                 <th>Monto</th>
                 <th>Acciones</th>
@@ -14,13 +15,15 @@
         </thead>
         <tbody>
         {% for movimiento in movimientos %}
-            <tr>
+            <tr {{ (movimiento.deletedAt != null) ? ' class="red lighten-4"' }}>
                 <td>{% if movimiento.fecha %}{{ movimiento.fecha|date('d/m/Y') }}{% endif %}</td>
-                <td>{{ movimiento.tipo }}</td>
-                <td>${{ movimiento.monto }}</td>
+                <td>{{ movimiento.concesionaria.nombre }}</td>
+                <td>{{ (movimiento.isContramovimiento) ? 'Contramovimiento - ' }}{{ movimiento.getTipoCanonical() }}</td>
+                <td>${{ movimiento.monto|number_format(2, ',', '.') }}</td>
                 <td class="fit">
-                    <a href="{{ path('movimiento_edit', { 'id': movimiento.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
-                    <a href="{{ path('movimiento_delete', { 'id': movimiento.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
+                    {% if movimiento.deletedAt == null %}
+                        <a href="{{ path('movimiento_delete', { 'id': movimiento.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">block</i></a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

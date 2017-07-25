@@ -3,10 +3,10 @@
 
 {% block fos_user_content %}
 
-    <h4>Iniciar Sesión</h4>
+    <h4 class="title">Iniciar Sesión</h4>
 
     {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        <div class="title">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
     <form action="{{ path("fos_user_security_check") }}" method="post">

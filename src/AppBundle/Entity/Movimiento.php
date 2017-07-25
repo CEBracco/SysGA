@@ -42,6 +42,29 @@ class Movimiento
      */
     private $tipo;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Concesionaria")
+     * @ORM\JoinColumn(name="concesionaria_id", referencedColumnName="id", nullable=false)
+     */
+     private $concesionaria;
+
+    /**
+    * @var \DateTime $deletedAt
+    *
+    * @ORM\Column(name="deleted_at", type="date", nullable=true)
+    */
+    private $deletedAt;
+
+    /**
+    * @var bool
+    *
+    * @ORM\Column(name="is_contramovimiento", type="boolean")
+    */
+    private $isContramovimiento;
+
+    function __construct() {
+        $this->isContramovimiento=false;
+    }
 
     /**
      * Get id
@@ -124,5 +147,88 @@ class Movimiento
     {
         return $this->tipo;
     }
-}
 
+    /**
+     * Set concesionaria
+     *
+     * @param Concesionaria $concesionaria
+     *
+     * @return Movimiento
+     */
+    public function setConcesionaria($concesionaria)
+    {
+        $this->concesionaria = $concesionaria;
+
+        return $this;
+    }
+
+    /**
+     * Get concesionaria
+     *
+     * @return concesionaria
+     */
+    public function getConcesionaria()
+    {
+        return $this->concesionaria;
+    }
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     *
+     * @return Movimiento
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * Set isContramovimiento
+     *
+     * @param boolean $isContramovimiento
+     *
+     * @return Cooperativista
+     */
+    public function setIsContramovimiento($isContramovimiento){
+        $this->isContramovimiento = $isContramovimiento;
+        return $this;
+    }
+
+    /**
+     * Get isContramovimiento
+     *
+     * @return bool
+     */
+    public function getIsContramovimiento(){
+        return $this->isContramovimiento;
+    }
+
+    public function getTipoCanonical(){
+        switch ($this->tipo) {
+            case 1:
+                return 'Entrada';
+            case 2:
+                return 'Salida';
+            case 3:
+                return 'Entrada en registro';
+            case 4:
+                return 'Salida en registro';
+            default:
+                return 'N/A';
+        }
+    }
+}

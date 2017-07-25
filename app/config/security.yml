@@ -29,3 +29,7 @@ security:
         - { path: ^/register, role: ROLE_ADMIN }
         - { path: ^/home, role: IS_AUTHENTICATED_FULLY }
         - { path: ^/concesionaria/, role: ROLE_ADMIN }
+        - { path: ^/movimiento/, role: ROLE_ADMIN }
+        - { path: ^/registrodelautomotor/, role: ROLE_ADMIN }
+        - { path: ^/tramite/, role: IS_AUTHENTICATED_FULLY }
+        - { path: ^/titular/, role: IS_AUTHENTICATED_FULLY }
