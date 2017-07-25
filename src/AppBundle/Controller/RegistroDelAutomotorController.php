@@ -5,7 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\RegistroDelAutomotor;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Registrodelautomotor controller.
@@ -48,10 +49,10 @@ class RegistroDelAutomotorController extends Controller
             $em->persist($registroDelAutomotor);
             $em->flush();
 
-            return $this->redirectToRoute('registrodelautomotor_show', array('id' => $registroDelAutomotor->getId()));
+            return $this->redirectToRoute('registrodelautomotor_index');
         }
 
-        return $this->render('registrodelautomotor/new.html.twig', array(
+        return $this->render('registrodelautomotor/form.html.twig', array(
             'registroDelAutomotor' => $registroDelAutomotor,
             'form' => $form->createView(),
         ));
@@ -65,11 +66,8 @@ class RegistroDelAutomotorController extends Controller
      */
     public function showAction(RegistroDelAutomotor $registroDelAutomotor)
     {
-        $deleteForm = $this->createDeleteForm($registroDelAutomotor);
-
         return $this->render('registrodelautomotor/show.html.twig', array(
             'registroDelAutomotor' => $registroDelAutomotor,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -81,56 +79,35 @@ class RegistroDelAutomotorController extends Controller
      */
     public function editAction(Request $request, RegistroDelAutomotor $registroDelAutomotor)
     {
-        $deleteForm = $this->createDeleteForm($registroDelAutomotor);
         $editForm = $this->createForm('AppBundle\Form\RegistroDelAutomotorType', $registroDelAutomotor);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('registrodelautomotor_edit', array('id' => $registroDelAutomotor->getId()));
+            return $this->redirectToRoute('registrodelautomotor_index');
         }
 
-        return $this->render('registrodelautomotor/edit.html.twig', array(
+        return $this->render('registrodelautomotor/form.html.twig', array(
             'registroDelAutomotor' => $registroDelAutomotor,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form' => $editForm->createView(),
+            'edit' => true,
         ));
     }
 
     /**
      * Deletes a registroDelAutomotor entity.
      *
-     * @Route("/{id}", name="registrodelautomotor_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="registrodelautomotor_delete")
+     * @Method("GET")
      */
     public function deleteAction(Request $request, RegistroDelAutomotor $registroDelAutomotor)
     {
-        $form = $this->createDeleteForm($registroDelAutomotor);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($registroDelAutomotor);
-            $em->flush();
-        }
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($registroDelAutomotor);
+        $em->flush();
 
         return $this->redirectToRoute('registrodelautomotor_index');
     }
 
-    /**
-     * Creates a form to delete a registroDelAutomotor entity.
-     *
-     * @param RegistroDelAutomotor $registroDelAutomotor The registroDelAutomotor entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(RegistroDelAutomotor $registroDelAutomotor)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('registrodelautomotor_delete', array('id' => $registroDelAutomotor->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
 }
