@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class MovimientoType extends AbstractType
 {
@@ -29,6 +30,10 @@ class MovimientoType extends AbstractType
                             'Salida' => 'Salida',
                             'Deposito en registro' => 'Deposito en registro',
                         )
+                ))
+                ->add('concesionaria', EntityType::class, array(
+                    'class' => 'AppBundle:Concesionaria',
+                    'choice_label' => 'nombre',
                 ));
     }
 

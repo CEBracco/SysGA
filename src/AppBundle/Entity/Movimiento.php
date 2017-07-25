@@ -42,6 +42,11 @@ class Movimiento
      */
     private $tipo;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Concesionaria")
+     * @ORM\JoinColumn(name="concesionaria_id", referencedColumnName="id", nullable=false)
+     */
+     private $concesionaria;
 
     /**
      * Get id
@@ -124,5 +129,28 @@ class Movimiento
     {
         return $this->tipo;
     }
-}
 
+    /**
+     * Set concesionaria
+     *
+     * @param Concesionaria $concesionaria
+     *
+     * @return Movimiento
+     */
+    public function setConcesionaria($concesionaria)
+    {
+        $this->concesionaria = $concesionaria;
+
+        return $this;
+    }
+
+    /**
+     * Get concesionaria
+     *
+     * @return concesionaria
+     */
+    public function getConcesionaria()
+    {
+        return $this->concesionaria;
+    }
+}

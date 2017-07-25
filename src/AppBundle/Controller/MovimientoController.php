@@ -45,11 +45,7 @@ class MovimientoController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            var_dump($movimiento);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($movimiento);
-            $em->flush();
-
+            $this->saveMovimiento($movimiento);
             return $this->redirectToRoute('movimiento_index');
         }
 
@@ -73,30 +69,6 @@ class MovimientoController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing movimiento entity.
-     *
-     * @Route("/{id}/edit", name="movimiento_edit")
-     * @Method({"GET", "POST"})
-     */
-    public function editAction(Request $request, Movimiento $movimiento)
-    {
-        $editForm = $this->createForm('AppBundle\Form\MovimientoType', $movimiento);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('movimiento_index');
-        }
-
-        return $this->render('movimiento/form.html.twig', array(
-            'movimiento' => $movimiento,
-            'form' => $editForm->createView(),
-            'edit' => true,
-        ));
-    }
-
-    /**
      * Deletes a movimiento entity.
      *
      * @Route("/{id}/delete", name="movimiento_delete")
@@ -104,11 +76,26 @@ class MovimientoController extends Controller
      */
     public function deleteAction(Request $request, Movimiento $movimiento)
     {
+        $contramovimiento=new Movimiento();
+        $contramovimiento->setMonto($movimiento->getMonto() * -1);
+        $contramovimiento->setConcesionaria($movimiento->getConcesionaria());
+        $contramovimiento->setFecha($movimiento->getFecha());
+        $contramovimiento->setTipo("Contramovimiento - ".$movimiento->getTipo());
 
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($movimiento);
-        $em->flush();
+        $this->saveMovimiento($contramovimiento);
 
         return $this->redirectToRoute('movimiento_index');
+    }
+
+    private function aplicarMonto(Movimiento $movimiento){
+        $concesionaria=$movimiento->getConcesionaria();
+        $concesionaria->setSaldoDepositado($concesionaria->getSaldoDepositado() + $movimiento->getMonto());
+    }
+
+    private function saveMovimiento(Movimiento $movimiento){
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($movimiento);
+        $this->aplicarMonto($movimiento);
+        $em->flush();
     }
 }
