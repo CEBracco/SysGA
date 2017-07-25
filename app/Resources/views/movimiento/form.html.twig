@@ -2,9 +2,9 @@
 
 {% block body %}
     {% if edit is not defined or edit == false %}
-        <h4>Nuevo Movimiento</h4>
+        <h4 class="title">Nuevo Movimiento</h4>
     {% else %}
-        <h4>Editar Movimiento</h4>
+        <h4 class="title">Editar Movimiento</h4>
     {% endif %}
 
     {{ form_start(form) }}

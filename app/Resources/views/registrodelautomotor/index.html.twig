@@ -1,39 +1,31 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Registrodelautomotors list</h1>
+    <h4>Registros del Automotor</h4>
 
-    <table>
+    <table class="striped highlight">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nombre</th>
-                <th>Actions</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-        {% for registroDelAutomotor in registroDelAutomotors %}
+        {% for registroDelAutomotor in registrosDelAutomotor %}
             <tr>
-                <td><a href="{{ path('registrodelautomotor_show', { 'id': registroDelAutomotor.id }) }}">{{ registroDelAutomotor.id }}</a></td>
                 <td>{{ registroDelAutomotor.nombre }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('registrodelautomotor_show', { 'id': registroDelAutomotor.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('registrodelautomotor_edit', { 'id': registroDelAutomotor.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                <td class="fit">
+                    <a href="{{ path('registrodelautomotor_edit', { 'id': registroDelAutomotor.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
+                    <a href="{{ path('registrodelautomotor_delete', { 'id': registroDelAutomotor.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('registrodelautomotor_new') }}">Create a new registroDelAutomotor</a>
-        </li>
-    </ul>
+    <div class="fixed-action-btn">
+        <a href="{{ path('registrodelautomotor_new') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
+            <i class="large material-icons">add</i>
+        </a>
+    </div>
 {% endblock %}

@@ -2,9 +2,9 @@
 
 {% block body %}
     {% if edit is not defined or edit == false %}
-        <h4 class="title">Nueva Concesionaria</h4>
+        <h4 class="title">Nuevo Registro del Automotor</h4>
     {% else %}
-        <h4 class="title">Editar Concesionaria</h4>
+        <h4 class="title">Editar Registro del Automotor</h4>
     {% endif %}
 
     {{ form_start(form) }}
@@ -20,7 +20,7 @@
 
         <div class="center-align">
             <button class="btn waves-effect waves-light" type="submit"><i class="material-icons left">save</i>Guardar</button>
-            <a href="{{ path('concesionaria_index') }}"><button type="button" class="btn-flat waves-effect waves-light">Cancelar</button></a>
+            <a href="{{ path('registrodelautomotor_index') }}"><button type="button" class="btn-flat waves-effect waves-light">Cancelar</button></a>
         </div>
     {{ form_end(form) }}
 {% endblock %}
