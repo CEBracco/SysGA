@@ -82,6 +82,8 @@ class MovimientoController extends Controller
         $contramovimiento->setFecha($movimiento->getFecha());
         $contramovimiento->setTipo("Contramovimiento - ".$movimiento->getTipo());
 
+        $movimiento->setDeletedAt(new \DateTime());
+
         $this->saveMovimiento($contramovimiento);
 
         return $this->redirectToRoute('movimiento_index');

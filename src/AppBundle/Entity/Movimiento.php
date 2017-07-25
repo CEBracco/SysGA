@@ -48,6 +48,13 @@ class Movimiento
      */
      private $concesionaria;
 
+     /**
+       * @var \DateTime $deletedAt
+       *
+       * @ORM\Column(name="deleted_at", type="date", nullable=true)
+       */
+      private $deletedAt;
+
     /**
      * Get id
      *
@@ -152,5 +159,29 @@ class Movimiento
     public function getConcesionaria()
     {
         return $this->concesionaria;
+    }
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     *
+     * @return Movimiento
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
     }
 }

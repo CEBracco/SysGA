@@ -21,7 +21,9 @@
                 <td>{{ movimiento.tipo }}</td>
                 <td>${{ movimiento.monto|number_format(2, ',', '.') }}</td>
                 <td class="fit">
-                    <a href="{{ path('movimiento_delete', { 'id': movimiento.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
+                    {% if movimiento.deletedAt == null %}
+                        <a href="{{ path('movimiento_delete', { 'id': movimiento.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
