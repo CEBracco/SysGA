@@ -1,43 +1,35 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Titulars list</h1>
+    <h4>Titulares</h4>
 
-    <table>
+    <table class="striped highlight">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>DNI</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
-                <th>Dni</th>
-                <th>Actions</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-        {% for titular in titulars %}
+        {% for titular in titulares %}
             <tr>
-                <td><a href="{{ path('titular_show', { 'id': titular.id }) }}">{{ titular.id }}</a></td>
+                <td>{{ titular.dni }}</td>
                 <td>{{ titular.nombre }}</td>
                 <td>{{ titular.apellido }}</td>
-                <td>{{ titular.dni }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('titular_show', { 'id': titular.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('titular_edit', { 'id': titular.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                <td class="fit">
+                    <a href="{{ path('titular_edit', { 'id': titular.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
+                    <a href="{{ path('titular_delete', { 'id': titular.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('titular_new') }}">Create a new titular</a>
-        </li>
-    </ul>
+    <div class="fixed-action-btn">
+        <a href="{{ path('titular_new') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
+            <i class="large material-icons">add</i>
+        </a>
+    </div>
 {% endblock %}

@@ -63,6 +63,12 @@ class Tramite
      */
     private $estado;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Concesionaria")
+     * @ORM\JoinColumn(name="concesionaria_id", referencedColumnName="id", nullable=false)
+     */
+     private $concesionaria;
+
     function __construct() {
         $this->gastoArancel=0;
         $this->impuestosPatente=0;
@@ -223,5 +229,29 @@ class Tramite
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set concesionaria
+     *
+     * @param Concesionaria $concesionaria
+     *
+     * @return Tramite
+     */
+    public function setConcesionaria($concesionaria)
+    {
+        $this->concesionaria = $concesionaria;
+
+        return $this;
+    }
+
+    /**
+     * Get concesionaria
+     *
+     * @return concesionaria
+     */
+    public function getConcesionaria()
+    {
+        return $this->concesionaria;
     }
 }

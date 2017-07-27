@@ -7,10 +7,7 @@
         <thead>
             <tr>
                 <th>Fecha</th>
-                <th>Gastos Arancel</th>
-                <th>Impuestos Patente</th>
-                <th>Sellados</th>
-                <th>Honorarios</th>
+                <th>Concesionaria</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
@@ -19,34 +16,19 @@
         {% for tramite in tramites %}
             <tr>
                 <td>{% if tramite.fecha %}{{ tramite.fecha|date('d/m/Y') }}{% endif %}</td>
-                <td>${{ tramite.gastoArancel }}</td>
-                <td>${{ tramite.impuestosPatente }}</td>
-                <td>${{ tramite.sellados }}</td>
-                <td>${{ tramite.honorarios }}</td>
+                <td>{{ tramite.concesionaria.nombre }}</td>
                 <td class="fit">
                     <a id="status-{{ tramite.id }}" class='btn' href='#' onclick="openStatusModal({{ tramite.id }})">{{ tramite.estado }}</a>
                 </td>
                 <td class="fit">
                     <a href="{{ path('tramite_edit', { 'id': tramite.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
+                    <a href="#" class="btn waves-effect waves-light no-lateral-padding amber darken-3" onclick="modalPago({{ tramite.gastoArancel}},{{ tramite.impuestosPatente}},{{ tramite.sellados}},{{ tramite.honorarios}})"><i class="material-icons">local_atm</i></a>
                     <a href="{{ path('tramite_delete', { 'id': tramite.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-    <!-- Dropdown Structure -->
-    <!-- <ul id='estados' class='dropdown-content'>
-      <li><a href="#!">Esperando</a></li>
-      <li><a href="#!">En registro</a></li>
-      <li><a href="#!">Con Observaciones</a></li>
-      <li><a href="#!">Sellando</a></li>
-      <li><a href="#!">Completado</a></li>
-    </ul> -->
-
-    <!-- Modal Trigger -->
-
-
 
     <div class="fixed-action-btn">
         <a href="{{ path('tramite_new') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
@@ -61,15 +43,52 @@
   <div class="modal-content">
       <h4>Estados</h4>
       <div id="estadosCollection" class="collection">
-        <a href="#!" class="collection-item">Esperando</a>
-        <a href="#!" class="collection-item">En registro</a>
-        <a href="#!" class="collection-item">Con Observaciones</a>
-        <a href="#!" class="collection-item">Sellando</a>
-        <a href="#!" class="collection-item">Completado</a>
+        <a href="#!" class="collection-item">Pendiente</a>
+        <a href="#!" class="collection-item">Presentado</a>
+        <a href="#!" class="collection-item">Observado</a>
+        <a href="#!" class="collection-item">Reingresado</a>
+        <a href="#!" class="collection-item">Retirado</a>
+        <a href="#!" class="collection-item">Enviado</a>
       </div>
   </div>
   <div class="modal-footer">
       <a href="#!" class="modal-action modal-close waves-effect btn" onclick="doUpdateStatus()">Aceptar</a>
+      <a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
+  </div>
+</div>
+
+<div id="payModal" class="modal modal-fixed-footer">
+  <div class="modal-content">
+      <h4>Resumen Gastos</h4>
+      <table class="striped hovered">
+          <thead>
+              <tr>
+                  <th>Concepto</th>
+                  <th>Valor</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>Gastos Arancel</td>
+                  <td class="gastosArancel"></td>
+              </tr>
+              <tr>
+                  <td>Impuestos Patente</td>
+                  <td class="impuestosPatente"></td>
+              </tr>
+              <tr>
+                  <td>Sellados</td>
+                  <td class="sellados"></td>
+              </tr>
+              <tr>
+                  <td>Honorarios</td>
+                  <td class="honorarios"></td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+  <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect btn">Aceptar</a>
       <a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
   </div>
 </div>
