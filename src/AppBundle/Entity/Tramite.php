@@ -3,6 +3,9 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use AppBundle\Entity\Estado;
 
 /**
  * Tramite
@@ -76,12 +79,19 @@ class Tramite
      */
      private $concesionaria;
 
+     /**
+      * @ORM\OneToMany(targetEntity="Estado", mappedBy="tramite", cascade={"persist", "remove"})
+      */
+     private $estados;
+
     function __construct() {
         $this->gastoArancel=0;
         $this->impuestosPatente=0;
         $this->sellados=0;
         $this->honorarios=0;
         $this->estado="Pendiente";
+        $this->estados = new ArrayCollection();
+        $this->addEstado(new Estado('Pendiente'));
     }
 
     /**
@@ -284,5 +294,50 @@ class Tramite
     public function getCodigoInternoConcesionaria()
     {
         return $this->codigoInternoConcesionaria;
+    }
+
+    /**
+     * Set estados
+     *
+     * @param \Doctrine\Common\Collections\Collection $estados
+     *
+     * @return Tramite
+     */
+    public function setEstados($estados)
+    {
+        $this->estados = $estados;
+
+        return $this;
+    }
+
+    /**
+     * Get estados
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEstados(){
+        return $this->estados;
+    }
+
+    /**
+     * Add estado
+     *
+     * @param \AppBundle\Entity\Estado $estado
+     *
+     * @return Delegacion
+     */
+    public function addEstado(Estado $estado){
+        $estado->setTramite($this);
+        $this->estados[] = $estado;
+        return $this;
+    }
+
+    /**
+     * Remove estado
+     *
+     * @param \AppBundle\Entity\Estado $estado
+     */
+    public function removeEstado(Estado $estado){
+        $this->estados->removeElement($estado);
     }
 }

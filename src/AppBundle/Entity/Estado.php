@@ -24,6 +24,13 @@ class Estado
     /**
      * @var string
      *
+     * @ORM\Column(name="estado", type="string", length=255)
+     */
+    private $estado;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="observacion", type="text", nullable=true)
      */
     private $observacion;
@@ -35,6 +42,16 @@ class Estado
      */
     private $fecha;
 
+    /**
+	 * @ORM\ManyToOne(targetEntity="\AppBundle\Entity\Tramite", inversedBy="estados")
+	 * @ORM\JoinColumn(name="tramite_id", referencedColumnName="id", nullable=false)
+	 */
+    private $tramite;
+
+    function __construct($estado) {
+        $this->estado=$estado;
+        $this->fecha=new \DateTime();
+    }
 
     /**
      * Get id
@@ -93,5 +110,52 @@ class Estado
     {
         return $this->fecha;
     }
-}
 
+    /**
+     * Set estado
+     *
+     * @param string $estado
+     *
+     * @return Estado
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    /**
+     * Set tramite
+     *
+     * @param Tramite $tramite
+     *
+     * @return Tramite
+     */
+    public function setTramite($tramite)
+    {
+        $this->tramite = $tramite;
+
+        return $this;
+    }
+
+    /**
+     * Get tramite
+     *
+     * @return tramite
+     */
+    public function getTramite()
+    {
+        return $this->tramite;
+    }
+}
