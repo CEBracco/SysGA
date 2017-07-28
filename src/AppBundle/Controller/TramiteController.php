@@ -3,11 +3,18 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Tramite;
+use AppBundle\Entity\Estado;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
 /**
  * Tramite controller.
@@ -114,15 +121,44 @@ class TramiteController extends Controller
     }
 
     /**
-     * Deletes a tramite entity.
+     * Obtiene los estados del tramite recibido por parametro
      *
-     * @Route("/{id}/change_status", name="change_status")
-     * @Method("POST")
+     * @Route("/{id}/estados", name="tramite_status")
+     * @Method({"GET","POST"})
      */
-    public function changeStatusAction(Request $request, Tramite $tramite)
+    public function tramiteStatusAction(Request $request, Tramite $tramite)
     {
-        $status=$request->request->get('status');
-        $tramite->setEstado($status);
+        $normalizer = new GetSetMethodNormalizer();
+        $normalizer->setIgnoredAttributes(array('tramite'));
+        $encoder = new JsonEncoder();
+
+        $callback = function ($dateTime) {
+            return $dateTime instanceof \DateTime
+                ? $dateTime->format('Y-m-d H:i:s')
+                : '';
+        };
+        $normalizer->setCallbacks(array('fecha' => $callback));
+
+        $serializer = new Serializer(array($normalizer), array($encoder));
+        $content=$serializer->serialize($tramite->getEstados(), 'json');
+        return new Response($content);
+    }
+
+    /**
+     * Agrega un nuevo estado al tramite recibido por parametro
+     *
+     * @Route("/{id}/addEstado", name="tramite_addEstado")
+     * @Method({"POST"})
+     */
+    public function addTramiteStatusAction(Request $request, Tramite $tramite)
+    {
+        $status=$request->request->get('estado');
+        $observacion=$request->request->get('observacion');
+
+        $estado=new Estado($status);
+        $estado->setObservacion($observacion);
+
+        $tramite->addEstado($estado);
 
         $em = $this->getDoctrine()->getManager();
         $em->flush();

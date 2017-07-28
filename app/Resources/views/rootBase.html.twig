@@ -62,16 +62,65 @@
 
 		{% block modals %}{% endblock %}
 
+		<div id="loadingSpinner" class="modal modal-fixed-footer transparent z-depth-0">
+			<div class="modal-content">
+				<div id="preloader" class="preloader-wrapper big active">
+					<div class="spinner-layer spinner-blue">
+						<div class="circle-clipper left">
+							<div class="circle"></div>
+						</div>
+						<div class="gap-patch">
+							<div class="circle"></div>
+						</div>
+						<div class="circle-clipper right">
+							<div class="circle"></div>
+						</div>
+					</div>
+
+					<div class="spinner-layer spinner-red">
+						<div class="circle-clipper left">
+							<div class="circle"></div>
+						</div>
+						<div class="gap-patch">
+							<div class="circle"></div>
+						</div>
+						<div class="circle-clipper right">
+							<div class="circle"></div>
+						</div>
+					</div>
+
+					<div class="spinner-layer spinner-yellow">
+						<div class="circle-clipper left">
+							<div class="circle"></div>
+						</div>
+						<div class="gap-patch">
+							<div class="circle"></div>
+						</div>
+						<div class="circle-clipper right">
+							<div class="circle"></div>
+						</div>
+					</div>
+
+					<div class="spinner-layer spinner-green">
+						<div class="circle-clipper left">
+							<div class="circle"></div>
+						</div>
+						<div class="gap-patch">
+							<div class="circle"></div>
+						</div>
+						<div class="circle-clipper right">
+							<div class="circle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
 		<script type="text/javascript" src="{{ asset('lib/jquery/jquery.min.js') }}"></script>
 		<script type="text/javascript" src="{{ asset('lib/materialize/js/materialize.min.js') }}"></script>
 		<script type="text/javascript" src="{{ asset('js/base.js') }}"></script>
-		<!-- <script type="text/javascript" src="{{ asset('js/sidebar.js') }}"></script> -->
-
-        <script type="text/javascript">
-            $(document).ready(function(){
-                $(".button-collapse").sideNav();
-            });
-        </script>
 		{% block javascripts %}{% endblock %}
 	</body>
+
 </html>
