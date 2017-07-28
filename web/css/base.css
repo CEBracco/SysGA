@@ -57,3 +57,10 @@ table.highlight > tbody > tr:hover {
     width:1%;
     white-space:nowrap;
 }
+
+/* spinner */
+#preloader{
+    position:fixed;
+    top:45%;
+    left:45%;
+}

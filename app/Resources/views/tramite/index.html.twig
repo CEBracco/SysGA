@@ -18,7 +18,7 @@
                 <td>{% if tramite.fecha %}{{ tramite.fecha|date('d/m/Y') }}{% endif %}</td>
                 <td>{{ tramite.concesionaria.nombre }}</td>
                 <td class="fit">
-                    <a id="status-{{ tramite.id }}" class='btn' href='#' onclick="openStatusModal({{ tramite.id }})">{{ tramite.estado }}</a>
+                    <a id="status-{{ tramite.id }}" class='btn' href='#' onclick="loadEstados({{ tramite.id }})">{{ tramite.estadoActual.estado }}</a>
                 </td>
                 <td class="fit">
                     <a href="{{ path('tramite_edit', { 'id': tramite.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
@@ -38,21 +38,47 @@
 {% endblock %}
 
 {% block modals %}
-<!-- Modal Structure -->
 <div id="statusModal" class="modal modal-fixed-footer">
   <div class="modal-content">
       <h4>Estados</h4>
-      <div id="estadosCollection" class="collection">
-        <a href="#!" class="collection-item">Pendiente</a>
-        <a href="#!" class="collection-item">Presentado</a>
-        <a href="#!" class="collection-item">Observado</a>
-        <a href="#!" class="collection-item">Reingresado</a>
-        <a href="#!" class="collection-item">Retirado</a>
-        <a href="#!" class="collection-item">Enviado</a>
-      </div>
+      <ul id="statusAccordion" class="collapsible" data-collapsible="accordion"></ul>
   </div>
   <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect btn" onclick="doUpdateStatus()">Aceptar</a>
+      <a class="modal-action waves-effect btn modal-trigger" href="#addStatusModal">Agregar Estado</a>
+      <a href="#!" class="modal-action modal-close waves-effect btn-flat">Cerrar</a>
+  </div>
+</div>
+
+<div id="addStatusModal" class="modal modal-fixed-footer">
+  <div class="modal-content">
+        <h4>Nuevo Estado</h4>
+        <div class="card">
+            <div class="card-content">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <select id="inputEstado">
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Presentado">Presentado</option>
+                            <option value="Observado">Observado</option>
+                            <option value="Reingresado">Reingresado</option>
+                            <option value="Retirado">Retirado</option>
+                            <option value="Enviado">Enviado</option>
+                        </select>
+                        <label>Estado</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="inputObservacion" class="materialize-textarea"></textarea>
+                        <label for="inputObservacion">Observacion</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+  <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect btn" onclick="doAddStatus()">Aceptar</a>
       <a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
   </div>
 </div>

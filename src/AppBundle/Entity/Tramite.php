@@ -67,17 +67,16 @@ class Tramite
     private $fecha;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="estado", type="string", length=255)
-     */
-    private $estado;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Concesionaria")
      * @ORM\JoinColumn(name="concesionaria_id", referencedColumnName="id", nullable=false)
      */
      private $concesionaria;
+
+     /**
+      * @ORM\ManyToOne(targetEntity="Estado", cascade={"persist", "remove"})
+      * @ORM\JoinColumn(name="estado_id", referencedColumnName="id", nullable=true)
+      */
+      private $estadoActual;
 
      /**
       * @ORM\OneToMany(targetEntity="Estado", mappedBy="tramite", cascade={"persist", "remove"})
@@ -225,27 +224,27 @@ class Tramite
     }
 
     /**
-     * Set estado
+     * Set estadoActual
      *
-     * @param string $estado
+     * @param Estado $estadoActual
      *
      * @return Tramite
      */
-    public function setEstado($estado)
+    public function setEstadoActual($estado)
     {
-        $this->estado = $estado;
+        $this->estadoActual = $estado;
 
         return $this;
     }
 
     /**
-     * Get estado
+     * Get estadoActual
      *
-     * @return string
+     * @return estadoActual
      */
-    public function getEstado()
+    public function getEstadoActual()
     {
-        return $this->estado;
+        return $this->estadoActual;
     }
 
     /**
@@ -329,6 +328,7 @@ class Tramite
     public function addEstado(Estado $estado){
         $estado->setTramite($this);
         $this->estados[] = $estado;
+        $this->estadoActual = $estado;
         return $this;
     }
 
