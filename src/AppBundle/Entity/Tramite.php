@@ -83,6 +83,37 @@ class Tramite
       */
      private $estados;
 
+     /**
+     * @var \DateTime $deletedAt
+     *
+     * @ORM\Column(name="deleted_at", type="date", nullable=true)
+     */
+     private $deletedAt;
+
+     /**
+      * Set deletedAt
+      *
+      * @param \DateTime $deletedAt
+      *
+      * @return Movimiento
+      */
+     public function setDeletedAt($deletedAt)
+     {
+         $this->deletedAt = $deletedAt;
+
+         return $this;
+     }
+
+     /**
+      * Get deletedAt
+      *
+      * @return \DateTime
+      */
+     public function getDeletedAt()
+     {
+         return $this->deletedAt;
+     }
+
     function __construct() {
         $this->gastoArancel=0;
         $this->impuestosPatente=0;
@@ -338,6 +369,7 @@ class Tramite
      * @param \AppBundle\Entity\Estado $estado
      */
     public function removeEstado(Estado $estado){
+        $this->estadoActual=null;
         $this->estados->removeElement($estado);
     }
 }

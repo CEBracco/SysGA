@@ -10,4 +10,7 @@ namespace AppBundle\Repository;
  */
 class TramiteRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findAll(){
+        return $this->findByDeletedAt(null);
+    }
 }

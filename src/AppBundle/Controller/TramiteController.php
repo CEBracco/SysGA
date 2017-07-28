@@ -113,8 +113,8 @@ class TramiteController extends Controller
      */
     public function deleteAction(Request $request, Tramite $tramite)
     {
+        $tramite->setDeletedAt(new \DateTime());
         $em = $this->getDoctrine()->getManager();
-        $em->remove($tramite);
         $em->flush();
 
         return $this->redirectToRoute('tramite_index');
@@ -124,7 +124,7 @@ class TramiteController extends Controller
      * Obtiene los estados del tramite recibido por parametro
      *
      * @Route("/{id}/estados", name="tramite_status")
-     * @Method({"GET","POST"})
+     * @Method({"POST"})
      */
     public function tramiteStatusAction(Request $request, Tramite $tramite)
     {
