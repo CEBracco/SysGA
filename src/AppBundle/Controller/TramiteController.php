@@ -94,6 +94,7 @@ class TramiteController extends Controller
         return $this->render('tramite/form.html.twig', array(
             'tramite' => $tramite,
             'form' => $editForm->createView(),
+            'edit' => true,
         ));
     }
 

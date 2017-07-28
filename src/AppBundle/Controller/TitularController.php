@@ -24,10 +24,10 @@ class TitularController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $titulars = $em->getRepository('AppBundle:Titular')->findAll();
+        $titulares = $em->getRepository('AppBundle:Titular')->findAll();
 
         return $this->render('titular/index.html.twig', array(
-            'titulars' => $titulars,
+            'titulares' => $titulares,
         ));
     }
 
@@ -48,28 +48,12 @@ class TitularController extends Controller
             $em->persist($titular);
             $em->flush();
 
-            return $this->redirectToRoute('titular_show', array('id' => $titular->getId()));
+            return $this->redirectToRoute('titular_index');
         }
 
-        return $this->render('titular/new.html.twig', array(
+        return $this->render('titular/form.html.twig', array(
             'titular' => $titular,
             'form' => $form->createView(),
-        ));
-    }
-
-    /**
-     * Finds and displays a titular entity.
-     *
-     * @Route("/{id}", name="titular_show")
-     * @Method("GET")
-     */
-    public function showAction(Titular $titular)
-    {
-        $deleteForm = $this->createDeleteForm($titular);
-
-        return $this->render('titular/show.html.twig', array(
-            'titular' => $titular,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -81,56 +65,33 @@ class TitularController extends Controller
      */
     public function editAction(Request $request, Titular $titular)
     {
-        $deleteForm = $this->createDeleteForm($titular);
         $editForm = $this->createForm('AppBundle\Form\TitularType', $titular);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('titular_edit', array('id' => $titular->getId()));
+            return $this->redirectToRoute('titular_index');
         }
 
-        return $this->render('titular/edit.html.twig', array(
+        return $this->render('titular/form.html.twig', array(
             'titular' => $titular,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form' => $editForm->createView(),
         ));
     }
 
     /**
      * Deletes a titular entity.
      *
-     * @Route("/{id}", name="titular_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="titular_delete")
+     * @Method("GET")
      */
     public function deleteAction(Request $request, Titular $titular)
     {
-        $form = $this->createDeleteForm($titular);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($titular);
-            $em->flush();
-        }
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($titular);
+        $em->flush();
 
         return $this->redirectToRoute('titular_index');
-    }
-
-    /**
-     * Creates a form to delete a titular entity.
-     *
-     * @param Titular $titular The titular entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Titular $titular)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('titular_delete', array('id' => $titular->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
     }
 }

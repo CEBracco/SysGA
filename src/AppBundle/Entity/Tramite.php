@@ -24,6 +24,13 @@ class Tramite
     /**
      * @var string
      *
+     * @ORM\Column(name="codigoInternoConcesionaria", type="string", length=255, nullable=true)
+     */
+    private $codigoInternoConcesionaria;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="gastoArancel", type="decimal", precision=12, scale=4)
      */
     private $gastoArancel;
@@ -63,12 +70,18 @@ class Tramite
      */
     private $estado;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Concesionaria")
+     * @ORM\JoinColumn(name="concesionaria_id", referencedColumnName="id", nullable=false)
+     */
+     private $concesionaria;
+
     function __construct() {
         $this->gastoArancel=0;
         $this->impuestosPatente=0;
         $this->sellados=0;
         $this->honorarios=0;
-        $this->estado="esperando";
+        $this->estado="Pendiente";
     }
 
     /**
@@ -223,5 +236,53 @@ class Tramite
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set concesionaria
+     *
+     * @param Concesionaria $concesionaria
+     *
+     * @return Tramite
+     */
+    public function setConcesionaria($concesionaria)
+    {
+        $this->concesionaria = $concesionaria;
+
+        return $this;
+    }
+
+    /**
+     * Get concesionaria
+     *
+     * @return concesionaria
+     */
+    public function getConcesionaria()
+    {
+        return $this->concesionaria;
+    }
+
+    /**
+     * Set codigoInternoConcesionaria
+     *
+     * @param string $codigoInternoConcesionaria
+     *
+     * @return Tramite
+     */
+    public function setCodigoInternoConcesionaria($codigoInternoConcesionaria)
+    {
+        $this->codigoInternoConcesionaria = $codigoInternoConcesionaria;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInternoConcesionaria
+     *
+     * @return string
+     */
+    public function getCodigoInternoConcesionaria()
+    {
+        return $this->codigoInternoConcesionaria;
     }
 }

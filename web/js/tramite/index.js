@@ -21,6 +21,15 @@ function doUpdateStatus(){
     });
 }
 
+function modalPago(gastosArancel, impuestosPatente, sellados, honorarios){
+    $('.gastosArancel').text("$"+gastosArancel);
+    $('.impuestosPatente').text("$"+impuestosPatente);
+    $('.sellados').text("$"+sellados);
+    $('.honorarios').text("$"+honorarios);
+
+    $('#payModal').modal('open');
+}
+
 $(document).ready(function(){
     $('#estadosCollection .collection-item').click(function(){
         selectedStatus=$(this).text();
