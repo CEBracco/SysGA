@@ -48,6 +48,10 @@ class TramiteType extends AbstractType
                     'attr' => ['class' => 'datepicker'],
                     'format' => 'dd-MM-yyyy',
             ))
+            ->add('codigoInternoConcesionaria', null, array(
+                'required' => false,
+                'label' => 'Codigo Interno de Concesionaria (Opcional)'
+            ))
             ->add('concesionaria', EntityType::class, array(
                 'class' => 'AppBundle:Concesionaria',
                 'choice_label' => 'nombre',

@@ -24,6 +24,13 @@ class Tramite
     /**
      * @var string
      *
+     * @ORM\Column(name="codigoInternoConcesionaria", type="string", length=255, nullable=true)
+     */
+    private $codigoInternoConcesionaria;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="gastoArancel", type="decimal", precision=12, scale=4)
      */
     private $gastoArancel;
@@ -74,7 +81,7 @@ class Tramite
         $this->impuestosPatente=0;
         $this->sellados=0;
         $this->honorarios=0;
-        $this->estado="esperando";
+        $this->estado="Pendiente";
     }
 
     /**
@@ -253,5 +260,29 @@ class Tramite
     public function getConcesionaria()
     {
         return $this->concesionaria;
+    }
+
+    /**
+     * Set codigoInternoConcesionaria
+     *
+     * @param string $codigoInternoConcesionaria
+     *
+     * @return Tramite
+     */
+    public function setCodigoInternoConcesionaria($codigoInternoConcesionaria)
+    {
+        $this->codigoInternoConcesionaria = $codigoInternoConcesionaria;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoInternoConcesionaria
+     *
+     * @return string
+     */
+    public function getCodigoInternoConcesionaria()
+    {
+        return $this->codigoInternoConcesionaria;
     }
 }
