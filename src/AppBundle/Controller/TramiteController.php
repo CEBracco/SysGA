@@ -183,8 +183,8 @@ class TramiteController extends Controller
     private function getTitular($nombre, $apellido, Provincia $provincia){
         $em = $this->getDoctrine()->getManager();
         $titular = $em->getRepository('AppBundle:Titular')->findOneBy(array(
-            'nombre' => $nombre,
-            'apellido' => $apellido,
+            'nombre' => mb_strtolower($nombre,'UTF-8'),
+            'apellido' => mb_strtolower($apellido,'UTF-8'),
             'provincia' => $provincia
         ));
 

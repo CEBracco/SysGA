@@ -60,7 +60,7 @@ class Titular
      */
     public function setNombre($nombre)
     {
-        $this->nombre = $nombre;
+        $this->nombre = mb_strtolower($nombre,'UTF-8');
 
         return $this;
     }
@@ -84,7 +84,7 @@ class Titular
      */
     public function setApellido($apellido)
     {
-        $this->apellido = $apellido;
+        $this->apellido = mb_strtolower($apellido,'UTF-8');
 
         return $this;
     }

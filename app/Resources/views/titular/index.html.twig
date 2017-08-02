@@ -15,8 +15,8 @@
         <tbody>
         {% for titular in titulares %}
             <tr>
-                <td>{{ titular.nombre }}</td>
-                <td>{{ titular.apellido }}</td>
+                <td>{{ titular.nombre|capitalize }}</td>
+                <td>{{ titular.apellido|capitalize }}</td>
                 <td>{{ titular.provincia.nombre }}</td>
                 <td class="fit">
                     <a href="{{ path('titular_edit', { 'id': titular.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
