@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use AppBundle\Entity\Estado;
+use AppBundle\Entity\Titular;
 
 /**
  * Tramite
@@ -71,6 +72,12 @@ class Tramite
      * @ORM\JoinColumn(name="concesionaria_id", referencedColumnName="id", nullable=false)
      */
      private $concesionaria;
+
+     /**
+      * @ORM\ManyToOne(targetEntity="Titular", cascade={"persist"})
+      * @ORM\JoinColumn(name="titular_id", referencedColumnName="id", nullable=false)
+      */
+      private $titular;
 
      /**
       * @ORM\ManyToOne(targetEntity="Estado", cascade={"persist", "remove"})
@@ -300,6 +307,30 @@ class Tramite
     public function getConcesionaria()
     {
         return $this->concesionaria;
+    }
+
+    /**
+     * Set titular
+     *
+     * @param Titular $titular
+     *
+     * @return Tramite
+     */
+    public function setTitular($titular)
+    {
+        $this->titular = $titular;
+
+        return $this;
+    }
+
+    /**
+     * Get titular
+     *
+     * @return titular
+     */
+    public function getTitular()
+    {
+        return $this->titular;
     }
 
     /**

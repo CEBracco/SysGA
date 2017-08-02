@@ -36,12 +36,10 @@ class Titular
     private $apellido;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="dni", type="bigint", unique=true)
+     * @ORM\ManyToOne(targetEntity="Provincia")
+     * @ORM\JoinColumn(name="provincia_id", referencedColumnName="id", nullable=false)
      */
-    private $dni;
-
+     private $provincia;
 
     /**
      * Get id
@@ -102,26 +100,26 @@ class Titular
     }
 
     /**
-     * Set dni
+     * Set provincia
      *
-     * @param integer $dni
+     * @param Provincia $provincia
      *
      * @return Titular
      */
-    public function setDni($dni)
+    public function setProvincia($provincia)
     {
-        $this->dni = $dni;
+        $this->provincia = $provincia;
 
         return $this;
     }
 
     /**
-     * Get dni
+     * Get provincia
      *
-     * @return int
+     * @return provincia
      */
-    public function getDni()
+    public function getProvincia()
     {
-        return $this->dni;
+        return $this->provincia;
     }
 }

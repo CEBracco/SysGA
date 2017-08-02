@@ -17,6 +17,8 @@ class TramiteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $tramite=$builder->getData();
+
         $builder
             ->add('gastoArancel', NumberType::class, array(
                 'required' => false,
@@ -56,6 +58,43 @@ class TramiteType extends AbstractType
                 'class' => 'AppBundle:Concesionaria',
                 'choice_label' => 'nombre',
             ));
+
+        if($tramite->getTitular() == null){
+            $builder
+                ->add('nombreTitular', null, array(
+                    'required' => true,
+                    'mapped' => false
+                ))
+                ->add('apellidoTitular', null, array(
+                    'required' => true,
+                    'mapped' => false
+                ))
+                ->add('provinciaTitular', EntityType::class, array(
+                    'class' => 'AppBundle:Provincia',
+                    'choice_label' => 'nombre',
+                    'mapped' => false
+                ));
+        }
+        else{
+            $titular=$tramite->getTitular();
+            $builder
+                ->add('nombreTitular', null, array(
+                    'required' => true,
+                    'mapped' => false,
+                    'data' => $titular->getNombre(),
+                ))
+                ->add('apellidoTitular', null, array(
+                    'required' => true,
+                    'mapped' => false,
+                    'data' => $titular->getApellido(),
+                ))
+                ->add('provinciaTitular', EntityType::class, array(
+                    'class' => 'AppBundle:Provincia',
+                    'choice_label' => 'nombre',
+                    'mapped' => false,
+                    'data' => $titular->getProvincia(),
+                ));
+        }
     }
 
     /**
