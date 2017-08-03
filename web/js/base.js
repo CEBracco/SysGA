@@ -5,6 +5,9 @@ $(document)
 	})
 	.ajaxStop(function () {
 		$loading.modal('close');
+	})
+	.ajaxError(function () {
+		$loading.modal('close');
 	});
 
 $(document).ready(function() {
@@ -54,4 +57,14 @@ function pad(num, size) {
     var s = num+"";
     while (s.length < size) s = "0" + s;
     return s;
+}
+
+function emptyFunction(){}
+
+function ajaxCall(url,data,success = emptyFunction, error = emptyFunction){
+	$.ajax({
+		url: url,
+		method: "POST",
+		data: data
+	}).done(success).fail(error);
 }
