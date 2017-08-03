@@ -24,6 +24,15 @@
             </div>
         </div>
 
+        <div id="registroDelAutomotorField" class="row collapse">
+            <div class="col m12">
+                <div class="input-field">
+                    {{ form_widget(form.registroDelAutomotor) }}
+                    {{ form_label(form.registroDelAutomotor) }}
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col m6">
                 <div class="input-field">
@@ -49,4 +58,19 @@
 
         {{ form_errors(form) }}
     {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    $(document).ready(function(){
+        $("select[name='appbundle_movimiento[tipo]']").change(function(){
+            if($(this).val() == 3 || $(this).val() == 4){
+                $('#registroDelAutomotorField').show();
+            }
+            else{
+                $('#registroDelAutomotorField').hide();
+            }
+        });
+    })
+</script>
 {% endblock %}

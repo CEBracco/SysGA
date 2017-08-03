@@ -29,7 +29,7 @@ $(document).ready(function() {
         format: 'dd/mm/yyyy',
         onStart: function (){
             var date = new Date();
-            this.set('select', [date.getFullYear(), date.getMonth() + 1, date.getDate()]);
+            this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
         }
     });
     $('select').material_select();

@@ -17,7 +17,7 @@
             <tr>
                 <td>{{ concesionaria.nombre }}</td>
                 <td>${{ concesionaria.saldoDepositado|number_format(2, ',', '.') }}</td>
-                <td>${{ concesionaria.saldoEnRegistro|number_format(2, ',', '.') }}</td>
+                <td><a href="#" class="btn waves-effect waves-light no-lateral-padding">Ver Cuentas</a></td>
                 <td class="fit">
                     <a href="{{ path('concesionaria_edit', { 'id': concesionaria.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
                     <a href="{{ path('concesionaria_delete', { 'id': concesionaria.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>

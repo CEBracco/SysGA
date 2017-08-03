@@ -43,10 +43,16 @@ class Movimiento
     private $tipo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Concesionaria")
-     * @ORM\JoinColumn(name="concesionaria_id", referencedColumnName="id", nullable=false)
-     */
-     private $concesionaria;
+    * @ORM\ManyToOne(targetEntity="Concesionaria")
+    * @ORM\JoinColumn(name="concesionaria_id", referencedColumnName="id", nullable=false)
+    */
+    private $concesionaria;
+
+    /**
+    * @ORM\ManyToOne(targetEntity="RegistroDelAutomotor")
+    * @ORM\JoinColumn(name="registrodelautomotor_id", referencedColumnName="id", nullable=true)
+    */
+    private $registroDelAutomotor;
 
     /**
     * @var \DateTime $deletedAt
@@ -173,6 +179,30 @@ class Movimiento
     }
 
     /**
+     * Set registroDelAutomotor
+     *
+     * @param RegistroDelAutomotor $registroDelAutomotor
+     *
+     * @return Movimiento
+     */
+    public function setRegistroDelAutomotor($registroDelAutomotor)
+    {
+        $this->registroDelAutomotor = $registroDelAutomotor;
+
+        return $this;
+    }
+
+    /**
+     * Get registroDelAutomotor
+     *
+     * @return registroDelAutomotor
+     */
+    public function getRegistroDelAutomotor()
+    {
+        return $this->registroDelAutomotor;
+    }
+
+    /**
      * Set deletedAt
      *
      * @param \DateTime $deletedAt
@@ -230,5 +260,9 @@ class Movimiento
             default:
                 return 'N/A';
         }
+    }
+
+    public function isMovimientoEnRegistro(){
+        return ($this->tipo == 1 || $this->tipo == 2);
     }
 }

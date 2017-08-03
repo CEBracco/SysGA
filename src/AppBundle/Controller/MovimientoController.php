@@ -45,6 +45,10 @@ class MovimientoController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if($movimiento->isMovimientoEnRegistro()){
+                $movimiento->setRegistroDelAutomotor(null);
+            }
+
             $this->saveMovimiento($movimiento);
             return $this->redirectToRoute('movimiento_index');
         }
@@ -79,6 +83,7 @@ class MovimientoController extends Controller
         $contramovimiento=new Movimiento();
         $contramovimiento->setMonto($movimiento->getMonto() * -1);
         $contramovimiento->setConcesionaria($movimiento->getConcesionaria());
+        $contramovimiento->setRegistroDelAutomotor($movimiento->getRegistroDelAutomotor());
         $contramovimiento->setFecha($movimiento->getFecha());
         $contramovimiento->setTipo($movimiento->getTipo());
         $contramovimiento->setIsContramovimiento(true);
@@ -100,10 +105,10 @@ class MovimientoController extends Controller
                 $concesionaria->setSaldoDepositado($concesionaria->getSaldoDepositado() - $movimiento->getMonto());
                 break;
             case 3:
-                $concesionaria->setSaldoEnRegistro($concesionaria->getSaldoEnRegistro() + $movimiento->getMonto());
+                $concesionaria->efectuarEntrada($movimiento);
                 break;
             case 4:
-                $concesionaria->setSaldoEnRegistro($concesionaria->getSaldoEnRegistro() - $movimiento->getMonto());
+                $concesionaria->efectuarSalida($movimiento);
                 break;
         }
     }

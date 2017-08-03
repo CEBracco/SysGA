@@ -126,7 +126,6 @@ class Tramite
         $this->impuestosPatente=0;
         $this->sellados=0;
         $this->honorarios=0;
-        $this->estado="Pendiente";
         $this->estados = new ArrayCollection();
         $this->addEstado(new Estado('Pendiente'));
     }
