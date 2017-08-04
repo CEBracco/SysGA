@@ -1,7 +1,9 @@
 var selectedTramite;
 var itemCollapsable='<li><div class="collapsible-header"><i class="material-icons">subject</i>{{ fecha }} - {{ estado }}</div><div class="collapsible-body"><span>{{ observacion }}</span></div></li>';
 
-function modalPago(gastosArancel, impuestosPatente, sellados, honorarios){
+function modalPago(id,gastosArancel, impuestosPatente, sellados, honorarios){
+    selectedTramite=id;
+
     $('.gastosArancel').text("$"+gastosArancel);
     $('.impuestosPatente').text("$"+impuestosPatente);
     $('.sellados').text("$"+sellados);
@@ -55,6 +57,12 @@ function addStatusItem(status){
     item=item.replace('{{ observacion }}', optionalString(status.observacion));
     item=item.replace('{{ fecha }}', formatDate(new Date(status.fecha)));
     $("#statusAccordion").append(item);
+}
+
+function liquidateTramite(){
+    ajaxCall('../movimiento/newFromTramite/'+selectedTramite,{},function(){
+        //alert
+    });
 }
 
 $(document).ready(function(){

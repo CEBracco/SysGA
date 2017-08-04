@@ -22,7 +22,7 @@
                 </td>
                 <td class="fit">
                     <a href="{{ path('tramite_edit', { 'id': tramite.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
-                    <a href="#" class="btn waves-effect waves-light no-lateral-padding amber darken-3" onclick="modalPago({{ tramite.gastoArancel}},{{ tramite.impuestosPatente}},{{ tramite.sellados}},{{ tramite.honorarios}})"><i class="material-icons">local_atm</i></a>
+                    <a href="#" class="btn waves-effect waves-light no-lateral-padding amber darken-3" onclick="modalPago({{tramite.id}},{{ tramite.gastoArancel}},{{ tramite.impuestosPatente}},{{ tramite.sellados}},{{ tramite.honorarios}})"><i class="material-icons">local_atm</i></a>
                     <a href="{{ path('tramite_delete', { 'id': tramite.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
                 </td>
             </tr>
@@ -114,7 +114,7 @@
       </table>
   </div>
   <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect btn">Aceptar</a>
+      <a href="#!" class="modal-action modal-close waves-effect btn" onclick="liquidateTramite()">Liquidar</a>
       <a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
   </div>
 </div>

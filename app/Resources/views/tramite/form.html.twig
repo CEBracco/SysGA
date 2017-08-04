@@ -13,10 +13,16 @@
             {% endif %}
 
             <div class="row">
-                <div class="col m12">
+                <div class="col m6">
                     <div class="input-field">
                         {{ form_widget(form.codigoInternoConcesionaria) }}
                         {{ form_label(form.codigoInternoConcesionaria) }}
+                    </div>
+                </div>
+                <div class="col m6">
+                    <div class="input-field">
+                        {{ form_widget(form.fecha) }}
+                        {{ form_label(form.fecha) }}
                     </div>
                 </div>
             </div>
@@ -30,8 +36,8 @@
                 </div>
                 <div class="col m6">
                     <div class="input-field">
-                        {{ form_widget(form.fecha) }}
-                        {{ form_label(form.fecha) }}
+                        {{ form_widget(form.registroDelAutomotor) }}
+                        {{ form_label(form.registroDelAutomotor) }}
                     </div>
                 </div>
             </div>
@@ -78,32 +84,53 @@
             <div class="row">
                 <div class="col m3">
                     <div class="input-field">
-                        {{ form_widget(form.gastoArancel, { 'type':'number' }) }}
+                        {{ form_widget(form.gastoArancel, { 'type':'number', 'attr': {'class': 'totalEnRegistro'} }) }}
                         {{ form_label(form.gastoArancel) }}
                     </div>
                 </div>
 
                 <div class="col m3">
                     <div class="input-field">
-                        {{ form_widget(form.impuestosPatente, { 'type':'number' }) }}
+                        {{ form_widget(form.impuestosPatente, { 'type':'number', 'attr': {'class': 'totalEnRegistro'} }) }}
                         {{ form_label(form.impuestosPatente) }}
                     </div>
                 </div>
 
                 <div class="col m3">
                     <div class="input-field">
-                        {{ form_widget(form.sellados, { 'type':'number' }) }}
+                        {{ form_widget(form.sellados, { 'type':'number', 'attr': {'class': 'totalGestoria'} } ) }}
                         {{ form_label(form.sellados) }}
                     </div>
                 </div>
 
                 <div class="col m3">
                     <div class="input-field">
-                        {{ form_widget(form.honorarios, { 'type':'number' }) }}
+                        {{ form_widget(form.honorarios, { 'type':'number', 'attr': {'class': 'totalGestoria'} }) }}
                         {{ form_label(form.honorarios) }}
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col m6 center-align">
+                    <b>Total en registro: </b>
+                    $<span class="showTotalEnRegistro">{{ form.vars.value.gastoArancel + form.vars.value.impuestosPatente }}</span>
+                </div>
+                <div class="col m6 center-align">
+                    <b>Total gestoría: </b>
+                    $<span class="showTotalGestoria">{{ form.vars.value.sellados + form.vars.value.honorarios }}</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col m12 center-align">
+                    <h5>
+                        <b>Total: </b>
+                        $<span class="showTotal">{{ form.vars.value.gastoArancel + form.vars.value.impuestosPatente }}</span>
+                    </h6>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -115,4 +142,47 @@
     </div>
 </div>
 {{ form_end(form) }}
+{% endblock %}
+
+
+{% block javascripts %}
+<script type="text/javascript">
+    var totalEnRegistro=0;
+    var totalGestoria=0;
+    var total=0;
+
+    $(document).ready(function(){
+        $('.totalEnRegistro').on('change keyup',function(){
+            totalEnRegistro=0;
+            $.each($('.totalEnRegistro'),function(index, totalIngresado){
+                if(total.value != ''){
+                    totalEnRegistro = totalEnRegistro + getValue(totalIngresado.value);
+                    total=totalEnRegistro + totalGestoria;
+                }
+            });
+            $('.showTotalEnRegistro').text(totalEnRegistro);
+            $('.showTotal').text(parseFloat(total));
+        });
+
+        $('.totalGestoria').on('change keyup',function(){
+            totalGestoria=0;
+            $.each($('.totalGestoria'),function(index, totalIngresado){
+                if(total.value != ''){
+                    totalGestoria = totalGestoria + getValue(totalIngresado.value);
+                    total=totalEnRegistro + totalGestoria;
+                }
+            });
+            $('.showTotalGestoria').text(totalGestoria);
+            $('.showTotal').text(parseFloat(total));
+        });
+    });
+
+    function getValue(value){
+        var integerVal=parseFloat(value);
+        if(isNaN(integerVal)){
+            return 0;
+        }
+        return integerVal;
+    }
+</script>
 {% endblock %}

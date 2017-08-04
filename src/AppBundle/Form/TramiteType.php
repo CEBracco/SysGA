@@ -57,6 +57,10 @@ class TramiteType extends AbstractType
             ->add('concesionaria', EntityType::class, array(
                 'class' => 'AppBundle:Concesionaria',
                 'choice_label' => 'nombre',
+            ))
+            ->add('registroDelAutomotor', EntityType::class, array(
+                'class' => 'AppBundle:RegistroDelAutomotor',
+                'choice_label' => 'nombre',
             ));
 
         if($tramite->getTitular() == null){

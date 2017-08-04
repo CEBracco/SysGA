@@ -3,10 +3,12 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Movimiento;
+use AppBundle\Entity\Tramite;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Movimiento controller.
@@ -118,5 +120,44 @@ class MovimientoController extends Controller
         $em->persist($movimiento);
         $this->aplicarMonto($movimiento);
         $em->flush();
+    }
+
+    /**
+     * Creates a new movimiento entity with tramite.
+     *
+     * @Route("/newFromTramite/{id}", name="movimiento_tramite_new")
+     * @Method({"GET", "POST"})
+     */
+    public function newMovimientoTramiteAction(Tramite $tramite)
+    {
+        $movimientoEnRegistro = new Movimiento();
+        $movimientoEnRegistro->setMonto($tramite->getTotalEnRegistro());
+        $movimientoEnRegistro->setConcesionaria($tramite->getConcesionaria());
+        $movimientoEnRegistro->setRegistroDelAutomotor($tramite->getRegistroDelAutomotor());
+        $movimientoEnRegistro->setFecha(new \DateTime());
+        $movimientoEnRegistro->setTipo(4);
+        // setTramite
+
+        $movimientoGestoria = new Movimiento();
+        $movimientoGestoria->setMonto($tramite->getTotalGestoria());
+        $movimientoGestoria->setConcesionaria($tramite->getConcesionaria());
+        $movimientoGestoria->setRegistroDelAutomotor($tramite->getRegistroDelAutomotor());
+        $movimientoGestoria->setFecha(new \DateTime());
+        $movimientoGestoria->setTipo(2);
+        // setTramite
+
+        $em = $this->getDoctrine()->getManager();
+
+        $em->persist($movimientoEnRegistro);
+        $this->aplicarMonto($movimientoEnRegistro);
+
+        $em->persist($movimientoGestoria);
+        $this->aplicarMonto($movimientoGestoria);
+
+        $tramite->fechaLiquidacion(new \DateTime());
+
+        $em->flush();
+
+        return new JsonResponse(array('status' => 'ok'));
     }
 }
