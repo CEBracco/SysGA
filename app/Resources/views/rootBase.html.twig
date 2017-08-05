@@ -62,6 +62,17 @@
 
 		{% block modals %}{% endblock %}
 
+		<div id="confirmationModal" class="modal">
+			<div class="modal-content">
+				<p><b>¿Esta seguro de realizar la operación?</b></p>
+				<p class="content">Seleccione el boton "Aceptar" para ejecutar la accion solicitada</p>
+			</div>
+			<div class="modal-footer">
+				<a id="confirmModalButton" class="modal-action modal-close waves-effect btn">Aceptar</a>
+				<a id="cancelModalButton" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
+			</div>
+		</div>
+
 		<div id="loadingSpinner" class="modal modal-fixed-footer transparent z-depth-0">
 			<div class="modal-content">
 				<div id="preloader" class="preloader-wrapper big active">

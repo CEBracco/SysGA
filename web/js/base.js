@@ -36,6 +36,8 @@ $(document).ready(function() {
         }
     });
     $('select').material_select();
+
+	$('#confirmModalButton').click(doConfirm);
 });
 
 function optionalString(str){
@@ -67,4 +69,28 @@ function ajaxCall(url,data,success = emptyFunction, error = emptyFunction){
 		method: "POST",
 		data: data
 	}).done(success).fail(error);
+}
+
+// modal de confirmacion
+var confirmParam=null;
+
+function confirmModal(param){
+	if(param != null && param != ''){
+		confirmParam=param;
+	}
+	else{
+		confirmParam=emptyFunction;
+	}
+	$('#confirmationModal').modal('open');
+}
+
+function doConfirm(){
+	if(confirmParam != null){
+		if (typeof confirmParam == 'string' || confirmParam instanceof String) {
+			window.location.href = confirmParam;
+		}
+		else{
+			confirmParam();
+		}
+	}
 }

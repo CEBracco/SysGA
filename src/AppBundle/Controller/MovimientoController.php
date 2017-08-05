@@ -130,6 +130,10 @@ class MovimientoController extends Controller
      */
     public function newMovimientoTramiteAction(Tramite $tramite)
     {
+        if($tramite->getFechaLiquidacion() != null){
+            return new JsonResponse(array('ok' => false, 'message' => "El trámite ya ha sido liquidado"));
+        }
+
         $movimientoEnRegistro = new Movimiento();
         $movimientoEnRegistro->setMonto($tramite->getTotalEnRegistro());
         $movimientoEnRegistro->setConcesionaria($tramite->getConcesionaria());
@@ -154,10 +158,10 @@ class MovimientoController extends Controller
         $em->persist($movimientoGestoria);
         $this->aplicarMonto($movimientoGestoria);
 
-        $tramite->fechaLiquidacion(new \DateTime());
+        $tramite->setFechaLiquidacion(new \DateTime());
 
         $em->flush();
 
-        return new JsonResponse(array('status' => 'ok'));
+        return new JsonResponse(array('ok' => true, 'message' => "La operacion se realizó correctamente"));
     }
 }

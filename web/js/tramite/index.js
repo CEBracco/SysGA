@@ -60,8 +60,9 @@ function addStatusItem(status){
 }
 
 function liquidateTramite(){
-    ajaxCall('../movimiento/newFromTramite/'+selectedTramite,{},function(){
-        //alert
+    ajaxCall('../movimiento/newFromTramite/'+selectedTramite,{},function(response){
+        $('#payModal').modal('close');
+        Materialize.toast(response.message, 4000);
     });
 }
 

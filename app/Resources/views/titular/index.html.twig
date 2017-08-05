@@ -20,13 +20,16 @@
                 <td>{{ titular.provincia.nombre }}</td>
                 <td class="fit">
                     <a href="{{ path('titular_edit', { 'id': titular.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
-                    <a href="{{ path('titular_delete', { 'id': titular.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
+                    <a onclick="confirmModal('{{ path('titular_delete', { 'id': titular.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
+{% endblock %}
+
+{% block modals %}
     <div class="fixed-action-btn">
         <a href="{{ path('titular_new') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
             <i class="large material-icons">add</i>

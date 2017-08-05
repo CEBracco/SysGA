@@ -20,21 +20,23 @@
                 <td><a class="btn waves-effect waves-light no-lateral-padding" onclick="loadAccountsModal({{concesionaria.id}})">Ver Cuentas</a></td>
                 <td class="fit">
                     <a href="{{ path('concesionaria_edit', { 'id': concesionaria.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
-                    <a href="{{ path('concesionaria_delete', { 'id': concesionaria.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
+                    <a onclick="confirmModal('{{ path('concesionaria_delete', { 'id': concesionaria.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <div class="fixed-action-btn">
-        <a href="{{ path('concesionaria_new') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
-            <i class="large material-icons">add</i>
-        </a>
-    </div>
+
 {% endblock %}
 
 {% block modals %}
+<div class="fixed-action-btn">
+    <a href="{{ path('concesionaria_new') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
+        <i class="large material-icons">add</i>
+    </a>
+</div>
+
 <div id="accountsModal" class="modal modal-fixed-footer">
   <div class="modal-content">
       <h4>Saldo en Registros</h4>

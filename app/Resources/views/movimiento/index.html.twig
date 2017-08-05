@@ -22,7 +22,7 @@
                 <td>${{ movimiento.monto|number_format(2, ',', '.') }}</td>
                 <td class="fit">
                     {% if movimiento.deletedAt == null %}
-                        <a href="{{ path('movimiento_delete', { 'id': movimiento.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">block</i></a>
+                        <a onclick="confirmModal('{{ path('movimiento_delete', { 'id': movimiento.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">block</i></a>
                     {% endif %}
                 </td>
             </tr>
@@ -30,6 +30,9 @@
         </tbody>
     </table>
 
+{% endblock %}
+
+{% block modals %}
     <div class="fixed-action-btn">
         <a href="{{ path('movimiento_new') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
             <i class="large material-icons">add</i>
