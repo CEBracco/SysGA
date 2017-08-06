@@ -152,6 +152,8 @@
     var total=0;
 
     $(document).ready(function(){
+        initValues();
+
         $('.totalEnRegistro').on('change keyup',function(){
             totalEnRegistro=0;
             $.each($('.totalEnRegistro'),function(index, totalIngresado){
@@ -175,6 +177,7 @@
             $('.showTotalGestoria').text(totalGestoria);
             $('.showTotal').text(parseFloat(total));
         });
+
     });
 
     function getValue(value){
@@ -183,6 +186,15 @@
             return 0;
         }
         return integerVal;
+    }
+
+    function initValues(){
+        $.each($('.totalGestoria'),function(index, totalIngresado){
+            totalGestoria = totalGestoria + getValue(totalIngresado.value);
+        });
+        $.each($('.totalEnRegistro'),function(index, totalIngresado){
+            totalEnRegistro = totalEnRegistro + getValue(totalIngresado.value);
+        });
     }
 </script>
 {% endblock %}
