@@ -5,6 +5,9 @@ $(document)
 	})
 	.ajaxStop(function () {
 		$loading.modal('close');
+	})
+	.ajaxError(function () {
+		$loading.modal('close');
 	});
 
 $(document).ready(function() {
@@ -29,10 +32,17 @@ $(document).ready(function() {
         format: 'dd/mm/yyyy',
         onStart: function (){
             var date = new Date();
-            this.set('select', [date.getFullYear(), date.getMonth() + 1, date.getDate()]);
+            this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
         }
     });
     $('select').material_select();
+
+	$('#confirmModalButton').click(doConfirm);
+
+});
+
+$(document).bind('keydown', 'ctrl+space', function(){
+	$('.button-collapse').sideNav('show');
 });
 
 function optionalString(str){
@@ -54,4 +64,38 @@ function pad(num, size) {
     var s = num+"";
     while (s.length < size) s = "0" + s;
     return s;
+}
+
+function emptyFunction(){}
+
+function ajaxCall(url,data,success = emptyFunction, error = emptyFunction){
+	$.ajax({
+		url: url,
+		method: "POST",
+		data: data
+	}).done(success).fail(error);
+}
+
+// modal de confirmacion
+var confirmParam=null;
+
+function confirmModal(param){
+	if(param != null && param != ''){
+		confirmParam=param;
+	}
+	else{
+		confirmParam=emptyFunction;
+	}
+	$('#confirmationModal').modal('open');
+}
+
+function doConfirm(){
+	if(confirmParam != null){
+		if (typeof confirmParam == 'string' || confirmParam instanceof String) {
+			window.location.href = confirmParam;
+		}
+		else{
+			confirmParam();
+		}
+	}
 }

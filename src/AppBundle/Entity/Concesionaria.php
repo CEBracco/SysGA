@@ -3,6 +3,11 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use AppBundle\Entity\Cuenta;
+use AppBundle\Entity\RegistroDelAutomotor;
+use AppBundle\Entity\Movimiento;
 
 /**
  * Concesionaria
@@ -36,16 +41,14 @@ class Concesionaria
     private $saldoDepositado;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="saldoEnRegistro", type="decimal", precision=12, scale=4, nullable=true)
+     * @ORM\OneToMany(targetEntity="Cuenta", mappedBy="concesionaria", cascade={"persist", "remove"})
      */
-    private $saldoEnRegistro;
+    private $cuentas;
 
 
     function __construct() {
         $this->saldoDepositado=0;
-        $this->saldoEnRegistro=0;
+        $this->cuentas = new ArrayCollection();
     }
 
     /**
@@ -107,26 +110,74 @@ class Concesionaria
     }
 
     /**
-     * Set saldoEnRegistro
+     * Set cuentas
      *
-     * @param string $saldoEnRegistro
+     * @param \Doctrine\Common\Collections\Collection $cuentas
      *
      * @return Concesionaria
      */
-    public function setSaldoEnRegistro($saldoEnRegistro)
+    public function setCuentas($cuentas)
     {
-        $this->saldoEnRegistro = $saldoEnRegistro;
+        $this->cuentas = $cuentas;
 
         return $this;
     }
 
     /**
-     * Get saldoEnRegistro
+     * Get cuentas
      *
-     * @return string
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getSaldoEnRegistro()
-    {
-        return $this->saldoEnRegistro;
+    public function getCuentas(){
+        return $this->cuentas;
+    }
+
+    /**
+     * Add cuenta
+     *
+     * @param \AppBundle\Entity\Cuenta $cuenta
+     *
+     * @return Concesionaria
+     */
+    public function addCuenta(Cuenta $cuenta){
+        $cuenta->setConcesionaria($this);
+        $this->cuentas[] = $cuenta;
+        return $this;
+    }
+
+    /**
+     * Remove cuenta
+     *
+     * @param \AppBundle\Entity\Cuenta $cuenta
+     */
+    public function removeCuenta(Cuenta $cuenta){
+        $this->cuentas->removeElement($cuenta);
+    }
+
+    public function findCuentaRegistroDelAutomotor(RegistroDelAutomotor $registroDelAutomotor){
+        $result=null;
+        foreach ($this->cuentas as $cuenta) {
+            if($cuenta->getRegistroDelAutomotor() == $registroDelAutomotor){
+                $result=$cuenta;
+                break;
+            }
+        }
+        if($result == null){
+            $result= new Cuenta();
+            $result->setRegistroDelAutomotor($registroDelAutomotor);
+            $this->addCuenta($result);
+        }
+
+        return $result;
+    }
+
+    public function efectuarEntrada(Movimiento $movimiento){
+        $cuenta=$this->findCuentaRegistroDelAutomotor($movimiento->getRegistroDelAutomotor());
+        $cuenta->efectuarEntrada($movimiento);
+    }
+
+    public function efectuarSalida(Movimiento $movimiento){
+        $cuenta=$this->findCuentaRegistroDelAutomotor($movimiento->getRegistroDelAutomotor());
+        $cuenta->efectuarSalida($movimiento);
     }
 }

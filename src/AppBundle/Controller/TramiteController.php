@@ -4,6 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Tramite;
 use AppBundle\Entity\Estado;
+use AppBundle\Entity\Titular;
+use AppBundle\Entity\Provincia;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -13,7 +15,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
 /**
@@ -53,6 +54,12 @@ class TramiteController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $nombreTitular = $form->get('nombreTitular')->getData();
+            $apellidoTitular = $form->get('apellidoTitular')->getData();
+            $provinciaTitular = $form->get('provinciaTitular')->getData();
+
+            $tramite->setTitular($this->getTitular($nombreTitular,$apellidoTitular,$provinciaTitular));
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($tramite);
             $em->flush();
@@ -93,6 +100,12 @@ class TramiteController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $nombreTitular = $editForm->get('nombreTitular')->getData();
+            $apellidoTitular = $editForm->get('apellidoTitular')->getData();
+            $provinciaTitular = $editForm->get('provinciaTitular')->getData();
+
+            $tramite->setTitular($this->getTitular($nombreTitular,$apellidoTitular,$provinciaTitular));
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('tramite_index');
@@ -164,5 +177,23 @@ class TramiteController extends Controller
         $em->flush();
 
         return new JsonResponse(array('status' => 'ok'));
+    }
+
+    private function getTitular($nombre, $apellido, Provincia $provincia){
+        $em = $this->getDoctrine()->getManager();
+        $titular = $em->getRepository('AppBundle:Titular')->findOneBy(array(
+            'nombre' => mb_strtolower($nombre,'UTF-8'),
+            'apellido' => mb_strtolower($apellido,'UTF-8'),
+            'provincia' => $provincia
+        ));
+
+        if($titular == null){
+            $titular=new Titular($nombre);
+            $titular->setNombre($nombre);
+            $titular->setApellido($apellido);
+            $titular->setProvincia($provincia);
+        }
+
+        return $titular;
     }
 }

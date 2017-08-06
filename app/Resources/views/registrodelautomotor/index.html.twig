@@ -16,13 +16,16 @@
                 <td>{{ registroDelAutomotor.nombre }}</td>
                 <td class="fit">
                     <a href="{{ path('registrodelautomotor_edit', { 'id': registroDelAutomotor.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
-                    <a href="{{ path('registrodelautomotor_delete', { 'id': registroDelAutomotor.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
+                    <a onclick="confirmModal('{{ path('registrodelautomotor_delete', { 'id': registroDelAutomotor.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
+{% endblock %}
+
+{% block modals %}
     <div class="fixed-action-btn">
         <a href="{{ path('registrodelautomotor_new') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
             <i class="large material-icons">add</i>

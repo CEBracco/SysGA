@@ -22,22 +22,23 @@
                 </td>
                 <td class="fit">
                     <a href="{{ path('tramite_edit', { 'id': tramite.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
-                    <a href="#" class="btn waves-effect waves-light no-lateral-padding amber darken-3" onclick="modalPago({{ tramite.gastoArancel}},{{ tramite.impuestosPatente}},{{ tramite.sellados}},{{ tramite.honorarios}})"><i class="material-icons">local_atm</i></a>
-                    <a href="{{ path('tramite_delete', { 'id': tramite.id }) }}" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
+                    <a href="#" class="btn waves-effect waves-light no-lateral-padding amber darken-3" onclick="modalPago({{tramite.id}},{{ tramite.gastoArancel}},{{ tramite.impuestosPatente}},{{ tramite.sellados}},{{ tramite.honorarios}})"><i class="material-icons">local_atm</i></a>
+                    <a onclick="confirmModal('{{ path('tramite_delete', { 'id': tramite.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <div class="fixed-action-btn">
-        <a href="{{ path('tramite_new') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
-            <i class="large material-icons">add</i>
-        </a>
-    </div>
 {% endblock %}
 
 {% block modals %}
+<div class="fixed-action-btn">
+    <a href="{{ path('tramite_new') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
+        <i class="large material-icons">add</i>
+    </a>
+</div>
+
 <div id="statusModal" class="modal modal-fixed-footer">
   <div class="modal-content">
       <h4>Estados</h4>
@@ -114,7 +115,7 @@
       </table>
   </div>
   <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect btn">Aceptar</a>
+      <a href="#!" class="modal-action waves-effect btn" onclick="confirmModal(liquidateTramite)">Liquidar</a>
       <a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
   </div>
 </div>

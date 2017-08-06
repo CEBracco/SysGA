@@ -5,7 +5,13 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Concesionaria;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
  * Concesionaria controller.
@@ -58,19 +64,6 @@ class ConcesionariaController extends Controller
     }
 
     /**
-     * Finds and displays a concesionaria entity.
-     *
-     * @Route("/{id}", name="concesionaria_show")
-     * @Method("GET")
-     */
-    public function showAction(Concesionaria $concesionaria)
-    {
-        return $this->render('concesionaria/show.html.twig', array(
-            'concesionaria' => $concesionaria,
-        ));
-    }
-
-    /**
      * Displays a form to edit an existing concesionaria entity.
      *
      * @Route("/{id}/edit", name="concesionaria_edit")
@@ -107,5 +100,22 @@ class ConcesionariaController extends Controller
         $em->flush();
 
         return $this->redirectToRoute('concesionaria_index');
+    }
+
+    /**
+     * Finds and displays a concesionaria entity.
+     *
+     * @Route("/{id}/cuentas", name="concesionaria_cuentas")
+     * @Method("POST")
+     */
+    public function getCuentasAction(Concesionaria $concesionaria)
+    {
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setIgnoredAttributes(array('concesionaria'));
+        $encoder = new JsonEncoder();
+
+        $serializer = new Serializer(array($normalizer), array($encoder));
+        $content=$serializer->serialize($concesionaria->getCuentas(), 'json');
+        return new Response($content);
     }
 }

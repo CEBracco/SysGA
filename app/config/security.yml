@@ -22,13 +22,15 @@ security:
 
             logout:       true
             anonymous:    true
+            access_denied_url: /
 
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: ROLE_ADMIN }
+        - { path: ^/usuario, role: ROLE_ADMIN }
         - { path: ^/home, role: IS_AUTHENTICATED_FULLY }
-        - { path: ^/concesionaria/, role: ROLE_ADMIN }
+        - { path: ^/concesionaria/, role: ROLE_GESTION }
         - { path: ^/movimiento/, role: ROLE_ADMIN }
         - { path: ^/registrodelautomotor/, role: ROLE_ADMIN }
         - { path: ^/tramite/, role: IS_AUTHENTICATED_FULLY }

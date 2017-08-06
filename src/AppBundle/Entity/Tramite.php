@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use AppBundle\Entity\Estado;
+use AppBundle\Entity\Titular;
 
 /**
  * Tramite
@@ -73,6 +74,18 @@ class Tramite
      private $concesionaria;
 
      /**
+      * @ORM\ManyToOne(targetEntity="RegistroDelAutomotor")
+      * @ORM\JoinColumn(name="registrodelautomotor_id", referencedColumnName="id", nullable=false)
+      */
+      private $registroDelAutomotor;
+
+     /**
+      * @ORM\ManyToOne(targetEntity="Titular", cascade={"persist"})
+      * @ORM\JoinColumn(name="titular_id", referencedColumnName="id", nullable=false)
+      */
+      private $titular;
+
+     /**
       * @ORM\ManyToOne(targetEntity="Estado", cascade={"persist", "remove"})
       * @ORM\JoinColumn(name="estado_id", referencedColumnName="id", nullable=true)
       */
@@ -90,36 +103,18 @@ class Tramite
      */
      private $deletedAt;
 
-     /**
-      * Set deletedAt
-      *
-      * @param \DateTime $deletedAt
-      *
-      * @return Movimiento
-      */
-     public function setDeletedAt($deletedAt)
-     {
-         $this->deletedAt = $deletedAt;
-
-         return $this;
-     }
-
-     /**
-      * Get deletedAt
-      *
-      * @return \DateTime
-      */
-     public function getDeletedAt()
-     {
-         return $this->deletedAt;
-     }
+    /**
+    * @var \DateTime $deletedAt
+    *
+    * @ORM\Column(name="fechaLiquidacion", type="date", nullable=true)
+    */
+    private $fechaLiquidacion;
 
     function __construct() {
         $this->gastoArancel=0;
         $this->impuestosPatente=0;
         $this->sellados=0;
         $this->honorarios=0;
-        $this->estado="Pendiente";
         $this->estados = new ArrayCollection();
         $this->addEstado(new Estado('Pendiente'));
     }
@@ -255,6 +250,54 @@ class Tramite
     }
 
     /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     *
+     * @return Movimiento
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * Set fechaLiquidacion
+     *
+     * @param \DateTime $fechaLiquidacion
+     *
+     * @return Movimiento
+     */
+    public function setFechaLiquidacion($fechaLiquidacion)
+    {
+        $this->fechaLiquidacion = $fechaLiquidacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaLiquidacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaLiquidacion()
+    {
+        return $this->fechaLiquidacion;
+    }
+
+    /**
      * Set estadoActual
      *
      * @param Estado $estadoActual
@@ -300,6 +343,54 @@ class Tramite
     public function getConcesionaria()
     {
         return $this->concesionaria;
+    }
+
+    /**
+     * Set registroDelAutomotor
+     *
+     * @param RegistroDelAutomotor $registroDelAutomotor
+     *
+     * @return Tramite
+     */
+    public function setRegistroDelAutomotor($registroDelAutomotor)
+    {
+        $this->registroDelAutomotor = $registroDelAutomotor;
+
+        return $this;
+    }
+
+    /**
+     * Get registroDelAutomotor
+     *
+     * @return registroDelAutomotor
+     */
+    public function getRegistroDelAutomotor()
+    {
+        return $this->registroDelAutomotor;
+    }
+
+    /**
+     * Set titular
+     *
+     * @param Titular $titular
+     *
+     * @return Tramite
+     */
+    public function setTitular($titular)
+    {
+        $this->titular = $titular;
+
+        return $this;
+    }
+
+    /**
+     * Get titular
+     *
+     * @return titular
+     */
+    public function getTitular()
+    {
+        return $this->titular;
     }
 
     /**
@@ -371,5 +462,13 @@ class Tramite
     public function removeEstado(Estado $estado){
         $this->estadoActual=null;
         $this->estados->removeElement($estado);
+    }
+
+    public function getTotalEnRegistro(){
+        return $this->gastoArancel + $this->impuestosPatente;
+    }
+
+    public function getTotalGestoria(){
+        return $this->sellados + $this->honorarios;
     }
 }

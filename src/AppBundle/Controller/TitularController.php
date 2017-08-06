@@ -77,6 +77,7 @@ class TitularController extends Controller
         return $this->render('titular/form.html.twig', array(
             'titular' => $titular,
             'form' => $editForm->createView(),
+            'edit' => true
         ));
     }
 

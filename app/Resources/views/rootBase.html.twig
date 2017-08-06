@@ -24,11 +24,6 @@
 						<a href="#" data-activates="mobile-sideNav" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
 					{% endif %}
 
-					<!-- <ul class="right hide-on-med-and-down">
-						<li><a href="#" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Mapa de Semáforos"><i class="material-icons">map</i></a></li>
-						<li><a href="#" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Semáforos Registrados"><i class="material-icons">traffic</i></a></li>
-						<li><a href="#" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Calles más Transitadas"><i class="material-icons">format_list_bulleted</i></a></li>
-					</ul> -->
 				</div>
 			</nav>
 		</div>
@@ -39,16 +34,24 @@
 					<div class="background">
 					  <img src="{{ asset('img/profile_background.jpg') }}">
 					</div>
-					<a href="#!user"><img class="circle" src="{{ asset('img/default_user.jpg') }}"></a>
-					<a href="#!name"><span class="white-text name">{{ app.user.nombre }} {{ app.user.apellido }}</span></a>
-					<a href="#!email"><span class="white-text email">{{ app.user.getRolAImprimir() }}</span></a>
+					<a><img class="circle" src="{{ asset('img/default_user.jpg') }}"></a>
+					<a><span class="white-text name">{{ app.user.nombre }} {{ app.user.apellido }}</span></a>
+					<a><span class="white-text email">{{ app.user.getRolAImprimir() }}</span></a>
 				</div></li>
-				<li><a href="{{ path('concesionaria_index') }}"><i class="material-icons">store</i> Concesionarias</a></li>
+				{% if is_granted('ROLE_GESTION') %}
+					<li><a href="{{ path('concesionaria_index') }}"><i class="material-icons">store</i> Concesionarias</a></li>
+				{% endif %}
 				<li><a href="{{ path('movimiento_index') }}"><i class="material-icons">local_atm</i> Movimientos</a></li>
-				<li><a href="{{ path('registrodelautomotor_index') }}"><i class="material-icons">account_balance</i> Registros del automotor</a></li>
-				<li><a href="{{ path('titular_index') }}"><i class="material-icons">recent_actors</i> Titulares</a></li>
-				<li><a href="{{ path('tramite_index') }}"><i class="material-icons">assignment</i> Tramites</a></li>
-				<li><a href="{{ path('fos_user_registration_register') }}"><i class="material-icons">supervisor_account</i> Crear Usuario</a></li>
+				{% if is_granted('ROLE_ADMIN') %}
+					<li><a href="{{ path('registrodelautomotor_index') }}"><i class="material-icons">account_balance</i> Registros del automotor</a></li>
+				{% endif %}
+				{% if is_granted('ROLE_GESTION') %}
+					<li><a href="{{ path('titular_index') }}"><i class="material-icons">recent_actors</i> Titulares</a></li>
+					<li><a href="{{ path('tramite_index') }}"><i class="material-icons">assignment</i> Tramites</a></li>
+				{% endif %}
+				{% if is_granted('ROLE_ADMIN') %}
+					<li><a href="{{ path('user_index') }}"><i class="material-icons">supervisor_account</i> Usuarios</a></li>
+				{% endif %}
 				<li><div class="divider"></div></li>
 				<li><a href="{{ path('fos_user_security_logout') }}"><i class="material-icons">exit_to_app</i> Cerrar Sesión</a></li>
 			</ul>
@@ -61,6 +64,17 @@
 		</div>
 
 		{% block modals %}{% endblock %}
+
+		<div id="confirmationModal" class="modal">
+			<div class="modal-content">
+				<p><b>¿Esta seguro de realizar la operación?</b></p>
+				<p class="content">Seleccione el boton "Aceptar" para ejecutar la accion solicitada</p>
+			</div>
+			<div class="modal-footer">
+				<a id="confirmModalButton" class="modal-action modal-close waves-effect btn">Aceptar</a>
+				<a id="cancelModalButton" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
+			</div>
+		</div>
 
 		<div id="loadingSpinner" class="modal modal-fixed-footer transparent z-depth-0">
 			<div class="modal-content">
@@ -118,6 +132,7 @@
 
 
 		<script type="text/javascript" src="{{ asset('lib/jquery/jquery.min.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('lib/jquery-hotkeys/jquery.hotkeys.js') }}"></script>
 		<script type="text/javascript" src="{{ asset('lib/materialize/js/materialize.min.js') }}"></script>
 		<script type="text/javascript" src="{{ asset('js/base.js') }}"></script>
 		{% block javascripts %}{% endblock %}

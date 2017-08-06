@@ -64,3 +64,13 @@ table.highlight > tbody > tr:hover {
     top:45%;
     left:45%;
 }
+
+#confirmationModal{
+    width:40%;
+}
+
+#toast-container {
+  top: auto !important;
+  bottom: 6%;
+  opacity: 0.75;
+}
