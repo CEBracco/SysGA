@@ -14,7 +14,7 @@
         </thead>
         <tbody>
         {% for tramite in tramites %}
-            <tr>
+            <tr id="tramite-{{ tramite.id }}">
                 <td>{% if tramite.fecha %}{{ tramite.fecha|date('d/m/Y') }}{% endif %}</td>
                 <td>{{ tramite.concesionaria.nombre }}</td>
                 <td class="fit">
@@ -22,7 +22,7 @@
                 </td>
                 <td class="fit">
                     <a href="{{ path('tramite_edit', { 'id': tramite.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
-                    <a href="#" class="btn waves-effect waves-light no-lateral-padding amber darken-3" onclick="modalPago({{tramite.id}},{{ tramite.gastoArancel}},{{ tramite.impuestosPatente}},{{ tramite.sellados}},{{ tramite.honorarios}})"><i class="material-icons">local_atm</i></a>
+                    <a href="#" class="btn waves-effect waves-light no-lateral-padding amber darken-3 openModalPago" onclick="modalPago({{tramite.id}},{{ (tramite.fechaLiquidacion) ? "'" ~ tramite.fechaLiquidacion|date('d/m/Y') ~ "'" : 'null' }},{{ tramite.gastoArancel}},{{ tramite.impuestosPatente}},{{ tramite.sellados}},{{ tramite.honorarios}})"><i class="material-icons">local_atm</i></a>
                     <a onclick="confirmModal('{{ path('tramite_delete', { 'id': tramite.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
                 </td>
             </tr>
@@ -87,6 +87,7 @@
 <div id="payModal" class="modal modal-fixed-footer">
   <div class="modal-content">
       <h4>Resumen Gastos</h4>
+      <p class="fechaLiquidacion red-text"></p>
       <table class="striped hovered">
           <thead>
               <tr>
@@ -111,11 +112,23 @@
                   <td>Honorarios</td>
                   <td class="honorarios"></td>
               </tr>
+              <tr>
+                  <td><b>Gatos Gestoria</b></td>
+                  <td><b class="totalGestoria"></b></td>
+              </tr>
+              <tr>
+                  <td><b>Gastos en Registro</b></td>
+                  <td><b class="totalEnRegistro"></b></td>
+              </tr>
+              <tr>
+                  <td><b>TOTAL</b></td>
+                  <td><b class="total"></b></td>
+              </tr>
           </tbody>
       </table>
   </div>
   <div class="modal-footer">
-      <a href="#!" class="modal-action waves-effect btn" onclick="confirmModal(liquidateTramite)">Liquidar</a>
+      <a href="#!" class="modal-action waves-effect btn liquidateButton" onclick="confirmModal(liquidateTramite)">Liquidar</a>
       <a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
   </div>
 </div>

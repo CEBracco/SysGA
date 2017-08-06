@@ -56,6 +56,10 @@ function formatDate(date){
     return padTwo(date.getDate())+'/'+padTwo(date.getMonth()+1)+'/'+date.getFullYear()+' '+padTwo(date.getHours())+':'+padTwo(date.getMinutes());
 }
 
+function formatDateOnly(date){
+    return padTwo(date.getDate())+'/'+padTwo(date.getMonth()+1)+'/'+date.getFullYear();
+}
+
 function padTwo(num) {
     return pad(num,2);
 }
