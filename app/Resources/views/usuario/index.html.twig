@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h4>Usuarios</h4>
+
+    <table class="striped highlight">
+        <thead>
+            <tr>
+                <th>Rol</th>
+                <th>DNI</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.getRolAImprimir() }}</td>
+                <td>{{ usuario.username }}</td>
+                <td>{{ usuario.apellido }}</td>
+                <td>{{ usuario.nombre }}</td>
+                <td class="fit">
+                    <a onclick="confirmModal('{{ path('user_delete', { 'id': usuario.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{% block modals %}
+        <div class="fixed-action-btn">
+            <a href="{{ path('fos_user_registration_register') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
+                <i class="large material-icons">add</i>
+            </a>
+        </div>
+{% endblock %}

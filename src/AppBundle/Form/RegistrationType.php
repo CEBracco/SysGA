@@ -66,7 +66,7 @@ class RegistrationType extends AbstractType{
 				'translation_domain' => 'FOSUserBundle',
 				'required' => false,
 				'attr' => array(
-					'placeholder' => "Ingrese el email (Opcional)...")))
+					'placeholder' => "Ingrese el email...")))
 
 			->add('plainPassword', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\RepeatedType'), array(
 				'type' => LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\PasswordType'),

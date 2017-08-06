@@ -38,6 +38,11 @@ $(document).ready(function() {
     $('select').material_select();
 
 	$('#confirmModalButton').click(doConfirm);
+
+});
+
+$(document).bind('keydown', 'ctrl+space', function(){
+	$('.button-collapse').sideNav('show');
 });
 
 function optionalString(str){
