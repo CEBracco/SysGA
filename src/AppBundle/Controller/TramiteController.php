@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Tramite;
+use AppBundle\Entity\Movimiento;
 use AppBundle\Entity\Estado;
 use AppBundle\Entity\Titular;
 use AppBundle\Entity\Provincia;
@@ -54,14 +55,22 @@ class TramiteController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+			$dniTitular = $form->get('dniTitular')->getData();
             $nombreTitular = $form->get('nombreTitular')->getData();
             $apellidoTitular = $form->get('apellidoTitular')->getData();
             $provinciaTitular = $form->get('provinciaTitular')->getData();
+			$depositoEnRegistro = $form->get('depositoEnRegistro')->getData();
+			$depositoGestoria = $form->get('depositoGestoria')->getData();
 
-            $tramite->setTitular($this->getTitular($nombreTitular,$apellidoTitular,$provinciaTitular));
+            $tramite->setTitular($this->getTitular($dniTitular,$nombreTitular,$apellidoTitular,$provinciaTitular));
+			$tramite->doDepositoEnRegistro($depositoEnRegistro);
+			$tramite->doDepositoGestoria($depositoGestoria);
+			$tramite->liquidate();
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($tramite);
+            // $this->newDepositoTramiteAction($em,$tramite);
+            // $this->newMovimientoTramiteAction($em,$tramite);
             $em->flush();
 
             return $this->redirectToRoute('tramite_index');
@@ -100,13 +109,20 @@ class TramiteController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+			$dniTitular = $editForm->get('dniTitular')->getData();
             $nombreTitular = $editForm->get('nombreTitular')->getData();
             $apellidoTitular = $editForm->get('apellidoTitular')->getData();
             $provinciaTitular = $editForm->get('provinciaTitular')->getData();
+			$depositoEnRegistro = $editForm->get('depositoEnRegistro')->getData();
+			$depositoGestoria = $editForm->get('depositoGestoria')->getData();
 
-            $tramite->setTitular($this->getTitular($nombreTitular,$apellidoTitular,$provinciaTitular));
+            $tramite->setTitular($this->getTitular($dniTitular,$nombreTitular,$apellidoTitular,$provinciaTitular));
 
-            $this->getDoctrine()->getManager()->flush();
+            $em=$this->getDoctrine()->getManager();
+			$tramite->doDepositoEnRegistro($depositoEnRegistro);
+			$tramite->doDepositoGestoria($depositoGestoria);
+			$tramite->liquidate();
+			$em->flush();
 
             return $this->redirectToRoute('tramite_index');
         }
@@ -179,16 +195,19 @@ class TramiteController extends Controller
         return new JsonResponse(array('status' => 'ok'));
     }
 
-    private function getTitular($nombre, $apellido, Provincia $provincia){
+    private function getTitular($dni, $nombre, $apellido, Provincia $provincia){
         $em = $this->getDoctrine()->getManager();
-        $titular = $em->getRepository('AppBundle:Titular')->findOneBy(array(
-            'nombre' => mb_strtolower($nombre,'UTF-8'),
-            'apellido' => mb_strtolower($apellido,'UTF-8'),
-            'provincia' => $provincia
-        ));
+        // $titular = $em->getRepository('AppBundle:Titular')->findOneBy(array(
+        //     'nombre' => mb_strtolower($nombre,'UTF-8'),
+        //     'apellido' => mb_strtolower($apellido,'UTF-8'),
+        //     'provincia' => $provincia
+        // ));
+
+		$titular = $em->getRepository('AppBundle:Titular')->findOneByDni($dni);
 
         if($titular == null){
             $titular=new Titular($nombre);
+			$titular->setDni($dni);
             $titular->setNombre($nombre);
             $titular->setApellido($apellido);
             $titular->setProvincia($provincia);

@@ -68,8 +68,15 @@ class Movimiento
     */
     private $isContramovimiento;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Tramite", inversedBy="movimientos")
+     * @ORM\JoinColumn(name="tramite_id", referencedColumnName="id", nullable=true)
+     */
+     private $tramite;
+
     function __construct() {
         $this->isContramovimiento=false;
+        $this->contramovimiento=null;
     }
 
     /**
@@ -203,6 +210,30 @@ class Movimiento
     }
 
     /**
+     * Set tramite
+     *
+     * @param Tramite $tramite
+     *
+     * @return Movimiento
+     */
+    public function setTramite($tramite)
+    {
+        $this->tramite = $tramite;
+
+        return $this;
+    }
+
+    /**
+     * Get tramite
+     *
+     * @return tramite
+     */
+    public function getTramite()
+    {
+        return $this->tramite;
+    }
+
+    /**
      * Set deletedAt
      *
      * @param \DateTime $deletedAt
@@ -263,6 +294,6 @@ class Movimiento
     }
 
     public function isMovimientoEnRegistro(){
-        return ($this->tipo == 1 || $this->tipo == 2);
+        return ($this->tipo == 3 || $this->tipo == 4);
     }
 }

@@ -24,7 +24,13 @@
         </div>
 
         <div class="row">
-            <div class="col m12">
+			<div class="col m6">
+				<div class="input-field">
+					{{ form_widget(form.dni) }}
+					{{ form_label(form.dni) }}
+				</div>
+			</div>
+            <div class="col m6">
                 <div class="input-field">
                     {{ form_widget(form.provincia) }}
                     {{ form_label(form.provincia) }}

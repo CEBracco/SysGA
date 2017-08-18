@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class TitularType extends AbstractType
@@ -17,6 +18,12 @@ class TitularType extends AbstractType
     {
         $builder->add('nombre')
                 ->add('apellido')
+				->add('dni', IntegerType::class,array(
+					'required' => true,
+					'label'  => 'DNI titular',
+					'attr' => array(
+					   'min' => 0)
+				))
                 ->add('provincia', EntityType::class, array(
                     'class' => 'AppBundle:Provincia',
                     'choice_label' => 'nombre',

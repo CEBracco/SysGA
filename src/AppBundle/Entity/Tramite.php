@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use AppBundle\Entity\Estado;
+use AppBundle\Entity\Movimiento;
 use AppBundle\Entity\Titular;
 
 /**
@@ -49,9 +50,16 @@ class Tramite
     /**
      * @var string
      *
-     * @ORM\Column(name="sellados", type="decimal", precision=12, scale=4)
+     * @ORM\Column(name="selladosGestoria", type="decimal", precision=12, scale=4)
      */
-    private $sellados;
+    private $selladosGestoria;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="selladosRegistro", type="decimal", precision=12, scale=4)
+     */
+    private $selladosRegistro;
 
     /**
      * @var string
@@ -59,6 +67,13 @@ class Tramite
      * @ORM\Column(name="honorarios", type="decimal", precision=12, scale=4)
      */
     private $honorarios;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="otros", type="decimal", precision=12, scale=4)
+     */
+    private $otros;
 
     /**
      * @var \DateTime
@@ -96,6 +111,11 @@ class Tramite
       */
      private $estados;
 
+	 /**
+	  * @ORM\OneToMany(targetEntity="Movimiento", mappedBy="tramite", cascade={"persist", "remove"})
+	  */
+	 private $movimientos;
+
      /**
      * @var \DateTime $deletedAt
      *
@@ -113,10 +133,13 @@ class Tramite
     function __construct() {
         $this->gastoArancel=0;
         $this->impuestosPatente=0;
-        $this->sellados=0;
+        $this->selladosGestoria=0;
+        $this->selladosRegistro=0;
         $this->honorarios=0;
+        $this->otros=0;
         $this->estados = new ArrayCollection();
         $this->addEstado(new Estado('Pendiente'));
+		$this->movimientos = new ArrayCollection();
     }
 
     /**
@@ -178,27 +201,51 @@ class Tramite
     }
 
     /**
-     * Set sellados
+     * Set selladosGestoria
      *
-     * @param string $sellados
+     * @param string $selladosGestoria
      *
      * @return Tramite
      */
-    public function setSellados($sellados)
+    public function setSelladosGestoria($selladosGestoria)
     {
-        $this->sellados = $sellados;
+        $this->selladosGestoria = $selladosGestoria;
 
         return $this;
     }
 
     /**
-     * Get sellados
+     * Get selladosGestoria
      *
      * @return string
      */
-    public function getSellados()
+    public function getSelladosGestoria()
     {
-        return $this->sellados;
+        return $this->selladosGestoria;
+    }
+
+    /**
+     * Set selladosRegistro
+     *
+     * @param string $selladosRegistro
+     *
+     * @return Tramite
+     */
+    public function setSelladosRegistro($selladosRegistro)
+    {
+        $this->selladosRegistro = $selladosRegistro;
+
+        return $this;
+    }
+
+    /**
+     * Get selladosRegistro
+     *
+     * @return string
+     */
+    public function getSelladosRegistro()
+    {
+        return $this->selladosRegistro;
     }
 
     /**
@@ -223,6 +270,30 @@ class Tramite
     public function getHonorarios()
     {
         return $this->honorarios;
+    }
+
+    /**
+     * Set otros
+     *
+     * @param string $otros
+     *
+     * @return Tramite
+     */
+    public function setOtros($otros)
+    {
+        $this->otros = $otros;
+
+        return $this;
+    }
+
+    /**
+     * Get otros
+     *
+     * @return string
+     */
+    public function getOtros()
+    {
+        return $this->otros;
     }
 
     /**
@@ -464,11 +535,149 @@ class Tramite
         $this->estados->removeElement($estado);
     }
 
+	/**
+     * Set movimientos
+     *
+     * @param \Doctrine\Common\Collections\Collection $movimientos
+     *
+     * @return Tramite
+     */
+    public function setMovimientos($movimientos)
+    {
+        $this->movimientos = $movimientos;
+
+        return $this;
+    }
+
+    /**
+     * Get movimientos
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMovimientos(){
+        return $this->movimientos;
+    }
+
+    /**
+     * Add movimiento
+     *
+     * @param \AppBundle\Entity\Movimiento $movimiento
+     *
+     * @return Delegacion
+     */
+    public function addMovimiento(Movimiento $movimiento){
+        $movimiento->setTramite($this);
+        $this->movimientos[] = $movimiento;
+        return $this;
+    }
+
+    /**
+     * Remove movimiento
+     *
+     * @param \AppBundle\Entity\Movimiento $movimiento
+     */
+    public function removeMovimiento(Movimiento $movimiento){
+        $this->movimientos->removeElement($movimiento);
+    }
+
     public function getTotalEnRegistro(){
-        return $this->gastoArancel + $this->impuestosPatente;
+        return $this->gastoArancel + $this->impuestosPatente + $this->selladosRegistro;
     }
 
     public function getTotalGestoria(){
-        return $this->sellados + $this->honorarios;
+        return $this->selladosGestoria + $this->honorarios + $this->otros;
     }
+
+	public function doDepositoEnRegistro($monto){
+		$this->doDeposito($monto,3,$this->getRegistroDelAutomotor());
+	}
+
+	public function doDepositoGestoria($monto){
+		$this->doDeposito($monto,1,null);
+	}
+
+	private function doDeposito($monto, $tipo, $registroDelAutomotor){
+		if($monto != 0){
+			$deposito = new Movimiento();
+			$deposito->setMonto($monto);
+			$deposito->setConcesionaria($this->getConcesionaria());
+			$deposito->setRegistroDelAutomotor($registroDelAutomotor);
+			$deposito->setFecha(new \DateTime());
+			$deposito->setTipo($tipo);
+
+			$this->aplicarMonto($deposito);
+			$this->addMovimiento($deposito);
+		}
+	}
+
+	public function liquidate(){
+		$montoTramiteEnRegistro=$this->getTotalEnRegistro() - $this->getTotalLiquidadoEnRegistro();
+		if($montoTramiteEnRegistro != 0){
+		    $movimientoEnRegistro = new Movimiento();
+		    $movimientoEnRegistro->setMonto($montoTramiteEnRegistro);
+		    $movimientoEnRegistro->setConcesionaria($this->getConcesionaria());
+		    $movimientoEnRegistro->setRegistroDelAutomotor($this->getRegistroDelAutomotor());
+		    $movimientoEnRegistro->setFecha(new \DateTime());
+		    $movimientoEnRegistro->setTipo(4);
+
+			$this->aplicarMonto($movimientoEnRegistro);
+			$this->addMovimiento($movimientoEnRegistro);
+		}
+
+		$montoTramiteGestoria=$this->getTotalGestoria() - $this->getTotalLiquidadoGestoria();
+		if($montoTramiteGestoria != 0){
+		    $movimientoGestoria = new Movimiento();
+		    $movimientoGestoria->setMonto($montoTramiteGestoria);
+		    $movimientoGestoria->setConcesionaria($this->getConcesionaria());
+		    $movimientoGestoria->setFecha(new \DateTime());
+		    $movimientoGestoria->setTipo(2);
+
+			$this->aplicarMonto($movimientoGestoria);
+			$this->addMovimiento($movimientoGestoria);
+		}
+	}
+
+	private function aplicarMonto(Movimiento $movimiento){
+	    $concesionaria=$movimiento->getConcesionaria();
+	    switch ($movimiento->getTipo()) {
+	        case 1:
+	            $concesionaria->setSaldoDepositado($concesionaria->getSaldoDepositado() + $movimiento->getMonto());
+	            break;
+	        case 2:
+	            $concesionaria->setSaldoDepositado($concesionaria->getSaldoDepositado() - $movimiento->getMonto());
+	            break;
+	        case 3:
+	            $concesionaria->efectuarEntrada($movimiento);
+	            break;
+	        case 4:
+	            $concesionaria->efectuarSalida($movimiento);
+	            break;
+	    }
+	}
+
+	private function getTotalLiquidadoEnRegistro(){
+		return $this->getTotalByTipo(4);
+	}
+
+	private function getTotalLiquidadoGestoria(){
+		return $this->getTotalByTipo(2);
+	}
+
+	private function getTotalByTipo($tipo){
+		$total=0;
+		foreach ($this->getMovimientos() as $movimiento) {
+			if($movimiento->getTipo() == $tipo && $movimiento->getDeletedAt() == null){
+				$total=$total+$movimiento->getMonto();
+			}
+		}
+		return $total;
+	}
+
+	public function getTotalDepositadoEnRegistro(){
+		return $this->getTotalByTipo(3);
+	}
+
+	public function getTotalDepositadoGestoria(){
+		return $this->getTotalByTipo(1);
+	}
 }

@@ -8,6 +8,7 @@
             <tr>
                 <th>Fecha</th>
                 <th>Concesionaria</th>
+                <th>Titular</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
@@ -17,12 +18,13 @@
             <tr id="tramite-{{ tramite.id }}">
                 <td>{% if tramite.fecha %}{{ tramite.fecha|date('d/m/Y') }}{% endif %}</td>
                 <td>{{ tramite.concesionaria.nombre }}</td>
+                <td>{{ tramite.titular.toString() }}</td>
                 <td class="fit">
                     <a id="status-{{ tramite.id }}" class='btn' href='#' onclick="loadEstados({{ tramite.id }})">{{ tramite.estadoActual.estado }}</a>
                 </td>
                 <td class="fit">
                     <a href="{{ path('tramite_edit', { 'id': tramite.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
-                    <a href="#" class="btn waves-effect waves-light no-lateral-padding amber darken-3 openModalPago" onclick="modalPago({{tramite.id}},{{ (tramite.fechaLiquidacion) ? "'" ~ tramite.fechaLiquidacion|date('d/m/Y') ~ "'" : 'null' }},{{ tramite.gastoArancel}},{{ tramite.impuestosPatente}},{{ tramite.sellados}},{{ tramite.honorarios}})"><i class="material-icons">local_atm</i></a>
+                    <a href="#" class="btn waves-effect waves-light no-lateral-padding amber darken-3 openModalPago" onclick="modalPago({{tramite.id}},{{ (tramite.fechaLiquidacion) ? "'" ~ tramite.fechaLiquidacion|date('d/m/Y') ~ "'" : 'null' }},{{ tramite.gastoArancel}},{{ tramite.impuestosPatente}},{{ tramite.selladosGestoria}},{{ tramite.selladosRegistro}},{{ tramite.honorarios}},{{ tramite.otros }})"><i class="material-icons">local_atm</i></a>
                     <a onclick="confirmModal('{{ path('tramite_delete', { 'id': tramite.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
                 </td>
             </tr>
@@ -105,20 +107,28 @@
                   <td class="impuestosPatente"></td>
               </tr>
               <tr>
-                  <td>Sellados</td>
-                  <td class="sellados"></td>
+                <td>Sellados Registro</td>
+                <td class="selladosRegistro"></td>
+              </tr>
+              <tr>
+                  <td>Sellados Gestoria</td>
+                  <td class="selladosGestoria"></td>
               </tr>
               <tr>
                   <td>Honorarios</td>
                   <td class="honorarios"></td>
               </tr>
               <tr>
-                  <td><b>Gatos Gestoria</b></td>
-                  <td><b class="totalGestoria"></b></td>
+                  <td>Otros</td>
+                  <td class="otros"></td>
               </tr>
               <tr>
-                  <td><b>Gastos en Registro</b></td>
-                  <td><b class="totalEnRegistro"></b></td>
+                <td><b>Gastos en Registro</b></td>
+                <td><b class="totalEnRegistro"></b></td>
+              </tr>
+              <tr>
+                  <td><b>Gatos Gestoria</b></td>
+                  <td><b class="totalGestoria"></b></td>
               </tr>
               <tr>
                   <td><b>TOTAL</b></td>
@@ -128,7 +138,6 @@
       </table>
   </div>
   <div class="modal-footer">
-      <a href="#!" class="modal-action waves-effect btn liquidateButton" onclick="confirmModal(liquidateTramite)">Liquidar</a>
       <a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
   </div>
 </div>

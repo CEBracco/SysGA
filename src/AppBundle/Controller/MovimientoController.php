@@ -47,7 +47,7 @@ class MovimientoController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if($movimiento->isMovimientoEnRegistro()){
+            if(!$movimiento->isMovimientoEnRegistro()){
                 $movimiento->setRegistroDelAutomotor(null);
             }
 
@@ -122,46 +122,4 @@ class MovimientoController extends Controller
         $em->flush();
     }
 
-    /**
-     * Creates a new movimiento entity with tramite.
-     *
-     * @Route("/newFromTramite/{id}", name="movimiento_tramite_new")
-     * @Method({"GET", "POST"})
-     */
-    public function newMovimientoTramiteAction(Tramite $tramite)
-    {
-        if($tramite->getFechaLiquidacion() != null){
-            return new JsonResponse(array('ok' => false, 'message' => "El trámite ya ha sido liquidado"));
-        }
-
-        $movimientoEnRegistro = new Movimiento();
-        $movimientoEnRegistro->setMonto($tramite->getTotalEnRegistro());
-        $movimientoEnRegistro->setConcesionaria($tramite->getConcesionaria());
-        $movimientoEnRegistro->setRegistroDelAutomotor($tramite->getRegistroDelAutomotor());
-        $movimientoEnRegistro->setFecha(new \DateTime());
-        $movimientoEnRegistro->setTipo(4);
-        // setTramite
-
-        $movimientoGestoria = new Movimiento();
-        $movimientoGestoria->setMonto($tramite->getTotalGestoria());
-        $movimientoGestoria->setConcesionaria($tramite->getConcesionaria());
-        $movimientoGestoria->setRegistroDelAutomotor($tramite->getRegistroDelAutomotor());
-        $movimientoGestoria->setFecha(new \DateTime());
-        $movimientoGestoria->setTipo(2);
-        // setTramite
-
-        $em = $this->getDoctrine()->getManager();
-
-        $em->persist($movimientoEnRegistro);
-        $this->aplicarMonto($movimientoEnRegistro);
-
-        $em->persist($movimientoGestoria);
-        $this->aplicarMonto($movimientoGestoria);
-
-        $tramite->setFechaLiquidacion(new \DateTime());
-
-        $em->flush();
-
-        return new JsonResponse(array('ok' => true, 'message' => "La operacion se realizó correctamente"));
-    }
 }

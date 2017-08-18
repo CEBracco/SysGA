@@ -8,6 +8,7 @@
             <tr>
                 <th>Fecha</th>
                 <th>Concesionaria</th>
+				<th>Titular Trámite</th>
                 <th>Tipo</th>
                 <th>Monto</th>
                 <th>Acciones</th>
@@ -18,6 +19,7 @@
             <tr {{ (movimiento.deletedAt != null) ? ' class="red lighten-4"' }}>
                 <td>{% if movimiento.fecha %}{{ movimiento.fecha|date('d/m/Y') }}{% endif %}</td>
                 <td>{{ movimiento.concesionaria.nombre }}</td>
+				<td>{% if movimiento.tramite %}{{ movimiento.tramite.titular.toString() }}{% endif %}</td>
                 <td>{{ (movimiento.isContramovimiento) ? 'Contramovimiento - ' }}{{ movimiento.getTipoCanonical() }}</td>
                 <td>${{ movimiento.monto|number_format(2, ',', '.') }}</td>
                 <td class="fit">

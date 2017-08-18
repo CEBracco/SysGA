@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
@@ -32,13 +33,25 @@ class TramiteType extends AbstractType
                    'min' => 0,
                    'step' => 0.0001,)
             ))
-            ->add('sellados', NumberType::class, array(
+            ->add('selladosGestoria', NumberType::class, array(
+                'required' => false,
+                'attr' => array(
+                   'min' => 0,
+                   'step' => 0.0001,)
+            ))
+            ->add('selladosRegistro', NumberType::class, array(
                 'required' => false,
                 'attr' => array(
                    'min' => 0,
                    'step' => 0.0001,)
             ))
             ->add('honorarios', NumberType::class, array(
+                'required' => false,
+                'attr' => array(
+                   'min' => 0,
+                   'step' => 0.0001,)
+            ))
+            ->add('otros', NumberType::class, array(
                 'required' => false,
                 'attr' => array(
                    'min' => 0,
@@ -61,10 +74,37 @@ class TramiteType extends AbstractType
             ->add('registroDelAutomotor', EntityType::class, array(
                 'class' => 'AppBundle:RegistroDelAutomotor',
                 'choice_label' => 'nombre',
-            ));
+            ))
+			->add('otros', NumberType::class, array(
+				'required' => false,
+				'attr' => array(
+				   'min' => 0,
+				   'step' => 0.0001,)
+			))
+			->add('depositoEnRegistro', NumberType::class, array(
+				'required' => false,
+				'mapped' => false,
+				'attr' => array(
+				   'min' => 0,
+				   'step' => 0.0001,)
+			))
+			->add('depositoGestoria', NumberType::class, array(
+				'required' => false,
+				'mapped' => false,
+				'attr' => array(
+				   'min' => 0,
+				   'step' => 0.0001,)
+			));
 
         if($tramite->getTitular() == null){
             $builder
+				->add('dniTitular', IntegerType::class, array(
+					'required' => true,
+					'mapped' => false,
+					'label'  => 'DNI titular',
+					'attr' => array(
+					   'min' => 0)
+				))
                 ->add('nombreTitular', null, array(
                     'required' => true,
                     'mapped' => false
@@ -82,6 +122,14 @@ class TramiteType extends AbstractType
         else{
             $titular=$tramite->getTitular();
             $builder
+				->add('dniTitular', IntegerType::class, array(
+					'required' => true,
+					'mapped' => false,
+					'label'  => 'DNI titular',
+					'data' => $titular->getDni(),
+					'attr' => array(
+					   'min' => 0)
+				))
                 ->add('nombreTitular', null, array(
                     'required' => true,
                     'mapped' => false,

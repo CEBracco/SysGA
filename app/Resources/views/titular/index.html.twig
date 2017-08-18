@@ -6,6 +6,7 @@
     <table class="striped highlight">
         <thead>
             <tr>
+				<th>DNI</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Provincia</th>
@@ -15,6 +16,7 @@
         <tbody>
         {% for titular in titulares %}
             <tr>
+				<td>{{ titular.dni }}</td>
                 <td>{{ titular.nombre|capitalize }}</td>
                 <td>{{ titular.apellido|capitalize }}</td>
                 <td>{{ titular.provincia.nombre }}</td>

@@ -21,6 +21,13 @@ class Titular
      */
     private $id;
 
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="dni", type="string", length=15, nullable=true, unique=true)
+     */
+    private $dni;
+
     /**
      * @var string
      *
@@ -122,4 +129,32 @@ class Titular
     {
         return $this->provincia;
     }
+
+	/**
+	 * Set dni
+	 *
+	 * @param string $dni
+	 *
+	 * @return Titular
+	 */
+	public function setDni($dni)
+	{
+		$this->dni = $dni;
+
+		return $this;
+	}
+
+	/**
+	 * Get dni
+	 *
+	 * @return dni
+	 */
+	public function getDni()
+	{
+		return $this->dni;
+	}
+
+	public function toString(){
+		return $this->nombre.' '.$this->apellido.'('.$this->dni.')';
+	}
 }

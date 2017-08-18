@@ -1,26 +1,26 @@
 var selectedTramite;
 var itemCollapsable='<li><div class="collapsible-header"><i class="material-icons">subject</i>{{ fecha }} - {{ estado }}</div><div class="collapsible-body"><span>{{ observacion }}</span></div></li>';
 
-function modalPago(id, fechaLiquidacion, gastosArancel, impuestosPatente, sellados, honorarios){
+function modalPago(id, fechaLiquidacion, gastosArancel, impuestosPatente, selladosGestoria, selladosRegistro, honorarios, otros){
     selectedTramite=id;
-    var totalGestoria=sellados+honorarios;
-    var totalEnRegistro=gastosArancel+impuestosPatente;
+    var totalGestoria=selladosGestoria+honorarios+otros;
+    var totalEnRegistro=selladosRegistro+gastosArancel+impuestosPatente;
 
     $('.gastosArancel').text("$"+gastosArancel);
     $('.impuestosPatente').text("$"+impuestosPatente);
-    $('.sellados').text("$"+sellados);
+    $('.selladosGestoria').text("$"+selladosGestoria);
+    $('.selladosRegistro').text("$"+selladosRegistro);
     $('.honorarios').text("$"+honorarios);
+    $('.otros').text("$"+otros);
     $('.totalGestoria').text("$"+totalGestoria);
     $('.totalEnRegistro').text("$"+totalEnRegistro);
     $('.total').text("$"+(totalEnRegistro+totalGestoria));
     $('.honorarios').text("$"+honorarios);
     if(fechaLiquidacion != null){
         $('.fechaLiquidacion').text('Tramite Liquidado el día: '+fechaLiquidacion);
-        $('.liquidateButton').addClass('disabled');
     }
     else{
         $('.fechaLiquidacion').text('');
-        $('.liquidateButton').removeClass('disabled');
     }
 
     $('#payModal').modal('open');
@@ -71,20 +71,6 @@ function addStatusItem(status){
     item=item.replace('{{ observacion }}', optionalString(status.observacion));
     item=item.replace('{{ fecha }}', formatDate(new Date(status.fecha)));
     $("#statusAccordion").append(item);
-}
-
-function liquidateTramite(){
-    ajaxCall('../movimiento/newFromTramite/'+selectedTramite,{},function(response){
-        var splitedAction=$("#tramite-"+ selectedTramite +" .openModalPago").attr("onclick").split(',');
-        var newAction=splitedAction[0]+",'"+formatDateOnly(new Date())+"'";
-        for (var i = 2; i < splitedAction.length; i++) {
-            newAction=newAction+","+splitedAction[i];
-        }
-
-        $("#tramite-"+ selectedTramite +" .openModalPago").attr("onclick",newAction);
-        $('#payModal').modal('close');
-        Materialize.toast(response.message, 4000);
-    });
 }
 
 $(document).ready(function(){
