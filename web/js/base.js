@@ -1,7 +1,10 @@
+var spinnerOff=false;
 var $loading = $('#loadingSpinner');
 $(document)
 	.ajaxStart(function () {
-		$loading.modal('open');
+		if(!spinnerOff){
+			$loading.modal('open');
+		}
 	})
 	.ajaxStop(function () {
 		$loading.modal('close');
@@ -31,8 +34,10 @@ $(document).ready(function() {
         selectYears: 15,
         format: 'dd/mm/yyyy',
         onStart: function (){
-            var date = new Date();
-            this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
+			if(!emptyDates){
+            	var date = new Date();
+            	this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
+			}
         }
     });
     $('select').material_select();

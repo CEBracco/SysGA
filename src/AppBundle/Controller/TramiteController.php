@@ -29,18 +29,48 @@ class TramiteController extends Controller
      * Lists all tramite entities.
      *
      * @Route("/", name="tramite_index")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+		$em = $this->getDoctrine()->getManager();
+		$concesionarias=$em->getRepository('AppBundle:Concesionaria')->findAll();
 
-        $tramites = $em->getRepository('AppBundle:Tramite')->findAll();
+		$fromDate=\DateTime::createFromFormat('!d/m/Y',$request->request->get('fromDate',''));
+		$toDate=\DateTime::createFromFormat('!d/m/Y',$request->request->get('toDate',''));
+		$concesionaria=$request->request->get('concesionaria','');
+		$titular=$request->request->get('titular','');
+		$filter=$this->getFilter($fromDate,$toDate,$concesionaria,$titular);
 
+		$tramites= $this->listTramites($filter);
         return $this->render('tramite/index.html.twig', array(
             'tramites' => $tramites,
+			'concesionarias' => $concesionarias
         ));
     }
+
+	private function getFilter($fromDate,$toDate,$concesionaria,$titular){
+		$filter=array();
+		if(!empty($fromDate)){
+			$filter['fromDate']=$fromDate;
+		}
+		if(!empty($toDate)){
+			$filter['toDate']=$toDate;
+		}
+		if(!empty($concesionaria)){
+			$filter['concesionaria']=$concesionaria;
+		}
+		if(!empty($titular)){
+			$filter['titular']=$titular;
+		}
+		return $filter;
+	}
+
+	private function listTramites($filter){
+		// var_dump($filter);
+		$em = $this->getDoctrine()->getManager();
+        return $em->getRepository('AppBundle:Tramite')->findByFilter($filter);
+	}
 
     /**
      * Creates a new tramite entity.

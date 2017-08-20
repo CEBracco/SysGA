@@ -10,4 +10,17 @@ namespace AppBundle\Repository;
  */
 class TitularRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function search($value){
+		$cb = $this->createQueryBuilder('t');
+
+		$cb->where('LOWER(t.nombre) LIKE :valueNombre')
+			->setParameter('valueNombre', '%'.$value.'%')
+			->orWhere('LOWER(t.apellido) LIKE :valueApellido')
+			->setParameter('valueApellido', '%'.$value.'%')
+			->orWhere('t.dni LIKE :valueDni')
+			->setParameter('valueDni', '%'.$value.'%');
+
+		$query=$cb->getQuery();
+		return $query->getResult();
+	}
 }

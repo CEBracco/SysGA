@@ -13,4 +13,28 @@ class TramiteRepository extends \Doctrine\ORM\EntityRepository
     public function findAll(){
         return $this->findByDeletedAt(null);
     }
+
+	public function findByFilter($filter){
+		$cb = $this->createQueryBuilder('t');
+
+		if(array_key_exists('fromDate',$filter)){
+			$cb->where('t.fecha >= :fromDate');
+			$cb->setParameter('fromDate', $filter['fromDate']);
+		}
+		if(array_key_exists('toDate',$filter)){
+			$cb->andWhere('t.fecha <= :toDate');
+			$cb->setParameter('toDate', $filter['toDate']);
+		}
+		if(array_key_exists('concesionaria',$filter)){
+			$cb->andWhere('t.concesionaria = :concesionaria');
+			$cb->setParameter('concesionaria', $filter['concesionaria']);
+		}
+		if(array_key_exists('titular',$filter)){
+			$cb->andWhere('t.titular = :titular');
+			$cb->setParameter('titular', $filter['titular']);
+		}
+
+		$query=$cb->getQuery();
+		return $query->getResult();
+	}
 }

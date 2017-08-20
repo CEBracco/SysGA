@@ -1,65 +1,102 @@
-{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %} {% block body %}
+<h4>Trámites</h4>
 
-{% block body %}
-    <h4>Trámites</h4>
+<form action="{{ path('tramite_index') }}" method="post">
+	<div class="row">
+		<div class="col m3">
+			<div class="input-field">
+				<input type="text" class="datepicker" name="fromDate">
+				<label>Desde</label>
+			</div>
+		</div>
+		<div class="col m3">
+			<div class="input-field">
+				<input type="text" class="datepicker" name="toDate">
+				<label>Hasta</label>
+			</div>
+		</div>
+		<div class="col m3">
+			<div class="input-field">
+				<select name="concesionaria">
+					<option value="" selected>TODAS</option>
+					{% for concesionaria in concesionarias %}
+						<option value="{{ concesionaria.id }}">{{ concesionaria.nombre }}</option>
+					{% endfor %}
+				</select>
+				<label>Concesionaria</label>
+			</div>
+		</div>
+		<div class="col m3">
+			<div class="input-field">
+				<input type="text" id="autocomplete-input" class="autocomplete" autocomplete="off">
+				<label for="autocomplete-input">Titular</label>
+			</div>
+			<input id="hiddenInputTitular" type="hidden" name="titular">
+		</div>
+	</div>
+	<div class="row ">
+		<div class="col m12">
+			<button class="btn right" type="submit">Buscar</button>
+		</div>
+	</div>
+</form>
 
-    <table class="striped highlight">
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Concesionaria</th>
-                <th>Titular</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for tramite in tramites %}
-            <tr id="tramite-{{ tramite.id }}">
-                <td>{% if tramite.fecha %}{{ tramite.fecha|date('d/m/Y') }}{% endif %}</td>
-                <td>{{ tramite.concesionaria.nombre }}</td>
-                <td>{{ tramite.titular.toString() }}</td>
-                <td class="fit">
-                    <a id="status-{{ tramite.id }}" class='btn' href='#' onclick="loadEstados({{ tramite.id }})">{{ tramite.estadoActual.estado }}</a>
-                </td>
-                <td class="fit">
-                    <a href="{{ path('tramite_edit', { 'id': tramite.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
-                    <a href="#" class="btn waves-effect waves-light no-lateral-padding amber darken-3 openModalPago" onclick="modalPago({{tramite.id}},{{ (tramite.fechaLiquidacion) ? "'" ~ tramite.fechaLiquidacion|date('d/m/Y') ~ "'" : 'null' }},{{ tramite.gastoArancel}},{{ tramite.impuestosPatente}},{{ tramite.selladosGestoria}},{{ tramite.selladosRegistro}},{{ tramite.honorarios}},{{ tramite.otros }})"><i class="material-icons">local_atm</i></a>
-                    <a onclick="confirmModal('{{ path('tramite_delete', { 'id': tramite.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<table class="striped highlight">
+	<thead>
+		<tr>
+			<th>Fecha</th>
+			<th>Concesionaria</th>
+			<th>Titular</th>
+			<th>Estado</th>
+			<th>Acciones</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for tramite in tramites %}
+		<tr id="tramite-{{ tramite.id }}">
+			<td>{% if tramite.fecha %}{{ tramite.fecha|date('d/m/Y') }}{% endif %}</td>
+			<td>{{ tramite.concesionaria.nombre }}</td>
+			<td>{{ tramite.titular.toString() }}</td>
+			<td class="fit">
+				<a id="status-{{ tramite.id }}" class='btn' href='#' onclick="loadEstados({{ tramite.id }})">{{ tramite.estadoActual.estado }}</a>
+			</td>
+			<td class="fit">
+				<a href="{{ path('tramite_edit', { 'id': tramite.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
+				<a href="#" class="btn waves-effect waves-light no-lateral-padding amber darken-3 openModalPago" onclick="modalPago({{tramite.id}},{{ (tramite.fechaLiquidacion) ? " '" ~ tramite.fechaLiquidacion|date('d/m/Y ') ~ "'
+				    " : 'null' }},{{ tramite.gastoArancel}},{{ tramite.impuestosPatente}},{{ tramite.selladosGestoria}},{{ tramite.selladosRegistro}},{{ tramite.honorarios}},{{ tramite.otros }})"><i class="material-icons">local_atm</i></a> {% if tramite.deletedAt is null %}<a onclick="confirmModal('{{ path('tramite_delete', { 'id': tramite.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>{%
+				endif %}
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
 
-{% endblock %}
-
-{% block modals %}
+{% endblock %} {% block modals %}
 <div class="fixed-action-btn">
-    <a href="{{ path('tramite_new') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
+	<a href="{{ path('tramite_new') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
         <i class="large material-icons">add</i>
     </a>
 </div>
 
 <div id="statusModal" class="modal modal-fixed-footer">
-  <div class="modal-content">
-      <h4>Estados</h4>
-      <ul id="statusAccordion" class="collapsible" data-collapsible="accordion"></ul>
-  </div>
-  <div class="modal-footer">
-      <a class="modal-action waves-effect btn modal-trigger" href="#addStatusModal">Agregar Estado</a>
-      <a href="#!" class="modal-action modal-close waves-effect btn-flat">Cerrar</a>
-  </div>
+	<div class="modal-content">
+		<h4>Estados</h4>
+		<ul id="statusAccordion" class="collapsible" data-collapsible="accordion"></ul>
+	</div>
+	<div class="modal-footer">
+		<a class="modal-action waves-effect btn modal-trigger" href="#addStatusModal">Agregar Estado</a>
+		<a href="#!" class="modal-action modal-close waves-effect btn-flat">Cerrar</a>
+	</div>
 </div>
 
 <div id="addStatusModal" class="modal modal-fixed-footer">
-  <div class="modal-content">
-        <h4>Nuevo Estado</h4>
-        <div class="card">
-            <div class="card-content">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <select id="inputEstado">
+	<div class="modal-content">
+		<h4>Nuevo Estado</h4>
+		<div class="card">
+			<div class="card-content">
+				<div class="row">
+					<div class="input-field col s12">
+						<select id="inputEstado">
                             <option value="Pendiente">Pendiente</option>
                             <option value="Presentado">Presentado</option>
                             <option value="Observado">Observado</option>
@@ -67,82 +104,83 @@
                             <option value="Retirado">Retirado</option>
                             <option value="Enviado">Enviado</option>
                         </select>
-                        <label>Estado</label>
-                    </div>
-                </div>
+						<label>Estado</label>
+					</div>
+				</div>
 
-                <div class="row">
-                    <div class="input-field col s12">
-                        <textarea id="inputObservacion" class="materialize-textarea"></textarea>
-                        <label for="inputObservacion">Observacion</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-  </div>
-  <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect btn" onclick="doAddStatus()">Aceptar</a>
-      <a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
-  </div>
+				<div class="row">
+					<div class="input-field col s12">
+						<textarea id="inputObservacion" class="materialize-textarea"></textarea>
+						<label for="inputObservacion">Observacion</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class="modal-action modal-close waves-effect btn" onclick="doAddStatus()">Aceptar</a>
+		<a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
+	</div>
 </div>
 
 <div id="payModal" class="modal modal-fixed-footer">
-  <div class="modal-content">
-      <h4>Resumen Gastos</h4>
-      <p class="fechaLiquidacion red-text"></p>
-      <table class="striped hovered">
-          <thead>
-              <tr>
-                  <th>Concepto</th>
-                  <th>Valor</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td>Gastos Arancel</td>
-                  <td class="gastosArancel"></td>
-              </tr>
-              <tr>
-                  <td>Impuestos Patente</td>
-                  <td class="impuestosPatente"></td>
-              </tr>
-              <tr>
-                <td>Sellados Registro</td>
-                <td class="selladosRegistro"></td>
-              </tr>
-              <tr>
-                  <td>Sellados Gestoria</td>
-                  <td class="selladosGestoria"></td>
-              </tr>
-              <tr>
-                  <td>Honorarios</td>
-                  <td class="honorarios"></td>
-              </tr>
-              <tr>
-                  <td>Otros</td>
-                  <td class="otros"></td>
-              </tr>
-              <tr>
-                <td><b>Gastos en Registro</b></td>
-                <td><b class="totalEnRegistro"></b></td>
-              </tr>
-              <tr>
-                  <td><b>Gatos Gestoria</b></td>
-                  <td><b class="totalGestoria"></b></td>
-              </tr>
-              <tr>
-                  <td><b>TOTAL</b></td>
-                  <td><b class="total"></b></td>
-              </tr>
-          </tbody>
-      </table>
-  </div>
-  <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
-  </div>
+	<div class="modal-content">
+		<h4>Resumen Gastos</h4>
+		<p class="fechaLiquidacion red-text"></p>
+		<table class="striped hovered">
+			<thead>
+				<tr>
+					<th>Concepto</th>
+					<th>Valor</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Gastos Arancel</td>
+					<td class="gastosArancel"></td>
+				</tr>
+				<tr>
+					<td>Impuestos Patente</td>
+					<td class="impuestosPatente"></td>
+				</tr>
+				<tr>
+					<td>Sellados Registro</td>
+					<td class="selladosRegistro"></td>
+				</tr>
+				<tr>
+					<td>Sellados Gestoria</td>
+					<td class="selladosGestoria"></td>
+				</tr>
+				<tr>
+					<td>Honorarios</td>
+					<td class="honorarios"></td>
+				</tr>
+				<tr>
+					<td>Otros</td>
+					<td class="otros"></td>
+				</tr>
+				<tr>
+					<td><b>Gastos en Registro</b></td>
+					<td><b class="totalEnRegistro"></b></td>
+				</tr>
+				<tr>
+					<td><b>Gastos Gestoria</b></td>
+					<td><b class="totalGestoria"></b></td>
+				</tr>
+				<tr>
+					<td><b>TOTAL</b></td>
+					<td><b class="total"></b></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
+	</div>
 </div>
-{% endblock %}
-
-{% block javascripts %}
-    <script src="{{ asset('js/tramite/index.js') }}"></script>
+{% endblock %} {% block javascripts %}
+<script>
+	var queryTitulares="{{ path('titular_search') }}"
+</script>
+<script src="{{ asset('js/tramite/index.js') }}"></script>
 {% endblock %}

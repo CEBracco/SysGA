@@ -1,3 +1,4 @@
+var emptyDates=true;
 var selectedTramite;
 var itemCollapsable='<li><div class="collapsible-header"><i class="material-icons">subject</i>{{ fecha }} - {{ estado }}</div><div class="collapsible-body"><span>{{ observacion }}</span></div></li>';
 
@@ -75,4 +76,22 @@ function addStatusItem(status){
 
 $(document).ready(function(){
     $("#addStatusModal").modal({dismissible: false});
+
+	$('input.autocomplete').autocomplete({
+		data: {},
+		limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+		onAutocomplete: function(val) {
+			// Callback function when value is autcompleted.
+		},
+		minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+	});
+});
+
+ajaxAutoComplete({
+	inputId:'autocomplete-input',
+	hiddenInputId:'hiddenInputTitular',
+	ajaxUrl:queryTitulares,
+	printObject: function(titular) {
+		return titular.nombre+" "+titular.apellido+" ("+titular.dni+")";
+	}
 });

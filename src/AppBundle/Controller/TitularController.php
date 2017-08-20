@@ -5,7 +5,13 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Titular;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
 /**
  * Titular controller.
@@ -95,4 +101,26 @@ class TitularController extends Controller
 
         return $this->redirectToRoute('titular_index');
     }
+
+	/**
+	 * Search titular entities.
+	 *
+	 * @Route("/search", name="titular_search")
+	 * @Method("POST")
+	 */
+	public function searchAction(Request $request)
+	{
+		$value=$request->request->get('value','');
+		// $value=$request->query->get('value','');
+
+		$em = $this->getDoctrine()->getManager();
+		$titulares = $em->getRepository('AppBundle:Titular')->search($value);
+
+		$normalizer = new GetSetMethodNormalizer();
+		$encoder = new JsonEncoder();
+
+		$serializer = new Serializer(array($normalizer), array($encoder));
+		$content=$serializer->serialize($titulares, 'json');
+		return new Response($content);
+	}
 }
