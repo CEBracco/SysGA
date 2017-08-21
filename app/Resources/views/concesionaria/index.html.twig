@@ -9,7 +9,8 @@
                 <th>Nombre</th>
                 <th>Saldo Depositado</th>
                 <th>Saldo en Registro</th>
-                <th>Acciones</th>
+				{% if is_granted('ROLE_ADMIN') %}<th>Acciones</th>{% endif %}
+
             </tr>
         </thead>
         <tbody>
@@ -18,10 +19,12 @@
                 <td>{{ concesionaria.nombre }}</td>
                 <td>${{ concesionaria.saldoDepositado|number_format(2, ',', '.') }}</td>
                 <td><a class="btn waves-effect waves-light no-lateral-padding" onclick="loadAccountsModal({{concesionaria.id}})">Ver Cuentas</a></td>
-                <td class="fit">
+				{% if is_granted('ROLE_ADMIN') %}
+				<td class="fit">
                     <a href="{{ path('concesionaria_edit', { 'id': concesionaria.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
                     <a onclick="confirmModal('{{ path('concesionaria_delete', { 'id': concesionaria.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
                 </td>
+				{% endif %}
             </tr>
         {% endfor %}
         </tbody>

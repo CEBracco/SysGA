@@ -39,17 +39,34 @@ class TramiteController extends Controller
 		$fromDate=\DateTime::createFromFormat('!d/m/Y',$request->request->get('fromDate',''));
 		$toDate=\DateTime::createFromFormat('!d/m/Y',$request->request->get('toDate',''));
 		$concesionaria=$request->request->get('concesionaria','');
+
+		$titularString='';
 		$titular=$request->request->get('titular','');
-		$filter=$this->getFilter($fromDate,$toDate,$concesionaria,$titular);
+		if($titular != ''){
+			$titularEntity=$em->getRepository('AppBundle:Titular')->find($titular);
+			$titularString=$titularEntity->getNombre().' '.$titularEntity->getApellido().' ('.$titularEntity->getDni().')';
+		}
+
+		$estado=$request->request->get('estado','');
+		$filter=$this->getFilter($fromDate,$toDate,$concesionaria,$titular,$estado);
 
 		$tramites= $this->listTramites($filter);
         return $this->render('tramite/index.html.twig', array(
             'tramites' => $tramites,
-			'concesionarias' => $concesionarias
+			'concesionarias' => $concesionarias,
+			'estados' => $this->getEstados(),
+			'filtro' => array(
+							'fromDate' => $request->request->get('fromDate',''),
+							'toDate' => $request->request->get('toDate',''),
+							'concesionaria' => $concesionaria,
+							'titular' => $titular,
+							'titularString' => $titularString,
+							'estado' => $estado
+						)
         ));
     }
 
-	private function getFilter($fromDate,$toDate,$concesionaria,$titular){
+	private function getFilter($fromDate,$toDate,$concesionaria,$titular,$estado){
 		$filter=array();
 		if(!empty($fromDate)){
 			$filter['fromDate']=$fromDate;
@@ -62,6 +79,9 @@ class TramiteController extends Controller
 		}
 		if(!empty($titular)){
 			$filter['titular']=$titular;
+		}
+		if(!empty($estado)){
+			$filter['estado']=$estado;
 		}
 		return $filter;
 	}
@@ -245,4 +265,15 @@ class TramiteController extends Controller
 
         return $titular;
     }
+
+	private function getEstados(){
+		return [
+			"Pendiente",
+			"Presentado",
+			"Observado",
+			"Reingresado",
+			"Retirado",
+			"Enviado",
+		];
+	}
 }

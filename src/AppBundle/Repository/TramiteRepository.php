@@ -33,6 +33,12 @@ class TramiteRepository extends \Doctrine\ORM\EntityRepository
 			$cb->andWhere('t.titular = :titular');
 			$cb->setParameter('titular', $filter['titular']);
 		}
+		if(array_key_exists('estado',$filter)){
+			$cb->join('t.estadoActual', 'e');
+			$cb->andWhere('e.estado = :tipoEstado');
+			$cb->setParameter('tipoEstado', $filter['estado']);
+		}
+		$cb->andWhere('t.deletedAt is null');
 
 		$query=$cb->getQuery();
 		return $query->getResult();

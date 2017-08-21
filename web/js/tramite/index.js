@@ -88,10 +88,33 @@ $(document).ready(function(){
 });
 
 ajaxAutoComplete({
-	inputId:'autocomplete-input',
+	inputId:'input-titular',
 	hiddenInputId:'hiddenInputTitular',
 	ajaxUrl:queryTitulares,
 	printObject: function(titular) {
 		return titular.nombre+" "+titular.apellido+" ("+titular.dni+")";
 	}
 });
+
+function resetInputs(){
+	$('input[name="fromDate"').val('');
+	$('input[name="fromDate"').focus();
+	$('input[name="fromDate"').blur();
+
+	$('input[name="toDate"').val('');
+	$('input[name="toDate"').focus();
+	$('input[name="toDate"').blur();
+
+	$('select[name="concesionaria"]').val('');
+	$('select[name="concesionaria"]').material_select('destroy');
+	$('select[name="concesionaria"]').material_select();
+
+	$('input[name="titular"]').val('');
+	$('#input-titular').val("".trim());
+	$('#input-titular').focus();
+	$('#input-titular').blur();
+
+	$('select[name="estado"]').val('');
+	$('select[name="estado"]').material_select('destroy');
+	$('select[name="estado"]').material_select();
+}

@@ -1,0 +1,12 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+	<div class="center-align">
+		<b>Exito</b>
+    	<p>¡El usuario ha sido registrado!</p>
+		<br>
+    	<p><a class="btn" href="{{ path('user_index') }}">Volver al Listado</a></p>
+	</div>
+{% endblock fos_user_content %}

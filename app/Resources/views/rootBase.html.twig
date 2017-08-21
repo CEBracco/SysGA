@@ -41,8 +41,8 @@
 				{% if is_granted('ROLE_GESTION') %}
 					<li><a href="{{ path('concesionaria_index') }}"><i class="material-icons">store</i> Concesionarias</a></li>
 				{% endif %}
-				<li><a href="{{ path('movimiento_index') }}"><i class="material-icons">local_atm</i> Movimientos</a></li>
 				{% if is_granted('ROLE_ADMIN') %}
+					<li><a href="{{ path('movimiento_index') }}"><i class="material-icons">local_atm</i> Movimientos</a></li>
 					<li><a href="{{ path('registrodelautomotor_index') }}"><i class="material-icons">account_balance</i> Registros del automotor</a></li>
 				{% endif %}
 				{% if is_granted('ROLE_GESTION') %}
