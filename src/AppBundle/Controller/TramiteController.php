@@ -18,6 +18,8 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 /**
  * Tramite controller.
  *
@@ -34,11 +36,18 @@ class TramiteController extends Controller
     public function indexAction(Request $request)
     {
 		$em = $this->getDoctrine()->getManager();
-		$concesionarias=$em->getRepository('AppBundle:Concesionaria')->findAll();
 
 		$fromDate=\DateTime::createFromFormat('!d/m/Y',$request->request->get('fromDate',''));
 		$toDate=\DateTime::createFromFormat('!d/m/Y',$request->request->get('toDate',''));
-		$concesionaria=$request->request->get('concesionaria','');
+
+		if ($this->getUser()->getRol() != 'ROLE_CONCESIONARIA'){
+			$concesionarias=$em->getRepository('AppBundle:Concesionaria')->findAll();
+			$concesionaria=$request->request->get('concesionaria','');
+		}
+		else{
+			$concesionarias=array();
+			$concesionaria=$this->getUser()->getConcesionaria()->getId();
+		}
 
 		$titularString='';
 		$titular=$request->request->get('titular','');
@@ -97,6 +106,7 @@ class TramiteController extends Controller
      *
      * @Route("/new", name="tramite_new")
      * @Method({"GET", "POST"})
+	 * @Security("has_role('ROLE_GESTION')")
      */
     public function newAction(Request $request)
     {
@@ -133,25 +143,11 @@ class TramiteController extends Controller
     }
 
     /**
-     * Finds and displays a tramite entity.
-     *
-     * @Route("/{id}", name="tramite_show")
-     * @Method("GET")
-     */
-    public function showAction(Tramite $tramite)
-    {
-        $deleteForm = $this->createDeleteForm($tramite);
-
-        return $this->render('tramite/show.html.twig', array(
-            'tramite' => $tramite,
-        ));
-    }
-
-    /**
      * Displays a form to edit an existing tramite entity.
      *
      * @Route("/{id}/edit", name="tramite_edit")
      * @Method({"GET", "POST"})
+	 * @Security("has_role('ROLE_GESTION')")
      */
     public function editAction(Request $request, Tramite $tramite)
     {
@@ -189,6 +185,7 @@ class TramiteController extends Controller
      *
      * @Route("/{id}/delete", name="tramite_delete")
      * @Method("GET")
+	 * @Security("has_role('ROLE_GESTION')")
      */
     public function deleteAction(Request $request, Tramite $tramite)
     {
@@ -228,6 +225,7 @@ class TramiteController extends Controller
      *
      * @Route("/{id}/addEstado", name="tramite_addEstado")
      * @Method({"POST"})
+	 * @Security("has_role('ROLE_GESTION')")
      */
     public function addTramiteStatusAction(Request $request, Tramite $tramite)
     {

@@ -106,15 +106,20 @@ class TitularController extends Controller
 	 * Search titular entities.
 	 *
 	 * @Route("/search", name="titular_search")
-	 * @Method("POST")
+	 * @Method({"GET", "POST"})
 	 */
 	public function searchAction(Request $request)
 	{
 		$value=$request->request->get('value','');
-		// $value=$request->query->get('value','');
 
 		$em = $this->getDoctrine()->getManager();
-		$titulares = $em->getRepository('AppBundle:Titular')->search($value);
+
+		if ($this->getUser()->getRol() != 'ROLE_CONCESIONARIA'){
+			$titulares = $em->getRepository('AppBundle:Titular')->search($value);
+		}
+		else{
+			$titulares = $em->getRepository('AppBundle:Titular')->searchInConcesionaria($value,$this->getUser()->getConcesionaria());
+		}
 
 		$normalizer = new GetSetMethodNormalizer();
 		$encoder = new JsonEncoder();

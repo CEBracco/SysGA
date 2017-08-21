@@ -45,6 +45,15 @@
         </div>
     </div>
 
+	<div id="concesionariaContainer" class="row collapse">
+		<div class="col s12">
+			<div class="input-field">
+				{{ form_widget(form.concesionaria) }}
+				{{ form_label(form.concesionaria) }}
+			</div>
+		</div>
+	</div>
+
     <div class="row">
         <div class="col m6">
             <div class="input-field">
@@ -68,8 +77,28 @@
 
 {% block javascripts %}
 <script>
+	var emptyValue=true;
     $(document).ready(function() {
-        $('select').material_select();
+        $('#fos_user_registration_form_rol').change(function(){
+			if($(this).val() == 'ROLE_CONCESIONARIA'){
+				$('#concesionariaContainer').show();
+				$('#fos_user_registration_form_concesionaria option[value=""]').remove();
+				$('#fos_user_registration_form_concesionaria').material_select('destroy');
+				$('#fos_user_registration_form_concesionaria').material_select();
+				emptyValue=false;
+			}
+			else{
+				$('#concesionariaContainer').hide();
+				if(!emptyValue){
+					var o = new Option("", "");
+					o.selected=true;
+					$('#fos_user_registration_form_concesionaria').prepend(o);
+					$('#fos_user_registration_form_concesionaria').material_select('destroy');
+					$('#fos_user_registration_form_concesionaria').material_select();
+					emptyValue=true;
+				}
+			}
+		})
     });
 </script>
 {% endblock %}

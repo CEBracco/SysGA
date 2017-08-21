@@ -38,6 +38,12 @@ class User extends BaseUser{
     private $apellido;
 
 	/**
+     * @ORM\ManyToOne(targetEntity="Concesionaria")
+     * @ORM\JoinColumn(name="concesionaria_id", referencedColumnName="id", nullable=true)
+     */
+     private $concesionaria;
+
+	/**
      * Set nombre
      *
      * @param string $nombre
@@ -101,6 +107,30 @@ class User extends BaseUser{
 	public function setId($id) {
 		$this->id = $id;
 	}
+
+    /**
+     * Set concesionaria
+     *
+     * @param Concesionaria $concesionaria
+     *
+     * @return User
+     */
+    public function setConcesionaria($concesionaria)
+    {
+        $this->concesionaria = $concesionaria;
+
+        return $this;
+    }
+
+    /**
+     * Get concesionaria
+     *
+     * @return concesionaria
+     */
+    public function getConcesionaria()
+    {
+        return $this->concesionaria;
+    }
 
 	public function serializar(){
 		return array(

@@ -36,7 +36,7 @@
 					</div>
 					<a><img class="circle" src="{{ asset('img/default_user.jpg') }}"></a>
 					<a><span class="white-text name">{{ app.user.nombre }} {{ app.user.apellido }}</span></a>
-					<a><span class="white-text email">{{ app.user.getRolAImprimir() }}</span></a>
+					<a><span class="white-text email">{{ app.user.getRolAImprimir() }}{% if app.user.concesionaria is not null %} ({{ app.user.concesionaria.nombre }}){% endif %}</span></a>
 				</div></li>
 				{% if is_granted('ROLE_GESTION') %}
 					<li><a href="{{ path('concesionaria_index') }}"><i class="material-icons">store</i> Concesionarias</a></li>
@@ -47,6 +47,8 @@
 				{% endif %}
 				{% if is_granted('ROLE_GESTION') %}
 					<li><a href="{{ path('titular_index') }}"><i class="material-icons">recent_actors</i> Titulares</a></li>
+				{% endif %}
+				{% if is_granted('ROLE_CONCESIONARIA') %}
 					<li><a href="{{ path('tramite_index') }}"><i class="material-icons">assignment</i> Tramites</a></li>
 				{% endif %}
 				{% if is_granted('ROLE_ADMIN') %}

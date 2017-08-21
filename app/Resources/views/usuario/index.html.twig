@@ -16,7 +16,7 @@
         <tbody>
         {% for usuario in usuarios %}
             <tr>
-                <td>{{ usuario.getRolAImprimir() }}</td>
+                <td>{{ usuario.getRolAImprimir() }}{% if usuario.concesionaria is not null %} ({{ usuario.concesionaria.nombre }}){% endif %}</td>
                 <td>{{ usuario.username }}</td>
                 <td>{{ usuario.apellido }}</td>
                 <td>{{ usuario.nombre }}</td>

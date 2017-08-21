@@ -15,6 +15,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+
 class RegistrationType extends AbstractType{
 
     public function getParent(){
@@ -32,9 +34,9 @@ class RegistrationType extends AbstractType{
 
 	private function roleChoices(){
 		$choices = array(
+			'Administrador' => "ROLE_ADMIN",
 			'Concesionaria' => "ROLE_CONCESIONARIA",
-            'Gestión de tramites' => "ROLE_GESTION",
-			'Administrador' => "ROLE_ADMIN");
+            'Gestión de tramites' => "ROLE_GESTION");
 		return $choices;
 	}
 
@@ -62,11 +64,17 @@ class RegistrationType extends AbstractType{
 					'placeholder' => "Ingrese su DNI...")))
 
 			->add('email', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\EmailType'), array(
-				'label' => 'Email (Opcional)',
+				'label' => 'Email',
 				'translation_domain' => 'FOSUserBundle',
 				'required' => false,
 				'attr' => array(
 					'placeholder' => "Ingrese el email...")))
+
+			->add('concesionaria', EntityType::class, array(
+				'required' => false,
+				'class' => 'AppBundle:Concesionaria',
+				'choice_label' => 'nombre',
+			))
 
 			->add('plainPassword', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\RepeatedType'), array(
 				'type' => LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\PasswordType'),
