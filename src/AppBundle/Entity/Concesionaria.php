@@ -180,4 +180,12 @@ class Concesionaria
         $cuenta=$this->findCuentaRegistroDelAutomotor($movimiento->getRegistroDelAutomotor());
         $cuenta->efectuarSalida($movimiento);
     }
+
+	public function getSaldoEnCuentas(){
+		$total=0;
+		foreach ($this->cuentas as $cuenta) {
+			$total=$total + $cuenta->getSaldo();
+		}
+		return $total;
+	}
 }

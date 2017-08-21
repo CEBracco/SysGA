@@ -27,6 +27,7 @@ security:
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/account, role: ROLE_CONCESIONARIA }
         - { path: ^/register, role: ROLE_ADMIN }
         - { path: ^/usuario, role: ROLE_ADMIN }
         - { path: ^/home, role: IS_AUTHENTICATED_FULLY }

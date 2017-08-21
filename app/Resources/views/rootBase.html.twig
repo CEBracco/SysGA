@@ -41,6 +41,9 @@
 				{% if is_granted('ROLE_GESTION') %}
 					<li><a href="{{ path('concesionaria_index') }}"><i class="material-icons">store</i> Concesionarias</a></li>
 				{% endif %}
+				{% if app.user.getRol() == 'ROLE_CONCESIONARIA' %}
+				<li><a href="{{ path('concesionaria_micuenta') }}"><i class="material-icons">credit_card</i> Cuentas</a></li>
+				{% endif %}
 				{% if is_granted('ROLE_ADMIN') %}
 					<li><a href="{{ path('movimiento_index') }}"><i class="material-icons">local_atm</i> Movimientos</a></li>
 					<li><a href="{{ path('registrodelautomotor_index') }}"><i class="material-icons">account_balance</i> Registros del automotor</a></li>
@@ -48,9 +51,7 @@
 				{% if is_granted('ROLE_GESTION') %}
 					<li><a href="{{ path('titular_index') }}"><i class="material-icons">recent_actors</i> Titulares</a></li>
 				{% endif %}
-				{% if is_granted('ROLE_CONCESIONARIA') %}
-					<li><a href="{{ path('tramite_index') }}"><i class="material-icons">assignment</i> Tramites</a></li>
-				{% endif %}
+				<li><a href="{{ path('tramite_index') }}"><i class="material-icons">assignment</i> Tramites</a></li>
 				{% if is_granted('ROLE_ADMIN') %}
 					<li><a href="{{ path('user_index') }}"><i class="material-icons">supervisor_account</i> Usuarios</a></li>
 				{% endif %}
