@@ -18,8 +18,8 @@
             <tr>
                 <td>{{ usuario.getRolAImprimir() }}{% if usuario.concesionaria is not null %} ({{ usuario.concesionaria.nombre }}){% endif %}</td>
                 <td>{{ usuario.username }}</td>
+				<td>{{ usuario.nombre }}</td>
                 <td>{{ usuario.apellido }}</td>
-                <td>{{ usuario.nombre }}</td>
                 <td class="fit">
                     <a onclick="confirmModal('{{ path('user_delete', { 'id': usuario.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
                 </td>
