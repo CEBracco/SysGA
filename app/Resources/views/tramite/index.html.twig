@@ -9,14 +9,14 @@
 		{% if is_granted('ROLE_CONCESIONARIA') %}
 			<div class="col m3">
 				<div class="input-field">
-					<input type="text" class="datepicker" name="fromDate" value="{{ filtro.fromDate }}">
+					<input type="text" class="datepickerEmpty" name="fromDate" value="{{ filtro.fromDate }}">
 					<label>Fecha desde</label>
 				</div>
 			</div>
 		{% else %}
 			<div class="col m2">
 				<div class="input-field">
-					<input type="text" class="datepicker" name="fromDate" value="{{ filtro.fromDate }}">
+					<input type="text" class="datepickerEmpty" name="fromDate" value="{{ filtro.fromDate }}">
 					<label>Fecha desde</label>
 				</div>
 			</div>
@@ -25,14 +25,14 @@
 		{% if is_granted('ROLE_CONCESIONARIA') %}
 			<div class="col m3">
 				<div class="input-field">
-					<input type="text" class="datepicker" name="toDate" value="{{ filtro.toDate }}">
+					<input type="text" class="datepickerEmpty" name="toDate" value="{{ filtro.toDate }}">
 					<label>Fecha hasta</label>
 				</div>
 			</div>
 		{% else %}
 			<div class="col m2">
 				<div class="input-field">
-					<input type="text" class="datepicker" name="toDate" value="{{ filtro.toDate }}">
+					<input type="text" class="datepickerEmpty" name="toDate" value="{{ filtro.toDate }}">
 					<label>Fecha hasta</label>
 				</div>
 			</div>
