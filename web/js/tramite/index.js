@@ -1,4 +1,3 @@
-var emptyDates=true;
 var selectedTramite;
 var itemCollapsable='<li><div class="collapsible-header"><i class="material-icons">subject</i>{{ fecha }} - {{ estado }}</div><div class="collapsible-body"><span>{{ observacion }}</span></div></li>';
 

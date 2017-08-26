@@ -61,7 +61,7 @@ class TramiteType extends AbstractType
                     'widget' => 'single_text',
                     'html5' => true,
                     'attr' => ['class' => 'datepicker'],
-                    'format' => 'dd-MM-yyyy',
+                    'format' => 'dd/MM/yyyy',
             ))
             ->add('codigoInternoConcesionaria', null, array(
                 'required' => false,
