@@ -34,7 +34,7 @@ $(document).ready(function() {
         selectYears: 15,
         format: 'dd/mm/yyyy',
         onStart: function (){
-			if(!emptyDates){
+			if(typeof emptyDates !== 'undefined' && !emptyDates){
             	var date = new Date();
             	this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
 			}
