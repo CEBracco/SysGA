@@ -24,38 +24,32 @@ class TramiteType extends AbstractType
             ->add('gastoArancel', NumberType::class, array(
                 'required' => false,
                 'attr' => array(
-                   'min' => 0,
-                   'step' => 0.0001,)
+                   'min' => 0,)
             ))
             ->add('impuestosPatente', NumberType::class, array(
                 'required' => false,
                 'attr' => array(
-                   'min' => 0,
-                   'step' => 0.0001,)
+                   'min' => 0,)
             ))
             ->add('selladosGestoria', NumberType::class, array(
                 'required' => false,
                 'attr' => array(
-                   'min' => 0,
-                   'step' => 0.0001,)
+                   'min' => 0,)
             ))
             ->add('selladosRegistro', NumberType::class, array(
                 'required' => false,
                 'attr' => array(
-                   'min' => 0,
-                   'step' => 0.0001,)
+                   'min' => 0,)
             ))
             ->add('honorarios', NumberType::class, array(
                 'required' => false,
                 'attr' => array(
-                   'min' => 0,
-                   'step' => 0.0001,)
+                   'min' => 0,)
             ))
             ->add('otros', NumberType::class, array(
                 'required' => false,
                 'attr' => array(
-                   'min' => 0,
-                   'step' => 0.0001,)
+                   'min' => 0,)
             ))
             ->add('fecha',DateType::class,array(
                     'widget' => 'single_text',
@@ -78,22 +72,19 @@ class TramiteType extends AbstractType
 			->add('otros', NumberType::class, array(
 				'required' => false,
 				'attr' => array(
-				   'min' => 0,
-				   'step' => 0.0001,)
+				   'min' => 0,)
 			))
 			->add('depositoEnRegistro', NumberType::class, array(
 				'required' => false,
 				'mapped' => false,
 				'attr' => array(
-				   'min' => 0,
-				   'step' => 0.0001,)
+				   'min' => 0,)
 			))
 			->add('depositoGestoria', NumberType::class, array(
 				'required' => false,
 				'mapped' => false,
 				'attr' => array(
-				   'min' => 0,
-				   'step' => 0.0001,)
+				   'min' => 0,)
 			));
 
         if($tramite->getTitular() == null){
