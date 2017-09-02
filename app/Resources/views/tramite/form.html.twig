@@ -95,7 +95,7 @@
                         {{ form_label(form.depositoEnRegistro) }}
                     </div>
 					{% if edit is defined and edit == true %}
-					<p class="center-align"><b>Total depositado en Gestoria:</b> ${{ tramite.getTotalDepositadoEnRegistro}}</p>
+					<p class="center-align"><b>Total depositado en Registro:</b> ${{ tramite.getTotalDepositadoEnRegistro}}</p>
 					{% endif %}
                 </div>
                 <div class="col m6">
@@ -104,7 +104,7 @@
                         {{ form_label(form.depositoGestoria) }}
                     </div>
 					{% if edit is defined and edit == true %}
-					<p class="center-align"><b>Total depositado en Registro:</b> ${{ tramite.getTotalDepositadoGestoria}}</p>
+					<p class="center-align"><b>Total depositado en Gestoria:</b> ${{ tramite.getTotalDepositadoGestoria}}</p>
 					{% endif %}
                 </div>
             </div>
@@ -119,42 +119,42 @@
             <div class="row">
                 <div class="col m2">
                     <div class="input-field">
-                        {{ form_widget(form.gastoArancel, { 'type':'number', 'attr': {'class': 'totalEnRegistro'} }) }}
+                        {{ form_widget(form.gastoArancel, {'attr': {'class': 'totalEnRegistro numberInput', 'pattern':'[0-9]+([,\.][0-9]+)?' } }) }}
                         {{ form_label(form.gastoArancel) }}
                     </div>
                 </div>
 
                 <div class="col m2">
                     <div class="input-field">
-                        {{ form_widget(form.impuestosPatente, { 'type':'number', 'attr': {'class': 'totalEnRegistro'} }) }}
+                        {{ form_widget(form.impuestosPatente, {'attr': {'class': 'totalEnRegistro numberInput', 'pattern':'[0-9]+([,\.][0-9]+)?' } }) }}
                         {{ form_label(form.impuestosPatente) }}
                     </div>
                 </div>
 
                 <div class="col m2">
                     <div class="input-field">
-                        {{ form_widget(form.selladosRegistro, { 'type':'number', 'attr': {'class': 'totalEnRegistro'} } ) }}
+                        {{ form_widget(form.selladosRegistro, {'attr': {'class': 'totalEnRegistro numberInput', 'pattern':'[0-9]+([,\.][0-9]+)?' } } ) }}
                         {{ form_label(form.selladosRegistro) }}
                     </div>
                 </div>
 
                 <div class="col m2">
                     <div class="input-field">
-                        {{ form_widget(form.selladosGestoria, { 'type':'number', 'attr': {'class': 'totalGestoria'} } ) }}
+                        {{ form_widget(form.selladosGestoria, {'attr': {'class': 'totalGestoria numberInput', 'pattern':'[0-9]+([,\.][0-9]+)?' } } ) }}
                         {{ form_label(form.selladosGestoria) }}
                     </div>
                 </div>
 
                 <div class="col m2">
                     <div class="input-field">
-                        {{ form_widget(form.honorarios, { 'type':'number', 'attr': {'class': 'totalGestoria'} }) }}
+                        {{ form_widget(form.honorarios, {'attr': {'class': 'totalGestoria numberInput', 'pattern':'[0-9]+([,\.][0-9]+)?' } }) }}
                         {{ form_label(form.honorarios) }}
                     </div>
                 </div>
 
                 <div class="col m2">
                     <div class="input-field">
-                        {{ form_widget(form.otros, { 'type':'number', 'attr': {'class': 'totalGestoria'} }) }}
+                        {{ form_widget(form.otros, {'attr': {'class': 'totalGestoria numberInput', 'pattern':'[0-9]+([,\.][0-9]+)?' } }) }}
                         {{ form_label(form.otros) }}
                     </div>
                 </div>
@@ -215,7 +215,7 @@
                 }
             });
             $('.showTotalEnRegistro').text(totalEnRegistro);
-            $('.showTotal').text(parseFloat(total));
+            $('.showTotal').text(round(parseFloat(total)));
         });
 
         $('.totalGestoria').on('change keyup',function(){
@@ -227,7 +227,7 @@
                 }
             });
             $('.showTotalGestoria').text(totalGestoria);
-            $('.showTotal').text(parseFloat(total));
+            $('.showTotal').text(round(parseFloat(total)));
         });
 
     });
