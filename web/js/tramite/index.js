@@ -12,10 +12,9 @@ function modalPago(id, fechaLiquidacion, gastosArancel, impuestosPatente, sellad
     $('.selladosRegistro').text("$"+selladosRegistro);
     $('.honorarios').text("$"+honorarios);
     $('.otros').text("$"+otros);
-    $('.totalGestoria').text("$"+totalGestoria);
-    $('.totalEnRegistro').text("$"+totalEnRegistro);
-    $('.total').text("$"+(totalEnRegistro+totalGestoria));
-    $('.honorarios').text("$"+honorarios);
+    $('.totalGestoria').text(printMoney(totalGestoria));
+    $('.totalEnRegistro').text(printMoney(totalEnRegistro));
+    $('.total').text(printMoney(totalEnRegistro+totalGestoria));
     if(fechaLiquidacion != null){
         $('.fechaLiquidacion').text('Tramite Liquidado el día: '+fechaLiquidacion);
     }
