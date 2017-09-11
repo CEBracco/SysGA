@@ -22,39 +22,38 @@ class TramiteType extends AbstractType
 
         $builder
             ->add('gastoArancel', NumberType::class, array(
-                'required' => false,
+                'required' => true,
                 'attr' => array(
                    'min' => 0,)
             ))
             ->add('impuestosPatente', NumberType::class, array(
-                'required' => false,
+                'required' => true,
                 'attr' => array(
                    'min' => 0,)
             ))
             ->add('selladosGestoria', NumberType::class, array(
-                'required' => false,
+                'required' => true,
                 'attr' => array(
                    'min' => 0,)
             ))
             ->add('selladosRegistro', NumberType::class, array(
-                'required' => false,
+                'required' => true,
                 'attr' => array(
                    'min' => 0,)
             ))
             ->add('honorarios', NumberType::class, array(
-                'required' => false,
+                'required' => true,
                 'attr' => array(
                    'min' => 0,)
             ))
             ->add('otros', NumberType::class, array(
-                'required' => false,
+                'required' => true,
                 'attr' => array(
                    'min' => 0,)
             ))
             ->add('fecha',DateType::class,array(
                     'widget' => 'single_text',
                     'html5' => true,
-                    'attr' => ['class' => 'datepicker'],
                     'format' => 'dd/MM/yyyy',
             ))
             ->add('codigoInternoConcesionaria', null, array(
