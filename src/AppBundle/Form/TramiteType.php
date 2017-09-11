@@ -22,32 +22,32 @@ class TramiteType extends AbstractType
 
         $builder
             ->add('gastoArancel', NumberType::class, array(
-                'required' => false,
+                'required' => true,
                 'attr' => array(
                    'min' => 0,)
             ))
             ->add('impuestosPatente', NumberType::class, array(
-                'required' => false,
+                'required' => true,
                 'attr' => array(
                    'min' => 0,)
             ))
             ->add('selladosGestoria', NumberType::class, array(
-                'required' => false,
+                'required' => true,
                 'attr' => array(
                    'min' => 0,)
             ))
             ->add('selladosRegistro', NumberType::class, array(
-                'required' => false,
+                'required' => true,
                 'attr' => array(
                    'min' => 0,)
             ))
             ->add('honorarios', NumberType::class, array(
-                'required' => false,
+                'required' => true,
                 'attr' => array(
                    'min' => 0,)
             ))
             ->add('otros', NumberType::class, array(
-                'required' => false,
+                'required' => true,
                 'attr' => array(
                    'min' => 0,)
             ))
