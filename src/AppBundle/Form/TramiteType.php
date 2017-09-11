@@ -54,7 +54,6 @@ class TramiteType extends AbstractType
             ->add('fecha',DateType::class,array(
                     'widget' => 'single_text',
                     'html5' => true,
-                    'attr' => ['class' => 'datepicker'],
                     'format' => 'dd/MM/yyyy',
             ))
             ->add('codigoInternoConcesionaria', null, array(

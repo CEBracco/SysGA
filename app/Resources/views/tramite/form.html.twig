@@ -21,7 +21,11 @@
                 </div>
                 <div class="col m6">
                     <div class="input-field">
-                        {{ form_widget(form.fecha) }}
+						{% if edit is not defined or edit == false %}
+                        	{{ form_widget(form.fecha, {'attr': {'class': 'datepicker'}}) }}
+						{% else %}
+							{{ form_widget(form.fecha, {'attr': {'class': 'datepickerEmpty'}}) }}
+						{% endif %}
                         {{ form_label(form.fecha) }}
                     </div>
                 </div>
