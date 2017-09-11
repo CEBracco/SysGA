@@ -126,7 +126,7 @@ function doConfirm(){
 }
 
 function numberValidation(event){
-	var keys=[35,36,37,38,39,40,46,8,190,110,48,49,50,51,52,53,54,55,56,57,96,97,98,99,100,101,102,103,104,105];
+	var keys=[9,16,17,18,115,116,35,36,37,38,39,40,46,8,190,110,48,49,50,51,52,53,54,55,56,57,96,97,98,99,100,101,102,103,104,105];
 	var charCode = (event.which) ? event.which : event.keyCode;
 	if(jQuery.inArray(charCode,keys) != -1){
 		return true;
