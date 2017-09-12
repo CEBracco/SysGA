@@ -36,6 +36,7 @@ class MovimientoRepository extends \Doctrine\ORM\EntityRepository
 			$cb->setParameter('titular', $filter['titular']);
 		}
 		$cb->andWhere('m.deletedAt is null');
+		$cb->orderBy('m.fecha', 'DESC');
 
 		$query=$cb->getQuery();
 		return $query->getResult();
