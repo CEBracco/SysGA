@@ -3,6 +3,68 @@
 {% block body %}
     <h4>Movimientos</h4>
 
+	<form action="{{ path('movimiento_index') }}" method="post">
+		<div class="row" style="margin-bottom:0">
+
+
+				<div class="col m2">
+					<div class="input-field">
+						<input type="text" class="datepickerEmpty" name="fromDate" value="{{ filtro.fromDate }}">
+						<label>Fecha desde</label>
+					</div>
+				</div>
+
+
+				<div class="col m2">
+					<div class="input-field">
+						<input type="text" class="datepickerEmpty" name="toDate" value="{{ filtro.toDate }}">
+						<label>Fecha hasta</label>
+					</div>
+				</div>
+
+			<div class="col m2">
+				<div class="input-field">
+					<select name="concesionaria" value="{{ filtro.concesionaria }}">
+						<option value="" {% if filtro.concesionaria == '' %}selected{% endif %}>TODAS</option>
+						{% for concesionaria in concesionarias %}
+							<option value="{{ concesionaria.id }}" {% if filtro.concesionaria == concesionaria.id %}selected{% endif %}>{{ concesionaria.nombre }}</option>
+						{% endfor %}
+					</select>
+					<label>Concesionaria</label>
+				</div>
+			</div>
+
+			<div class="col m3">
+				<div class="input-field">
+					<input type="text" id="input-titular" class="autocomplete" autocomplete="off" value="{{ filtro.titularString }}">
+					<label for="autocomplete-input">Titular</label>
+				</div>
+				<input id="hiddenInputTitular" type="hidden" name="titular" value="{{ filtro.titular }}">
+			</div>
+
+			<div class="row">
+				<div class="col m3">
+					<div class="input-field">
+						<select name="tipo" value="{{ filtro.tipo }}">
+							<option value="" {% if filtro.tipo == '' %}selected{% endif %}>TODOS</option>
+							<option value="1" {% if filtro.tipo == 1 %}selected{% endif %}>Entrada</option>
+							<option value="2" {% if filtro.tipo == 2 %}selected{% endif %}>Salida</option>
+							<option value="3" {% if filtro.tipo == 3 %}selected{% endif %}>Entrada en registro</option>
+							<option value="4" {% if filtro.tipo == 4 %}selected{% endif %}>Salida en registro</option>
+						</select>
+						<label>Estado</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col m12">
+				<button class="btn right waves-effect" type="submit">Buscar</button>
+				<a class="btn-flat waves-effect right" style="margin-right:5px" onclick="resetInputs()">Limpiar</a>
+			</div>
+		</div>
+	</form>
+
     <table class="striped highlight">
         <thead>
             <tr>
@@ -40,4 +102,11 @@
             <i class="large material-icons">add</i>
         </a>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+	var queryTitulares="{{ path('titular_search') }}";
+</script>
+<script src="{{ asset('js/movimiento/index.js') }}"></script>
 {% endblock %}

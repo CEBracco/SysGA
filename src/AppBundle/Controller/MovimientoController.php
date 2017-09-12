@@ -21,18 +21,68 @@ class MovimientoController extends Controller
      * Lists all movimiento entities.
      *
      * @Route("/", name="movimiento_index")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
-    public function indexAction()
-    {
+    public function indexAction(Request $request){
         $em = $this->getDoctrine()->getManager();
 
-        $movimientos = $em->getRepository('AppBundle:Movimiento')->findAll();
+		$fromDate=\DateTime::createFromFormat('!d/m/Y',$request->request->get('fromDate',''));
+		$toDate=\DateTime::createFromFormat('!d/m/Y',$request->request->get('toDate',''));
+
+		$concesionarias=$em->getRepository('AppBundle:Concesionaria')->findAll();
+		$concesionaria=$request->request->get('concesionaria','');
+
+		$titularString='';
+		$titular=$request->request->get('titular','');
+		if($titular != ''){
+			$titularEntity=$em->getRepository('AppBundle:Titular')->find($titular);
+			$titularString=$titularEntity->getNombre().' '.$titularEntity->getApellido().' ('.$titularEntity->getDni().')';
+		}
+
+		$tipo=$request->request->get('tipo','');
+		$filter=$this->getFilter($fromDate,$toDate,$concesionaria,$titular,$tipo);
+
+		$movimientos= $this->listMovimientos($filter);
 
         return $this->render('movimiento/index.html.twig', array(
             'movimientos' => $movimientos,
+			'concesionarias' => $concesionarias,
+			'filtro' => array(
+							'fromDate' => $request->request->get('fromDate',''),
+							'toDate' => $request->request->get('toDate',''),
+							'concesionaria' => $concesionaria,
+							'titular' => $titular,
+							'titularString' => $titularString,
+							'tipo' => $tipo
+						)
         ));
     }
+
+	private function getFilter($fromDate,$toDate,$concesionaria,$titular,$tipo){
+		$filter=array();
+		if(!empty($fromDate)){
+			$filter['fromDate']=$fromDate;
+		}
+		if(!empty($toDate)){
+			$filter['toDate']=$toDate;
+		}
+		if(!empty($concesionaria)){
+			$filter['concesionaria']=$concesionaria;
+		}
+		if(!empty($titular)){
+			$filter['titular']=$titular;
+		}
+		if(!empty($tipo)){
+			$filter['tipo']=$tipo;
+		}
+		return $filter;
+	}
+
+	private function listMovimientos($filter){
+		// var_dump($filter);
+		$em = $this->getDoctrine()->getManager();
+		return $em->getRepository('AppBundle:Movimiento')->findByFilter($filter);
+	}
 
     /**
      * Creates a new movimiento entity.
