@@ -10,4 +10,36 @@ namespace AppBundle\Repository;
  */
 class MovimientoRepository extends \Doctrine\ORM\EntityRepository
 {
+
+	public function findByFilter($filter){
+		$cb = $this->createQueryBuilder('m');
+
+		if(array_key_exists('fromDate',$filter)){
+			$cb->where('m.fecha >= :fromDate');
+			$cb->setParameter('fromDate', $filter['fromDate']);
+		}
+		if(array_key_exists('toDate',$filter)){
+			$cb->andWhere('m.fecha <= :toDate');
+			$cb->setParameter('toDate', $filter['toDate']);
+		}
+		if(array_key_exists('concesionaria',$filter)){
+			$cb->andWhere('m.concesionaria = :concesionaria');
+			$cb->setParameter('concesionaria', $filter['concesionaria']);
+		}
+		if(array_key_exists('tipo',$filter)){
+			$cb->andWhere('m.tipo = :tipo');
+			$cb->setParameter('tipo', $filter['tipo']);
+		}
+		if(array_key_exists('titular',$filter)){
+			$cb->join('m.tramite', 't');
+			$cb->andWhere('t.titular = :titular');
+			$cb->setParameter('titular', $filter['titular']);
+		}
+		$cb->andWhere('m.deletedAt is null');
+		$cb->orderBy('m.fecha', 'DESC');
+
+		$query=$cb->getQuery();
+		return $query->getResult();
+	}
+
 }

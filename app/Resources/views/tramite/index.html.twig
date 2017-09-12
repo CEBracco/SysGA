@@ -6,7 +6,7 @@
 <form action="{{ path('tramite_index') }}" method="post">
 	<div class="row" style="margin-bottom:0">
 
-		{% if is_granted('ROLE_CONCESIONARIA') %}
+		{% if app.user.getRol() == 'ROLE_CONCESIONARIA' %}
 			<div class="col m3">
 				<div class="input-field">
 					<input type="text" class="datepickerEmpty" name="fromDate" value="{{ filtro.fromDate }}">
@@ -22,7 +22,7 @@
 			</div>
 		{% endif %}
 
-		{% if is_granted('ROLE_CONCESIONARIA') %}
+		{% if app.user.getRol() == 'ROLE_CONCESIONARIA' %}
 			<div class="col m3">
 				<div class="input-field">
 					<input type="text" class="datepickerEmpty" name="toDate" value="{{ filtro.toDate }}">
@@ -38,7 +38,7 @@
 			</div>
 		{% endif %}
 
-		{% if not is_granted('ROLE_CONCESIONARIA') %}
+		{% if app.user.getRol() != 'ROLE_CONCESIONARIA' %}
 		<div class="col m2">
 			<div class="input-field">
 				<select name="concesionaria" value="{{ filtro.concesionaria }}">

@@ -39,6 +39,7 @@ class TramiteRepository extends \Doctrine\ORM\EntityRepository
 			$cb->setParameter('tipoEstado', $filter['estado']);
 		}
 		$cb->andWhere('t.deletedAt is null');
+		$cb->orderBy('t.fecha', 'DESC');
 
 		$query=$cb->getQuery();
 		return $query->getResult();
