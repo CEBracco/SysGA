@@ -1,26 +1,33 @@
 var selectedTramite;
 var itemCollapsable='<li><div class="collapsible-header"><i class="material-icons">subject</i>{{ fecha }} - {{ estado }}</div><div class="collapsible-body"><span>{{ observacion }}</span></div></li>';
 
-function modalPago(id, fechaLiquidacion, gastosArancel, impuestosPatente, selladosGestoria, selladosRegistro, honorarios, otros){
-    selectedTramite=id;
-    var totalGestoria=selladosGestoria+honorarios+otros;
-    var totalEnRegistro=selladosRegistro+gastosArancel+impuestosPatente;
+function modalPago(tramiteJson){
+	var tramite=tramiteJson;
+    selectedTramite=tramite.id;
+    // var totalGestoria=tramite.selladosGestoria+tramite.honorarios+tramite.otros;
+    // var totalEnRegistro=tramite.selladosRegistro+tramite.gastosArancel+tramite.impuestosPatente;
 
-    $('.gastosArancel').text("$"+gastosArancel);
-    $('.impuestosPatente').text("$"+impuestosPatente);
-    $('.selladosGestoria').text("$"+selladosGestoria);
-    $('.selladosRegistro').text("$"+selladosRegistro);
-    $('.honorarios').text("$"+honorarios);
-    $('.otros').text("$"+otros);
-    $('.totalGestoria').text(printMoney(totalGestoria));
-    $('.totalEnRegistro').text(printMoney(totalEnRegistro));
-    $('.total').text(printMoney(totalEnRegistro+totalGestoria));
-    if(fechaLiquidacion != null){
-        $('.fechaLiquidacion').text('Tramite Liquidado el día: '+fechaLiquidacion);
+    $('.gastosArancel').text(printMoney(tramite.gastosArancel));
+    $('.impuestosPatente').text(printMoney(tramite.impuestosPatente));
+    $('.selladosGestoria').text(printMoney(tramite.selladosGestoria));
+    $('.selladosRegistro').text(printMoney(tramite.selladosRegistro));
+    $('.honorarios').text(printMoney(tramite.honorarios));
+    $('.otros').text(printMoney(tramite.otros));
+    $('.totalGestoria').text(printMoney(tramite.totalGestoria));
+    $('.totalEnRegistro').text(printMoney(tramite.totalEnRegistro));
+	$('.totalDepositadoEnRegistro').text(printMoney(tramite.totalDepositadoEnRegistro));
+	$('.restoEnRegistro').text(printMoney(tramite.restoEnRegistro));
+    $('.total').text(printMoney(tramite.total));
+    if(tramite.fechaLiquidacion != null){
+        $('.fechaLiquidacion').text('Tramite Liquidado el día: '+tramite.fechaLiquidacion);
     }
     else{
         $('.fechaLiquidacion').text('');
     }
+
+	if(tramite.restoTransferidoAGestoria == null && tramite.restoEnRegistro > 0){
+		$('#tranferRestoButton').prop('disabled', false);
+	}
 
     $('#payModal').modal('open');
 }
@@ -115,4 +122,10 @@ function resetInputs(){
 	$('select[name="estado"]').val('');
 	$('select[name="estado"]').material_select('destroy');
 	$('select[name="estado"]').material_select();
+}
+
+function doAddResto(){
+	ajaxCall(selectedTramite + '/addResto',{},function(){
+		showToast("¡La operacion se completo exitosamente!");
+	});
 }

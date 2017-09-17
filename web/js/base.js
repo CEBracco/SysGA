@@ -143,3 +143,7 @@ function printMoney(mount){
 function round(mount){
 	return Math.round(mount * 100) / 100;
 }
+
+function showToast(text){
+	Materialize.toast(text, 4000);
+}

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use AppBundle\Entity\Estado;
 use AppBundle\Entity\Movimiento;
+use AppBundle\Entity\Deposito;
 use AppBundle\Entity\Titular;
 
 /**
@@ -75,6 +76,13 @@ class Tramite
      */
     private $otros;
 
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="restoRegistroTrasferidoAGestoria", type="decimal", precision=12, scale=4, nullable=true)
+	 */
+	private $restoRegistroTrasferidoAGestoria;
+
     /**
      * @var \DateTime
      *
@@ -116,6 +124,11 @@ class Tramite
 	  */
 	 private $movimientos;
 
+	 /**
+	  * @ORM\OneToMany(targetEntity="Deposito", mappedBy="tramite", cascade={"persist", "remove"})
+	  */
+	 private $depositos;
+
      /**
      * @var \DateTime $deletedAt
      *
@@ -140,6 +153,7 @@ class Tramite
         $this->estados = new ArrayCollection();
         $this->addEstado(new Estado('Pendiente'));
 		$this->movimientos = new ArrayCollection();
+		$this->depositos = new ArrayCollection();
     }
 
     /**
@@ -294,6 +308,30 @@ class Tramite
     public function getOtros()
     {
         return $this->otros;
+    }
+
+	/**
+     * Set restoRegistroTrasferidoAGestoria
+     *
+     * @param string $restoRegistroTrasferidoAGestoria
+     *
+     * @return Tramite
+     */
+    public function setRestoRegistroTrasferidoAGestoria($restoRegistroTrasferidoAGestoria)
+    {
+        $this->restoRegistroTrasferidoAGestoria = $restoRegistroTrasferidoAGestoria;
+
+        return $this;
+    }
+
+    /**
+     * Get restoRegistroTrasferidoAGestoria
+     *
+     * @return string
+     */
+    public function getRestoRegistroTrasferidoAGestoria()
+    {
+        return $this->restoRegistroTrasferidoAGestoria;
     }
 
     /**
@@ -580,6 +618,51 @@ class Tramite
         $this->movimientos->removeElement($movimiento);
     }
 
+	/**
+	 * Set depositos
+	 *
+	 * @param \Doctrine\Common\Collections\Collection $depositos
+	 *
+	 * @return Tramite
+	 */
+	public function setDepositos($depositos)
+	{
+		$this->depositos = $depositos;
+
+		return $this;
+	}
+
+	/**
+	 * Get depositos
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getDepositos(){
+		return $this->depositos;
+	}
+
+	/**
+	 * Add deposito
+	 *
+	 * @param \AppBundle\Entity\Deposito $deposito
+	 *
+	 * @return Delegacion
+	 */
+	public function addDeposito(Deposito $deposito){
+		$deposito->setTramite($this);
+		$this->depositos[] = $deposito;
+		return $this;
+	}
+
+	/**
+	 * Remove deposito
+	 *
+	 * @param \AppBundle\Entity\Deposito $deposito
+	 */
+	public function removeDeposito(Deposito $deposito){
+		$this->depositos->removeElement($deposito);
+	}
+
     public function getTotalEnRegistro(){
         return $this->gastoArancel + $this->impuestosPatente + $this->selladosRegistro;
     }
@@ -589,7 +672,14 @@ class Tramite
     }
 
 	public function doDepositoEnRegistro($monto){
-		$this->doDeposito($monto,3,$this->getRegistroDelAutomotor());
+		// $this->doDeposito($monto,3,$this->getRegistroDelAutomotor());
+		if($monto != 0){
+			$deposito= new Deposito();
+			$deposito->setMonto($monto);
+			$deposito->setFecha(new \DateTime());
+
+			$this->addDeposito($deposito);
+		}
 	}
 
 	public function doDepositoGestoria($monto){
@@ -673,11 +763,48 @@ class Tramite
 		return $total;
 	}
 
-	public function getTotalDepositadoEnRegistro(){
-		return $this->getTotalByTipo(3);
-	}
-
 	public function getTotalDepositadoGestoria(){
 		return $this->getTotalByTipo(1);
+	}
+
+	public function getTotalDepositadoEnRegistro(){
+		$total=0;
+		foreach ($this->getDepositos() as $deposito) {
+			$total=$total+$deposito->getMonto();
+		}
+		return $total;
+	}
+
+	public function getRestoEnRegistro(){
+		return $this->getTotalDepositadoEnRegistro() - $this->getTotalEnRegistro();
+	}
+
+	public function addRestoRegistroAGestoria(){
+		$resto=$this->getRestoEnRegistro();
+		if($this->restoRegistroTrasferidoAGestoria == null && $resto > 0){
+			$this->doDepositoGestoria($resto);
+			$this->restoRegistroTrasferidoAGestoria=$resto;
+		}
+	}
+
+	public function serialize(){
+		$data = array(
+			'id' => $this->id,
+			'fechaLiquidacion' => $this->fechaLiquidacion,
+			'gastosArancel' => $this->gastoArancel,
+			'impuestosPatente' => $this->impuestosPatente,
+			'selladosGestoria' => $this->selladosGestoria,
+			'selladosRegistro' => $this->selladosRegistro,
+			'honorarios' => $this->honorarios,
+			'otros' => $this->otros,
+			'restoEnRegistro' => $this->getRestoEnRegistro(),
+			'totalDepositadoEnRegistro' => $this->getTotalDepositadoEnRegistro(),
+			'restoTransferidoAGestoria' => $this->restoRegistroTrasferidoAGestoria,
+			'totalEnRegistro' => $this->getTotalEnRegistro(),
+			'totalGestoria' => $this->getTotalGestoria(),
+			'total' => $this->getTotalGestoria()+$this->getTotalEnRegistro(),
+		);
+
+		return json_encode($data);
 	}
 }

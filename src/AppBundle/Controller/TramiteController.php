@@ -243,6 +243,23 @@ class TramiteController extends Controller
         return new JsonResponse(array('status' => 'ok'));
     }
 
+	/**
+	 * Agrega un nuevo estado al tramite recibido por parametro
+	 *
+	 * @Route("/{id}/addResto", name="tramite_addResto")
+	 * @Method({"POST"})
+	 * @Security("has_role('ROLE_GESTION')")
+	 */
+	public function addRestoAction(Request $request, Tramite $tramite)
+	{
+		$tramite->addRestoRegistroAGestoria();
+
+		$em = $this->getDoctrine()->getManager();
+		$em->flush();
+
+		return new JsonResponse(array('status' => 'ok'));
+	}
+
     private function getTitular($dni, $nombre, $apellido, Provincia $provincia){
         $em = $this->getDoctrine()->getManager();
         // $titular = $em->getRepository('AppBundle:Titular')->findOneBy(array(
