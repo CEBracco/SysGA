@@ -28,6 +28,13 @@ function modalPago(tramiteJson){
 	if(tramite.restoTransferidoAGestoria == null && tramite.restoEnRegistro > 0){
 		$('#tranferRestoButton').prop('disabled', false);
 	}
+	else{
+		$('#tranferRestoButton').prop('disabled', true);
+	}
+
+	if($('#tramite-'+selectedTramite).hasClass('transfered')){
+		$('#tranferRestoButton').prop('disabled', true);
+	}
 
     $('#payModal').modal('open');
 }
@@ -126,6 +133,8 @@ function resetInputs(){
 
 function doAddResto(){
 	ajaxCall(selectedTramite + '/addResto',{},function(){
+		$("#tramite-" + selectedTramite).addClass('transfered');
+		$('#tranferRestoButton').prop('disabled', true);
 		showToast("¡La operacion se completo exitosamente!");
 	});
 }

@@ -78,13 +78,13 @@ class TramiteType extends AbstractType
 				'mapped' => false,
 				'attr' => array(
 				   'min' => 0,)
-			))
-			->add('depositoGestoria', NumberType::class, array(
-				'required' => false,
-				'mapped' => false,
-				'attr' => array(
-				   'min' => 0,)
 			));
+			// ->add('depositoGestoria', NumberType::class, array(
+			// 	'required' => false,
+			// 	'mapped' => false,
+			// 	'attr' => array(
+			// 	   'min' => 0,)
+			// ));
 
         if($tramite->getTitular() == null){
             $builder

@@ -120,17 +120,15 @@ class TramiteController extends Controller
             $apellidoTitular = $form->get('apellidoTitular')->getData();
             $provinciaTitular = $form->get('provinciaTitular')->getData();
 			$depositoEnRegistro = $form->get('depositoEnRegistro')->getData();
-			$depositoGestoria = $form->get('depositoGestoria')->getData();
+			//$depositoGestoria = $form->get('depositoGestoria')->getData();
 
             $tramite->setTitular($this->getTitular($dniTitular,$nombreTitular,$apellidoTitular,$provinciaTitular));
 			$tramite->doDepositoEnRegistro($depositoEnRegistro);
-			$tramite->doDepositoGestoria($depositoGestoria);
+			//$tramite->doDepositoGestoria($depositoGestoria);
 			$tramite->liquidate();
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($tramite);
-            // $this->newDepositoTramiteAction($em,$tramite);
-            // $this->newMovimientoTramiteAction($em,$tramite);
             $em->flush();
 
             return $this->redirectToRoute('tramite_index');
@@ -160,13 +158,13 @@ class TramiteController extends Controller
             $apellidoTitular = $editForm->get('apellidoTitular')->getData();
             $provinciaTitular = $editForm->get('provinciaTitular')->getData();
 			$depositoEnRegistro = $editForm->get('depositoEnRegistro')->getData();
-			$depositoGestoria = $editForm->get('depositoGestoria')->getData();
+			//$depositoGestoria = $editForm->get('depositoGestoria')->getData();
 
             $tramite->setTitular($this->getTitular($dniTitular,$nombreTitular,$apellidoTitular,$provinciaTitular));
 
             $em=$this->getDoctrine()->getManager();
 			$tramite->doDepositoEnRegistro($depositoEnRegistro);
-			$tramite->doDepositoGestoria($depositoGestoria);
+			//$tramite->doDepositoGestoria($depositoGestoria);
 			$tramite->liquidate();
 			$em->flush();
 
