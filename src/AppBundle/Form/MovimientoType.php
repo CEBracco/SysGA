@@ -33,8 +33,6 @@ class MovimientoType extends AbstractType
                         'choices' => array(
                             'Entrada' => 1,
                             'Salida' => 2,
-                            'Entrada en registro' => 3,
-                            'Salida en registro' => 4,
                         )
                 ))
                 ->add('concesionaria', EntityType::class, array(

@@ -105,7 +105,7 @@
 					<a href="{{ path('tramite_edit', { 'id': tramite.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
 				{% endif %}
 				<a href="#" class="btn waves-effect waves-light no-lateral-padding amber darken-3 openModalPago"
-				onclick="modalPago({{tramite.id}},{{ (tramite.fechaLiquidacion) ? " '" ~ tramite.fechaLiquidacion|date('d/m/Y ') ~ "'" : 'null' }},{{ tramite.gastoArancel}},{{ tramite.impuestosPatente}},{{ tramite.selladosGestoria}},{{ tramite.selladosRegistro}},{{ tramite.honorarios}},{{ tramite.otros }})">
+				onclick="modalPago({{ tramite.serialize() }})">
 					<i class="material-icons">local_atm</i>
 				</a>
 				{% if is_granted('ROLE_GESTION') and tramite.deletedAt is null %}<a onclick="confirmModal('{{ path('tramite_delete', { 'id': tramite.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>{% endif %}
@@ -177,55 +177,87 @@
 	<div class="modal-content">
 		<h4>Resumen Gastos</h4>
 		<p class="fechaLiquidacion red-text"></p>
-		<table class="striped hovered">
-			<thead>
-				<tr>
-					<th>Concepto</th>
-					<th>Valor</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>Gastos Arancel</td>
-					<td class="gastosArancel"></td>
-				</tr>
-				<tr>
-					<td>Impuestos Patente</td>
-					<td class="impuestosPatente"></td>
-				</tr>
-				<tr>
-					<td>Sellados Registro</td>
-					<td class="selladosRegistro"></td>
-				</tr>
-				<tr>
-					<td>Sellados Gestoria</td>
-					<td class="selladosGestoria"></td>
-				</tr>
-				<tr>
-					<td>Honorarios</td>
-					<td class="honorarios"></td>
-				</tr>
-				<tr>
-					<td>Otros</td>
-					<td class="otros"></td>
-				</tr>
-				<tr>
-					<td><b>Gastos en Registro</b></td>
-					<td><b class="totalEnRegistro"></b></td>
-				</tr>
-				<tr>
-					<td><b>Gastos Gestoria</b></td>
-					<td><b class="totalGestoria"></b></td>
-				</tr>
-				<tr>
-					<td><b>TOTAL</b></td>
-					<td><b class="total"></b></td>
-				</tr>
-			</tbody>
-		</table>
+
+		<div class="card-panel">
+			<h5>Gastos en Gestoria</h5>
+			<table class="striped hovered">
+				<thead>
+					<tr>
+						<th>Concepto</th>
+						<th>Valor</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Sellados Gestoria</td>
+						<td class="selladosGestoria"></td>
+					</tr>
+					<tr>
+						<td>Honorarios</td>
+						<td class="honorarios"></td>
+					</tr>
+					<tr>
+						<td>Otros</td>
+						<td class="otros"></td>
+					</tr>
+					<tr>
+						<td><b>Gastos Gestoria</b></td>
+						<td><b class="totalGestoria"></b></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="card-panel">
+			<h5>Gastos en Registro</h5>
+			<table class="striped hovered">
+				<thead>
+					<tr>
+						<th>Concepto</th>
+						<th>Valor</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Gastos Arancel</td>
+						<td class="gastosArancel"></td>
+					</tr>
+					<tr>
+						<td>Impuestos Patente</td>
+						<td class="impuestosPatente"></td>
+					</tr>
+					<tr>
+						<td>Sellados Registro</td>
+						<td class="selladosRegistro"></td>
+					</tr>
+					<tr>
+						<td><b>Depositado en Registro</b></td>
+						<td><b class="totalDepositadoEnRegistro"></b></td>
+					</tr>
+					<tr>
+						<td><b>Gastos en Registro</b></td>
+						<td><b class="totalEnRegistro"></b></td>
+					</tr>
+					<tr>
+						<td><b>Restante en Registro</b></td>
+						<td><b class="restoEnRegistro"></b></td>
+					</tr>
+				</tbody>
+			</table>
+			<br>
+			<div class="center-align">
+				<button id="tranferRestoButton" class="waves-effect btn" onclick="confirmModal(doAddResto)" disabled>Agregar restante a cuenta gestoria</button>
+			</div>
+		</div>
+
+		<br>
+		<div class="center-align">
+			<h5><b>TOTAL Gastos: </b><b class="total"></b></h5>
+		</div>
+
 	</div>
 	<div class="modal-footer">
-		<a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
+		<a href="#!" class="modal-action modal-close waves-effect btn-flat">Cerrar</a>
 	</div>
 </div>
 {% endblock %}
