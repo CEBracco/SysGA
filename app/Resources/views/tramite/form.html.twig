@@ -101,19 +101,29 @@
 						</div>
 					</div>
 
-					{% if tramite.depositos is not empty %}
-						<div class="row">
-							<ul class="collection with-header">
-								<li class="collection-header teal darken-3"><h6 class="white-text">Depositos Realizados</h6></li>
-								{% for deposito in tramite.depositos %}
-									<li class="collection-item">{{ deposito.fecha|date('d/m/Y') }} - ${{ deposito.monto|number_format(2, ',', '.') }}</li>
-								{% endfor %}
-							</ul>
-						</div>
-					{% endif %}
+					<table id="depositosTable" class="striped highlight collapse">
+						<thead>
+							<tr>
+								<th>Fecha</th>
+								<th>Monto</th>
+								<th class="fit">Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for deposito in tramite.depositos %}
+								<tr id="deposito-{{ deposito.id }}">
+									<td>{{ deposito.fecha|date('d/m/Y') }}</td>
+									<td>${{ deposito.monto|number_format(2, ',', '.') }}</td>
+									<td>
+										<a onclick="confirmModal(deleteDeposito,{id:{{ deposito.id }}, monto:{{ deposito.monto }}})" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
 
 					{% if edit is defined and edit == true %}
-					<p class="center-align"><b>Total depositado en Registro:</b> ${{ tramite.getTotalDepositadoEnRegistro}}</p>
+					<p class="center-align"><b>Total depositado en Registro:</b> <span id="totalDepositadoEnRegistro">${{ tramite.getTotalDepositadoEnRegistro() }}</span></p>
 					{% endif %}
                 </div>
 
@@ -182,31 +192,72 @@
                 </div>
             </div>
 
-            {% set totalEnRegistro = form.vars.value.gastoArancel + form.vars.value.impuestosPatente + form.vars.value.selladosRegistro %}
-            {% set totalGestoria = form.vars.value.selladosGestoria + form.vars.value.honorarios + form.vars.value.otros %}
 
-            <div class="row">
-                <div class="col m6 center-align">
-                    <b>Total en registro: </b>
-                    $<span class="showTotalEnRegistro">{{ totalEnRegistro }}</span>
-                </div>
-                <div class="col m6 center-align">
-                    <b>Total gestoría: </b>
-                    $<span class="showTotalGestoria">{{ totalGestoria }}</span>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col m12 center-align">
-                    <h5>
-                        <b>Total: </b>
-                        $<span class="showTotal">{{ totalEnRegistro + totalGestoria }}</span>
-                    </h6>
-                </div>
-            </div>
 
         </div>
     </div>
+</div>
+
+<div class="row">
+    <div class="col s10 offset-s1">
+        <div class="card-panel">
+            <h5>Gastos Adicionales (en Gestoría)</h5>
+			<table id="gastosAdicionalesTable" class="striped highlight collapse">
+				<thead>
+					<tr>
+						<th>Concepto</th>
+						<th>Monto</th>
+						<th class="fit">Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for gastoAdicional in tramite.gastosAdicionales %}
+						<tr id="gasto-{{ gastoAdicional.id }}">
+							<td>{{ gastoAdicional.concepto }}</td>
+							<td>${{ gastoAdicional.monto|number_format(2, ',', '.') }}</td>
+							<td>
+								<a onclick="confirmModal(deleteGastoAdicional,{id:{{ gastoAdicional.id }}, monto:{{ gastoAdicional.monto }}, isPersisted:true})" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<br>
+			<button class="waves-effect waves-light btn modal-trigger" style="width:100%" href="#addGastoModal">Agregar Gasto</button>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+    <div class="col s10 offset-s1">
+        <div class="card-panel">
+
+			{% set totalEnRegistro = tramite.getTotalEnRegistro() %}
+			{% set totalGestoria = tramite.getTotalGestoria() %}
+
+			<div class="row">
+				<div class="col m6 center-align">
+					<b>Total en registro: </b>
+					$<span class="showTotalEnRegistro">{{ totalEnRegistro }}</span>
+				</div>
+				<div class="col m6 center-align">
+					<b>Total gestoría: </b>
+					$<span class="showTotalGestoria">{{ totalGestoria }}</span>
+				</div>
+			</div>
+
+			<div class="row" style="margin-bottom:0px">
+				<div class="col m12 center-align">
+					<h5>
+						<b>Total: </b>
+						$<span class="showTotal">{{ totalEnRegistro + totalGestoria }}</span>
+					</h6>
+				</div>
+			</div>
+
+		</div>
+	</div>
 </div>
 
 <div class="row">
@@ -221,54 +272,37 @@
 
 {% block javascripts %}
 <script type="text/javascript">
-    var totalEnRegistro=0;
-    var totalGestoria=0;
-    var total=0;
-
-    $(document).ready(function(){
-        initValues();
-
-        $('.totalEnRegistro').on('change keyup',function(){
-            totalEnRegistro=0;
-            $.each($('.totalEnRegistro'),function(index, totalIngresado){
-                if(total.value != ''){
-                    totalEnRegistro = totalEnRegistro + getValue(totalIngresado.value);
-                    total=totalEnRegistro + totalGestoria;
-                }
-            });
-            $('.showTotalEnRegistro').text(totalEnRegistro);
-            $('.showTotal').text(round(parseFloat(total)));
-        });
-
-        $('.totalGestoria').on('change keyup',function(){
-            totalGestoria=0;
-            $.each($('.totalGestoria'),function(index, totalIngresado){
-                if(total.value != ''){
-                    totalGestoria = totalGestoria + getValue(totalIngresado.value);
-                    total=totalEnRegistro + totalGestoria;
-                }
-            });
-            $('.showTotalGestoria').text(totalGestoria);
-            $('.showTotal').text(round(parseFloat(total)));
-        });
-
-    });
-
-    function getValue(value){
-        var integerVal=parseFloat(value);
-        if(isNaN(integerVal)){
-            return 0;
-        }
-        return integerVal;
-    }
-
-    function initValues(){
-        $.each($('.totalGestoria'),function(index, totalIngresado){
-            totalGestoria = totalGestoria + getValue(totalIngresado.value);
-        });
-        $.each($('.totalEnRegistro'),function(index, totalIngresado){
-            totalEnRegistro = totalEnRegistro + getValue(totalIngresado.value);
-        });
-    }
+	var deleteGastoPath="{{ path('remove_gasto_tramite',{'id':'idGasto'}) }}"
+	var deleteDepositoPath="{{ path('remove_deposito_tramite',{'id':'idDeposito'}) }}"
+	var totalGastosAdicionalesGestoria={{ tramite.getTotalGastosAdicionalesEnGestoria() }}
+	var totalDepositado={{ tramite.getTotalDepositadoEnRegistro() }}
 </script>
+<script type="text/javascript" src="{{ asset('js/tramite/form.js') }}"></script>
+{% endblock %}
+
+{% block modals %}
+<div id="addGastoModal" class="modal">
+	<div class="modal-content">
+		<h4>Nuevo Gasto Adicional</h4>
+		<div class="card">
+			<div class="card-content">
+				<div class="row">
+					<h5>Datos del Gasto</h5>
+					<div class="input-field col s6">
+						<input id="conceptoNuevoGasto" type="text">
+						<label for="conceptoNuevoGasto">Concepto</label>
+					</div>
+					<div class="input-field col m6">
+						<input id="montoNuevoGasto" type="text" class="numberInput" pattern="[0-9]+([,\.][0-9]+)?">
+						<label for="montoNuevoGasto">Monto</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class="modal-action modal-close waves-effect btn" onclick="addGastoAdicional()">Aceptar</a>
+		<a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
+	</div>
+</div>
 {% endblock %}

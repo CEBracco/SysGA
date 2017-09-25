@@ -13,6 +13,12 @@ function modalPago(tramiteJson){
     $('.selladosRegistro').text(printMoney(tramite.selladosRegistro));
     $('.honorarios').text(printMoney(tramite.honorarios));
     $('.otros').text(printMoney(tramite.otros));
+
+	$.each(tramite.gastosAdicionalesEnGestoria, function(index, gasto) {
+		printResumenRow(gasto.concepto,gasto.monto);
+	})
+
+
     $('.totalGestoria').text(printMoney(tramite.totalGestoria));
     $('.totalEnRegistro').text(printMoney(tramite.totalEnRegistro));
 	$('.totalDepositadoEnRegistro').text(printMoney(tramite.totalDepositadoEnRegistro));
@@ -36,7 +42,17 @@ function modalPago(tramiteJson){
 		$('#tranferRestoButton').prop('disabled', true);
 	}
 
-    $('#payModal').modal('open');
+    $('#payModal').modal({
+		complete: function(){
+			$('.gastoAdicional').remove();
+		}
+	});
+	$('#payModal').modal('open');
+}
+
+function printResumenRow(concepto,monto) {
+	var row="<tr class='gastoAdicional'><td>"+ concepto +"</td><td>"+ printMoney(monto) +"</td></tr>"
+	$('#totalGestoriaModal').before(row);
 }
 
 function doAddStatus(){
