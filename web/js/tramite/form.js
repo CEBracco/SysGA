@@ -29,6 +29,21 @@ $(document).ready(function(){
 		$('.showTotal').text(round(parseFloat(total)));
 	});
 
+	$('.newGastoAdicionalField').on('change keyup', function(){
+		var isEmpty=false;
+		$.each($('.newGastoAdicionalField'),function(index, input){
+			if(input.value == null || input.value == ''){
+				isEmpty=true;
+			}
+		});
+		if(!isEmpty){
+			$('#addGastoAdicionalButton').prop('disabled', false);
+		}
+		else{
+			$('#addGastoAdicionalButton').prop('disabled', true);
+		}
+	});
+
 	updateTable('gastosAdicionalesTable');
 	updateTable('depositosTable');
 });
@@ -77,9 +92,8 @@ function addGastoAdicional(){
 	updateJSONgastosAdicionales();
 	updateTable('gastosAdicionalesTable');
 	updateTotalGestoria(nuevoGasto.monto,true);
+	resetModalAddGastoAdicional();
 }
-
-// TODO validar los campos de alta de gastoAdicional
 
 function deleteGastoAdicional(gastoAdicional){
 	if(gastoAdicional.isPersisted){
@@ -124,6 +138,13 @@ function updateTotalGestoria(monto,sum){
 
 	$('.showTotalGestoria').text(totalGestoria);
 	$('.showTotal').text(round(parseFloat(total)));
+}
+
+function resetModalAddGastoAdicional(){
+	$.each($('.newGastoAdicionalField'),function(index, input){
+		input.value = '';
+	});
+	$('#addGastoAdicionalButton').prop('disabled', true);
 }
 
 function deleteDeposito(deposito) {

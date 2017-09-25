@@ -289,11 +289,11 @@
 				<div class="row">
 					<h5>Datos del Gasto</h5>
 					<div class="input-field col s6">
-						<input id="conceptoNuevoGasto" type="text">
+						<input id="conceptoNuevoGasto" class="newGastoAdicionalField" type="text">
 						<label for="conceptoNuevoGasto">Concepto</label>
 					</div>
 					<div class="input-field col m6">
-						<input id="montoNuevoGasto" type="text" class="numberInput" pattern="[0-9]+([,\.][0-9]+)?">
+						<input id="montoNuevoGasto" type="text" class="numberInput newGastoAdicionalField" pattern="[0-9]+([,\.][0-9]+)?">
 						<label for="montoNuevoGasto">Monto</label>
 					</div>
 				</div>
@@ -301,7 +301,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<a href="#!" class="modal-action modal-close waves-effect btn" onclick="addGastoAdicional()">Aceptar</a>
+		<button id="addGastoAdicionalButton" class="modal-action modal-close waves-effect btn" onclick="addGastoAdicional()" disabled>Aceptar</button>
 		<a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
 	</div>
 </div>
