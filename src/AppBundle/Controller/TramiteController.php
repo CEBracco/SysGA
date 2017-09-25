@@ -7,6 +7,8 @@ use AppBundle\Entity\Movimiento;
 use AppBundle\Entity\Estado;
 use AppBundle\Entity\Titular;
 use AppBundle\Entity\Provincia;
+use AppBundle\Entity\Gasto;
+use AppBundle\Entity\Deposito;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -119,10 +121,15 @@ class TramiteController extends Controller
             $nombreTitular = $form->get('nombreTitular')->getData();
             $apellidoTitular = $form->get('apellidoTitular')->getData();
             $provinciaTitular = $form->get('provinciaTitular')->getData();
+			$gastosAdicionalesNuevosJSON = $form->get('gastosAdicionalesNuevos')->getData();
 			$depositoEnRegistro = $form->get('depositoEnRegistro')->getData();
 			//$depositoGestoria = $form->get('depositoGestoria')->getData();
 
             $tramite->setTitular($this->getTitular($dniTitular,$nombreTitular,$apellidoTitular,$provinciaTitular));
+
+			$gastosAdicionalesNuevos=$this->parseGastos($gastosAdicionalesNuevosJSON);
+			$tramite->addGastosAdicionales($gastosAdicionalesNuevos);
+
 			$tramite->doDepositoEnRegistro($depositoEnRegistro);
 			//$tramite->doDepositoGestoria($depositoGestoria);
 			$tramite->liquidate();
@@ -157,15 +164,20 @@ class TramiteController extends Controller
             $nombreTitular = $editForm->get('nombreTitular')->getData();
             $apellidoTitular = $editForm->get('apellidoTitular')->getData();
             $provinciaTitular = $editForm->get('provinciaTitular')->getData();
+			$gastosAdicionalesNuevosJSON = $editForm->get('gastosAdicionalesNuevos')->getData();
 			$depositoEnRegistro = $editForm->get('depositoEnRegistro')->getData();
 			//$depositoGestoria = $editForm->get('depositoGestoria')->getData();
 
             $tramite->setTitular($this->getTitular($dniTitular,$nombreTitular,$apellidoTitular,$provinciaTitular));
 
-            $em=$this->getDoctrine()->getManager();
+			$gastosAdicionalesNuevos=$this->parseGastos($gastosAdicionalesNuevosJSON);
+			$tramite->addGastosAdicionales($gastosAdicionalesNuevos);
+
 			$tramite->doDepositoEnRegistro($depositoEnRegistro);
 			//$tramite->doDepositoGestoria($depositoGestoria);
 			$tramite->liquidate();
+
+			$em=$this->getDoctrine()->getManager();
 			$em->flush();
 
             return $this->redirectToRoute('tramite_index');
@@ -177,6 +189,48 @@ class TramiteController extends Controller
             'edit' => true,
         ));
     }
+
+	private function parseGastos($gastosAdicionalesJSON){
+		$gastosAdicionalesDTO=json_decode($gastosAdicionalesJSON,true);
+
+		$gastosAdicionales=array();
+		if($gastosAdicionalesDTO != null){
+			foreach ($gastosAdicionalesDTO as $gastoAdicionalDTO) {
+				$gastosAdicionales[]=Gasto::enGestoria($gastoAdicionalDTO['concepto'],$gastoAdicionalDTO['monto']);
+			}
+		}
+		return $gastosAdicionales;
+	}
+
+	/**
+	 *
+	 * @Route("/{id}/removeDeposito", name="remove_deposito_tramite")
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_GESTION')")
+	 */
+	public function removeDepositoAction(Request $request, Deposito $deposito){
+		if($deposito->getTramite()->getRestoRegistroTrasferidoAGestoria() == null){
+			$em = $this->getDoctrine()->getManager();
+			$em->remove($deposito);
+			$em->flush();
+			return new JsonResponse(array('status' => 'ok'));
+		}
+		return new JsonResponse(array('status' => 'error'));
+	}
+
+	/**
+	 *
+	 * @Route("/{id}/removeGasto", name="remove_gasto_tramite")
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_GESTION')")
+	 */
+	public function removeGastoAdicionalAction(Request $request, Gasto $gastoAdicional){
+		$em = $this->getDoctrine()->getManager();
+		$em->remove($gastoAdicional);
+		$em->flush();
+		return new JsonResponse(array('status' => 'ok'));
+	}
+
 
     /**
      * Deletes a tramite entity.

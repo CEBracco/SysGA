@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class TramiteType extends AbstractType
 {
@@ -72,6 +73,9 @@ class TramiteType extends AbstractType
 				'required' => false,
 				'attr' => array(
 				   'min' => 0,)
+			))
+			->add('gastosAdicionalesNuevos', HiddenType::class, array(
+				'mapped' => false,
 			))
 			->add('depositoEnRegistro', NumberType::class, array(
 				'required' => false,

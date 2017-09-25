@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use AppBundle\Entity\Estado;
 use AppBundle\Entity\Movimiento;
+use AppBundle\Entity\Gasto;
 use AppBundle\Entity\Deposito;
 use AppBundle\Entity\Titular;
 
@@ -129,6 +130,11 @@ class Tramite
 	  */
 	 private $depositos;
 
+	 /**
+	  * @ORM\OneToMany(targetEntity="Gasto", mappedBy="tramite", cascade={"persist", "remove"})
+	  */
+	 private $gastosAdicionales;
+
      /**
      * @var \DateTime $deletedAt
      *
@@ -154,6 +160,7 @@ class Tramite
         $this->addEstado(new Estado('Pendiente'));
 		$this->movimientos = new ArrayCollection();
 		$this->depositos = new ArrayCollection();
+		$this->gastosAdicionales = new ArrayCollection();
     }
 
     /**
@@ -554,7 +561,7 @@ class Tramite
      *
      * @param \AppBundle\Entity\Estado $estado
      *
-     * @return Delegacion
+     * @return Tramite
      */
     public function addEstado(Estado $estado){
         $estado->setTramite($this);
@@ -601,7 +608,7 @@ class Tramite
      *
      * @param \AppBundle\Entity\Movimiento $movimiento
      *
-     * @return Delegacion
+     * @return Tramite
      */
     public function addMovimiento(Movimiento $movimiento){
         $movimiento->setTramite($this);
@@ -617,6 +624,82 @@ class Tramite
     public function removeMovimiento(Movimiento $movimiento){
         $this->movimientos->removeElement($movimiento);
     }
+
+	/**
+	 * Set gastosAdicionales
+	 *
+	 * @param \Doctrine\Common\Collections\Collection $gastosAdicionales
+	 *
+	 * @return Tramite
+	 */
+	public function setGastosAdicionales($gastosAdicionales)
+	{
+		$this->gastosAdicionales = $gastosAdicionales;
+
+		return $this;
+	}
+
+	/**
+	 * Get gastosAdicionales
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getGastosAdicionales(){
+		return $this->gastosAdicionales;
+	}
+
+	/**
+	 * Add gastoAdicional
+	 *
+	 * @param \AppBundle\Entity\Gasto $gastoAdicional
+	 *
+	 * @return Tramite
+	 */
+	public function addGastoAdicional(Gasto $gastoAdicional){
+		$gastoAdicional->setTramite($this);
+		$this->gastosAdicionales[] = $gastoAdicional;
+		return $this;
+	}
+
+	/**
+	 * Remove gastoAdicional
+	 *
+	 * @param \AppBundle\Entity\Gasto $gastoAdicional
+	 */
+	public function removeGastoAdicional(Gasto $gastoAdicional){
+		$gastoAdicional->setTramite(null);
+		$this->gastosAdicionales->removeElement($gastoAdicional);
+	}
+
+	/**
+	 * Add gastosAdicionales
+	 *
+	 * @return Tramite
+	 */
+	public function addGastosAdicionales($gastosAdicionales){
+		foreach ($gastosAdicionales as $gastoAdicional) {
+			$this->addGastoAdicional($gastoAdicional);
+		}
+		return $this;
+	}
+
+	private function getTotalGastosAdicionalesPorTipo($enRegistro){
+		$total=0;
+		foreach ($this->gastosAdicionales as $gastoAdicional) {
+			if($gastoAdicional->getIsGastoEnRegistro() == $enRegistro){
+				$total=$total + $gastoAdicional->getMonto();
+			}
+		}
+		return $total;
+	}
+
+	public function getTotalGastosAdicionalesEnRegistro(){
+		return $this->getTotalGastosAdicionalesPorTipo(true);
+	}
+
+	public function getTotalGastosAdicionalesEnGestoria(){
+		return $this->getTotalGastosAdicionalesPorTipo(false);
+	}
 
 	/**
 	 * Set depositos
@@ -646,7 +729,7 @@ class Tramite
 	 *
 	 * @param \AppBundle\Entity\Deposito $deposito
 	 *
-	 * @return Delegacion
+	 * @return Tramite
 	 */
 	public function addDeposito(Deposito $deposito){
 		$deposito->setTramite($this);
@@ -668,7 +751,7 @@ class Tramite
     }
 
     public function getTotalGestoria(){
-        return $this->selladosGestoria + $this->honorarios + $this->otros;
+        return $this->selladosGestoria + $this->honorarios + $this->otros + $this->getTotalGastosAdicionalesEnGestoria();
     }
 
 	public function doDepositoEnRegistro($monto){
@@ -701,18 +784,19 @@ class Tramite
 	}
 
 	public function liquidate(){
-		$montoTramiteEnRegistro=$this->getTotalEnRegistro() - $this->getTotalLiquidadoEnRegistro();
-		if($montoTramiteEnRegistro != 0){
-		    $movimientoEnRegistro = new Movimiento();
-		    $movimientoEnRegistro->setMonto($montoTramiteEnRegistro);
-		    $movimientoEnRegistro->setConcesionaria($this->getConcesionaria());
-		    $movimientoEnRegistro->setRegistroDelAutomotor($this->getRegistroDelAutomotor());
-		    $movimientoEnRegistro->setFecha(new \DateTime());
-		    $movimientoEnRegistro->setTipo(4);
-
-			$this->aplicarMonto($movimientoEnRegistro);
-			$this->addMovimiento($movimientoEnRegistro);
-		}
+		//descomentar para temer movimientos cuentas de registro
+		// $montoTramiteEnRegistro=$this->getTotalEnRegistro() - $this->getTotalLiquidadoEnRegistro();
+		// if($montoTramiteEnRegistro != 0){
+		//     $movimientoEnRegistro = new Movimiento();
+		//     $movimientoEnRegistro->setMonto($montoTramiteEnRegistro);
+		//     $movimientoEnRegistro->setConcesionaria($this->getConcesionaria());
+		//     $movimientoEnRegistro->setRegistroDelAutomotor($this->getRegistroDelAutomotor());
+		//     $movimientoEnRegistro->setFecha(new \DateTime());
+		//     $movimientoEnRegistro->setTipo(4);
+		//
+		// 	$this->aplicarMonto($movimientoEnRegistro);
+		// 	$this->addMovimiento($movimientoEnRegistro);
+		// }
 
 		$montoTramiteGestoria=$this->getTotalGestoria() - $this->getTotalLiquidadoGestoria();
 		if($montoTramiteGestoria != 0){
@@ -787,6 +871,14 @@ class Tramite
 		}
 	}
 
+	public function getArrayOfGastosAdicionales(){
+		$gastosAdicionales=array();
+		foreach ($this->gastosAdicionales as $gasto) {
+			$gastosAdicionales[]=$gasto->toArray();
+		}
+		return $gastosAdicionales;
+	}
+
 	public function serialize(){
 		$data = array(
 			'id' => $this->id,
@@ -797,6 +889,7 @@ class Tramite
 			'selladosRegistro' => $this->selladosRegistro,
 			'honorarios' => $this->honorarios,
 			'otros' => $this->otros,
+			'gastosAdicionalesEnGestoria' => $this->getArrayOfGastosAdicionales(),
 			'restoEnRegistro' => $this->getRestoEnRegistro(),
 			'totalDepositadoEnRegistro' => $this->getTotalDepositadoEnRegistro(),
 			'restoTransferidoAGestoria' => $this->restoRegistroTrasferidoAGestoria,

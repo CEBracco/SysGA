@@ -103,10 +103,12 @@ function ajaxCall(url,data,success = emptyFunction, error = emptyFunction){
 
 // modal de confirmacion
 var confirmParam=null;
+var confirmFunctionParams=null;
 
-function confirmModal(param){
+function confirmModal(param, functionParams = null){
 	if(param != null && param != ''){
 		confirmParam=param;
+		confirmFunctionParams=functionParams;
 	}
 	else{
 		confirmParam=emptyFunction;
@@ -120,10 +122,18 @@ function doConfirm(){
 			window.location.href = confirmParam;
 		}
 		else{
-			confirmParam();
+			if(confirmFunctionParams == null){
+				confirmParam();
+			}
+			else{
+				confirmParam(confirmFunctionParams);
+				confirmFunctionParams=null;
+			}
 		}
 	}
 }
+//
+
 
 function numberValidation(event){
 	var keys=[9,16,17,18,115,116,35,36,37,38,39,40,46,8,190,110,48,49,50,51,52,53,54,55,56,57,96,97,98,99,100,101,102,103,104,105];
@@ -146,4 +156,13 @@ function round(mount){
 
 function showToast(text){
 	Materialize.toast(text, 4000);
+}
+
+function updateTable(tableId){
+	if($('#'+tableId+' tbody tr').length == 0){
+		$('#'+tableId).hide();
+	}
+	else{
+		$('#'+tableId).show();
+	}
 }

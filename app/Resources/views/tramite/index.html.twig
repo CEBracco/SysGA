@@ -87,8 +87,9 @@
 			<th>Fecha</th>
 			<th>Concesionaria</th>
 			<th>Titular</th>
+			<th>Registro del Automotor</th>
 			<th>Estado</th>
-			<th>Acciones</th>
+			<th class="fit">Acciones</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -97,6 +98,7 @@
 			<td>{% if tramite.fecha %}{{ tramite.fecha|date('d/m/Y') }}{% endif %}</td>
 			<td>{{ tramite.concesionaria.nombre }}</td>
 			<td>{{ tramite.titular.toString() }}</td>
+			<td>{{ tramite.registroDelAutomotor.nombre }}</td>
 			<td class="fit">
 				<a id="status-{{ tramite.id }}" class='btn' href='#' onclick="loadEstados({{ tramite.id }})">{{ tramite.estadoActual.estado }}</a>
 			</td>
@@ -200,7 +202,8 @@
 						<td>Otros</td>
 						<td class="otros"></td>
 					</tr>
-					<tr>
+
+					<tr id="totalGestoriaModal">
 						<td><b>Gastos Gestoria</b></td>
 						<td><b class="totalGestoria"></b></td>
 					</tr>

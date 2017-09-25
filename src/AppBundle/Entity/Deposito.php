@@ -36,7 +36,7 @@ class Deposito
     private $fecha;
 
 	/**
-     * @ORM\ManyToOne(targetEntity="Tramite", inversedBy="movimientos")
+     * @ORM\ManyToOne(targetEntity="Tramite", inversedBy="depositos")
      * @ORM\JoinColumn(name="tramite_id", referencedColumnName="id")
      */
      private $tramite;
