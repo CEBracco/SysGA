@@ -141,6 +141,12 @@
 		<script type="text/javascript" src="{{ asset('js/materialize-autocomplete.js') }}"></script>
 		<script type="text/javascript" src="{{ asset('js/base.js') }}"></script>
 		{% block javascripts %}{% endblock %}
+
+		{% if msg is defined and msg is not empty %}
+			<script type="text/javascript">
+				showToast("{{msg}}");
+			</script>
+		{% endif %}
 	</body>
 
 </html>
