@@ -180,14 +180,20 @@ class TramiteController extends Controller
 			$em=$this->getDoctrine()->getManager();
 			$em->flush();
 
-            return $this->redirectToRoute('tramite_index');
-        }
+			return $this->redirectToRoute('tramite_edit', array('id' => $tramite->getId(),'status' => 'ok'));
+		}
 
-        return $this->render('tramite/form.html.twig', array(
-            'tramite' => $tramite,
-            'form' => $editForm->createView(),
-            'edit' => true,
-        ));
+		$msg=null;
+		if($request->query->get('status') == 'ok'){
+			$msg="Los cambios han sido guardados";
+		}
+
+		return $this->render('tramite/form.html.twig', array(
+			'tramite' => $tramite,
+			'form' => $editForm->createView(),
+			'edit' => true,
+			'msg' => $msg,
+		));
     }
 
 	private function parseGastos($gastosAdicionalesJSON){
