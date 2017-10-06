@@ -128,6 +128,7 @@
 			<th>Concesionaria</th>
 			<th>Titular</th>
 			<th>Registro del Automotor</th>
+			<th>Código Interno</th>
 			<th>Estado</th>
 			<th class="fit">Acciones</th>
 		</tr>
@@ -139,6 +140,7 @@
 			<td>{{ tramite.concesionaria.nombre }}</td>
 			<td>{{ tramite.titular.toString() }}</td>
 			<td>{{ tramite.registroDelAutomotor.nombre }}</td>
+			<td>{{ tramite.codigoInternoConcesionaria ? tramite.codigoInternoConcesionaria : '-' }}</td>
 			<td class="fit">
 				<a id="status-{{ tramite.id }}" class='btn' href='#' onclick="loadEstados({{ tramite.id }})">{{ tramite.estadoActual.estado }}</a>
 			</td>
