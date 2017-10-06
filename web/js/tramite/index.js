@@ -125,6 +125,10 @@ ajaxAutoComplete({
 });
 
 function resetInputs(){
+	$('input[name="codigoInternoConcesionaria"').val('');
+	$('input[name="codigoInternoConcesionaria"').focus();
+	$('input[name="codigoInternoConcesionaria"').blur();
+
 	$('input[name="fromDate"').val('');
 	$('input[name="fromDate"').focus();
 	$('input[name="fromDate"').blur();
