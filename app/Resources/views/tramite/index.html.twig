@@ -3,63 +3,99 @@
 {% block body %}
 <h4>Trámites</h4>
 
+
 <form action="{{ path('tramite_index') }}" method="post">
-	<div class="row" style="margin-bottom:0">
 
-		{% if app.user.getRol() == 'ROLE_CONCESIONARIA' %}
+	{% if app.user.getRol() != 'ROLE_CONCESIONARIA' %}
+		<ul class="collapsible" data-collapsible="accordion" style="margin-top:20px">
+			<li>
+				<div class="collapsible-header {% if filtroAplicado %}active{% endif %}"><i class="material-icons">search</i>Filtros de búsqueda</div>
+				<div class="collapsible-body grey lighten-5" style="padding-top:15px; padding-bottom:0px">
+					<div class="row" style="margin-bottom:0">
+						<div class="col m4">
+							<div class="input-field">
+								<input type="text" class="datepickerEmpty" name="fromDate" value="{{ filtro.fromDate }}">
+								<label>Fecha desde</label>
+							</div>
+						</div>
+						<div class="col m4">
+							<div class="input-field">
+								<input type="text" class="datepickerEmpty" name="toDate" value="{{ filtro.toDate }}">
+								<label>Fecha hasta</label>
+							</div>
+						</div>
+						<div class="col m4">
+							<div class="input-field">
+								<select name="concesionaria" value="{{ filtro.concesionaria }}">
+									<option value="" {% if filtro.concesionaria == '' %}selected{% endif %}>TODAS</option>
+									{% for concesionaria in concesionarias %}
+										<option value="{{ concesionaria.id }}" {% if filtro.concesionaria == concesionaria.id %}selected{% endif %}>{{ concesionaria.nombre }}</option>
+									{% endfor %}
+								</select>
+								<label>Concesionaria</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="row" style="margin-bottom:0px">
+						<div class="col m4">
+							<div class="input-field">
+								<input type="text" name="codigoInternoConcesionaria" value="{{ filtro.codigoInternoConcesionaria }}">
+								<label>Código Interno</label>
+							</div>
+						</div>
+						<div class="col m4">
+							<div class="input-field">
+								<input type="text" id="input-titular" class="autocomplete" autocomplete="off" value="{{ filtro.titularString }}">
+								<label for="autocomplete-input">Titular</label>
+							</div>
+							<input id="hiddenInputTitular" type="hidden" name="titular" value="{{ filtro.titular }}">
+						</div>
+						<div class="col m4">
+							<div class="input-field">
+								<select name="estado" value="{{ filtro.estado }}">
+									<option value="" {% if filtro.estado == '' %}selected{% endif %}>TODOS</option>
+									{% for estado in estados %}
+										<option value="{{ estado }}" {% if filtro.estado == estado %}selected{% endif %}>{{ estado }}</option>
+									{% endfor %}
+								</select>
+								<label>Estado</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col m12">
+							<button class="btn right waves-effect" type="submit">Buscar</button>
+							<a class="btn-flat waves-effect right" style="margin-right:5px" onclick="resetInputs()">Limpiar</a>
+						</div>
+					</div>
+
+				</div>
+			</li>
+		</ul>
+	{% else %}
+		<div class="row" style="margin-bottom:0">
 			<div class="col m3">
 				<div class="input-field">
 					<input type="text" class="datepickerEmpty" name="fromDate" value="{{ filtro.fromDate }}">
 					<label>Fecha desde</label>
 				</div>
 			</div>
-		{% else %}
-			<div class="col m2">
-				<div class="input-field">
-					<input type="text" class="datepickerEmpty" name="fromDate" value="{{ filtro.fromDate }}">
-					<label>Fecha desde</label>
-				</div>
-			</div>
-		{% endif %}
-
-		{% if app.user.getRol() == 'ROLE_CONCESIONARIA' %}
 			<div class="col m3">
 				<div class="input-field">
 					<input type="text" class="datepickerEmpty" name="toDate" value="{{ filtro.toDate }}">
 					<label>Fecha hasta</label>
 				</div>
 			</div>
-		{% else %}
-			<div class="col m2">
+
+			<div class="col m3">
 				<div class="input-field">
-					<input type="text" class="datepickerEmpty" name="toDate" value="{{ filtro.toDate }}">
-					<label>Fecha hasta</label>
+					<input type="text" id="input-titular" class="autocomplete" autocomplete="off" value="{{ filtro.titularString }}">
+					<label for="autocomplete-input">Titular</label>
 				</div>
+				<input id="hiddenInputTitular" type="hidden" name="titular" value="{{ filtro.titular }}">
 			</div>
-		{% endif %}
-
-		{% if app.user.getRol() != 'ROLE_CONCESIONARIA' %}
-		<div class="col m2">
-			<div class="input-field">
-				<select name="concesionaria" value="{{ filtro.concesionaria }}">
-					<option value="" {% if filtro.concesionaria == '' %}selected{% endif %}>TODAS</option>
-					{% for concesionaria in concesionarias %}
-						<option value="{{ concesionaria.id }}" {% if filtro.concesionaria == concesionaria.id %}selected{% endif %}>{{ concesionaria.nombre }}</option>
-					{% endfor %}
-				</select>
-				<label>Concesionaria</label>
-			</div>
-		</div>
-		{% endif %}
-
-		<div class="col m3">
-			<div class="input-field">
-				<input type="text" id="input-titular" class="autocomplete" autocomplete="off" value="{{ filtro.titularString }}">
-				<label for="autocomplete-input">Titular</label>
-			</div>
-			<input id="hiddenInputTitular" type="hidden" name="titular" value="{{ filtro.titular }}">
-		</div>
-		<div class="row">
 			<div class="col m3">
 				<div class="input-field">
 					<select name="estado" value="{{ filtro.estado }}">
@@ -72,14 +108,18 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col m12">
-			<button class="btn right waves-effect" type="submit">Buscar</button>
-			<a class="btn-flat waves-effect right" style="margin-right:5px" onclick="resetInputs()">Limpiar</a>
+		<div class="row">
+			<div class="col m12">
+				<button class="btn right waves-effect" type="submit">Buscar</button>
+				<a class="btn-flat waves-effect right" style="margin-right:5px" onclick="resetInputs()">Limpiar</a>
+			</div>
 		</div>
-	</div>
+	{% endif %}
+
+
+
 </form>
+
 
 <table class="striped highlight">
 	<thead>
@@ -88,6 +128,7 @@
 			<th>Concesionaria</th>
 			<th>Titular</th>
 			<th>Registro del Automotor</th>
+			<th>Código Interno</th>
 			<th>Estado</th>
 			<th class="fit">Acciones</th>
 		</tr>
@@ -99,6 +140,7 @@
 			<td>{{ tramite.concesionaria.nombre }}</td>
 			<td>{{ tramite.titular.toString() }}</td>
 			<td>{{ tramite.registroDelAutomotor.nombre }}</td>
+			<td>{{ tramite.codigoInternoConcesionaria ? tramite.codigoInternoConcesionaria : '-' }}</td>
 			<td class="fit">
 				<a id="status-{{ tramite.id }}" class='btn' href='#' onclick="loadEstados({{ tramite.id }})">{{ tramite.estadoActual.estado }}</a>
 			</td>

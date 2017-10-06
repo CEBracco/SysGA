@@ -33,6 +33,10 @@ class TramiteRepository extends \Doctrine\ORM\EntityRepository
 			$cb->andWhere('t.titular = :titular');
 			$cb->setParameter('titular', $filter['titular']);
 		}
+		if(array_key_exists('codigoInternoConcesionaria',$filter)){
+			$cb->andWhere('t.codigoInternoConcesionaria = :codigoInternoConcesionaria');
+			$cb->setParameter('codigoInternoConcesionaria', $filter['codigoInternoConcesionaria']);
+		}
 		if(array_key_exists('estado',$filter)){
 			$cb->join('t.estadoActual', 'e');
 			$cb->andWhere('e.estado = :tipoEstado');

@@ -39,6 +39,8 @@ class TramiteController extends Controller
     {
 		$em = $this->getDoctrine()->getManager();
 
+		$codigoInternoConcesionaria=$toDate=$request->request->get('codigoInternoConcesionaria','');
+
 		$fromDate=\DateTime::createFromFormat('!d/m/Y',$request->request->get('fromDate',''));
 		$toDate=\DateTime::createFromFormat('!d/m/Y',$request->request->get('toDate',''));
 
@@ -59,26 +61,31 @@ class TramiteController extends Controller
 		}
 
 		$estado=$request->request->get('estado','');
-		$filter=$this->getFilter($fromDate,$toDate,$concesionaria,$titular,$estado);
+		$filter=$this->getFilter($codigoInternoConcesionaria,$fromDate,$toDate,$concesionaria,$titular,$estado);
 
 		$tramites= $this->listTramites($filter);
         return $this->render('tramite/index.html.twig', array(
             'tramites' => $tramites,
 			'concesionarias' => $concesionarias,
 			'estados' => $this->getEstados(),
+			'filtroAplicado' => !empty($filter),
 			'filtro' => array(
 							'fromDate' => $request->request->get('fromDate',''),
 							'toDate' => $request->request->get('toDate',''),
 							'concesionaria' => $concesionaria,
 							'titular' => $titular,
 							'titularString' => $titularString,
-							'estado' => $estado
+							'estado' => $estado,
+							'codigoInternoConcesionaria' => $codigoInternoConcesionaria,
 						)
         ));
     }
 
-	private function getFilter($fromDate,$toDate,$concesionaria,$titular,$estado){
+	private function getFilter($codigoInternoConcesionaria,$fromDate,$toDate,$concesionaria,$titular,$estado){
 		$filter=array();
+		if(!empty($codigoInternoConcesionaria)){
+			$filter['codigoInternoConcesionaria']=$codigoInternoConcesionaria;
+		}
 		if(!empty($fromDate)){
 			$filter['fromDate']=$fromDate;
 		}
