@@ -199,6 +199,7 @@ class TramiteController extends Controller
 			'tramite' => $tramite,
 			'form' => $editForm->createView(),
 			'edit' => true,
+			'estados' => $this->getEstados(),
 			'msg' => $msg,
 		));
     }
