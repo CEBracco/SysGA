@@ -78,18 +78,20 @@
         </thead>
         <tbody>
         {% for movimiento in movimientos %}
-            <tr {{ (movimiento.deletedAt != null) ? ' class="red lighten-4"' }}>
-                <td>{% if movimiento.fecha %}{{ movimiento.fecha|date('d/m/Y') }}{% endif %}</td>
-                <td>{{ movimiento.concesionaria.nombre }}</td>
-				<td>{% if movimiento.tramite %}{{ movimiento.tramite.titular.toString() }}{% endif %}</td>
-                <td>{{ (movimiento.isContramovimiento) ? 'Contramovimiento - ' }}{{ movimiento.getTipoCanonical() }}</td>
-                <td>${{ movimiento.monto|number_format(2, ',', '.') }}</td>
-                <td class="fit">
-                    {% if movimiento.deletedAt == null %}
-                        <a onclick="confirmModal('{{ path('movimiento_delete', { 'id': movimiento.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">block</i></a>
-                    {% endif %}
-                </td>
-            </tr>
+			{% if movimiento.visible %}
+	            <tr {{ (movimiento.deletedAt != null) ? ' class="red lighten-4"' }}>
+	                <td>{% if movimiento.fecha %}{{ movimiento.fecha|date('d/m/Y') }}{% endif %}</td>
+	                <td>{{ movimiento.concesionaria.nombre }}</td>
+					<td>{% if movimiento.tramite %}{{ movimiento.tramite.titular.toString() }}{% endif %}</td>
+	                <td>{{ (movimiento.isContramovimiento) ? 'Contramovimiento - ' }}{{ movimiento.getTipoCanonical() }}</td>
+	                <td>${{ movimiento.monto|number_format(2, ',', '.') }}</td>
+	                <td class="fit">
+	                    {% if movimiento.deletedAt == null %}
+	                        <a onclick="confirmModal('{{ path('movimiento_delete', { 'id': movimiento.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">block</i></a>
+	                    {% endif %}
+	                </td>
+	            </tr>
+			{% endif %}
         {% endfor %}
         </tbody>
     </table>

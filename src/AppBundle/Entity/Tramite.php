@@ -687,7 +687,7 @@ class Tramite
 		$total=0;
 		foreach ($this->gastosAdicionales as $gastoAdicional) {
 			if($gastoAdicional->getIsGastoEnRegistro() == $enRegistro){
-				$total=$total + $gastoAdicional->getMonto();
+				$total=bcadd($total, $gastoAdicional->getMonto(),2);
 			}
 		}
 		return $total;
@@ -751,7 +751,10 @@ class Tramite
     }
 
     public function getTotalGestoria(){
-        return $this->selladosGestoria + $this->honorarios + $this->otros + $this->getTotalGastosAdicionalesEnGestoria();
+		$total= bcadd($this->selladosGestoria, $this->honorarios,2);
+		$total= bcadd($total, $this->otros,2);
+		$total= bcadd($total, $this->getTotalGastosAdicionalesEnGestoria(),2);
+        return $total;
     }
 
 	public function doDepositoEnRegistro($monto){
@@ -841,7 +844,7 @@ class Tramite
 		$total=0;
 		foreach ($this->getMovimientos() as $movimiento) {
 			if($movimiento->getTipo() == $tipo && $movimiento->getDeletedAt() == null){
-				$total=$total+$movimiento->getMonto();
+				$total=bcadd($total,$movimiento->getMonto(),2);
 			}
 		}
 		return $total;
