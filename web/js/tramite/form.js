@@ -44,6 +44,17 @@ $(document).ready(function(){
 		}
 	});
 
+	$('#addGastoModal').modal({
+		ready: function(){
+			if(totalEnRegistro > totalDepositado && !isDiferenciaApplied()){
+				$('#cargarDiferenciaButton').prop('disabled', false);
+			}
+			else{
+				$('#cargarDiferenciaButton').prop('disabled', true);
+			}
+		}
+	});
+
 	updateTable('gastosAdicionalesTable');
 	updateTable('depositosTable');
 });
@@ -154,4 +165,21 @@ function deleteDeposito(deposito) {
 		totalDepositado=totalDepositado - getValue(deposito.monto);
 		$('#totalDepositadoEnRegistro').text(printMoney(totalDepositado));
 	});
+}
+
+function cargarDiferencia(){
+	if(totalEnRegistro > totalDepositado){
+		var diferencia=totalEnRegistro - totalDepositado;
+		$('#montoNuevoGasto').val(Math.round(diferencia * 100) / 100);
+		$('#conceptoNuevoGasto').val("Diferencia de gastos y depósito en Registro");
+
+		$('.newGastoAdicionalField').trigger("change");
+		Materialize.updateTextFields();
+	}
+}
+
+function isDiferenciaApplied(){
+	return $('#gastosAdicionalesTable td').filter(function() {
+    	return $(this).text().toLowerCase() == 'Diferencia de gastos y depósito en Registro'.toLowerCase();
+	}).length == 1;
 }
