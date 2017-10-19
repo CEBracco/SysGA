@@ -68,6 +68,14 @@ class Movimiento
     */
     private $isContramovimiento;
 
+	/**
+	* @var bool
+	*
+	* @ORM\Column(name="visible", type="boolean")
+	*/
+	private $visible;
+
+
     /**
      * @ORM\ManyToOne(targetEntity="Tramite", inversedBy="movimientos")
      * @ORM\JoinColumn(name="tramite_id", referencedColumnName="id", nullable=true)
@@ -77,6 +85,7 @@ class Movimiento
     function __construct() {
         $this->isContramovimiento=false;
         $this->contramovimiento=null;
+		$this->visible=true;
     }
 
     /**
@@ -276,6 +285,26 @@ class Movimiento
      */
     public function getIsContramovimiento(){
         return $this->isContramovimiento;
+    }
+
+	/**
+     * Set visible
+     *
+     * @param boolean $visible
+     *
+     */
+    public function setVisible($visible){
+        $this->visible = $visible;
+        return $this;
+    }
+
+    /**
+     * Get visible
+     *
+     * @return bool
+     */
+    public function getVisible(){
+        return $this->visible;
     }
 
     public function getTipoCanonical(){

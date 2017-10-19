@@ -188,6 +188,14 @@ class TramiteController extends Controller
 			$em->flush();
 
 			return $this->redirectToRoute('tramite_edit', array('id' => $tramite->getId(),'status' => 'ok'));
+
+			// return $this->render('tramite/form.html.twig', array(
+			// 	'tramite' => $tramite,
+			// 	'form' => $editForm->createView(),
+			// 	'edit' => true,
+			// 	'estados' => $this->getEstados(),
+			// 	'msg' => "lalala",
+			// ));
 		}
 
 		$msg=null;
