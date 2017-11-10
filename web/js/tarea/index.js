@@ -28,10 +28,18 @@ function getTareas(usuarioId,date){
 	printCanonicalDate(date);
 	ajaxCall(usuarioId + '/listado',{fecha:formatDateOnly(date)},function(response){
 		$('#tareasTable > tbody').empty();
-		var tareasCollection=JSON.parse(response)
-		$.each(tareasCollection,function(index, tarea){
-			addTarea(tarea);
-		});
+		var tareasCollection=JSON.parse(response);
+		if(tareasCollection.length > 0){
+			$.each(tareasCollection,function(index, tarea){
+				addTarea(tarea);
+			});
+			$('#tareasTable').show();
+			$('#msgEmptyTable').hide();
+		}
+		else {
+			$('#tareasTable').hide();
+			$('#msgEmptyTable').show();
+		}
 	})
 }
 
