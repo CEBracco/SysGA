@@ -81,6 +81,11 @@ function formatDateOnly(date){
     return padTwo(date.getDate())+'/'+padTwo(date.getMonth()+1)+'/'+date.getFullYear();
 }
 
+function getDate(dateString){
+	var dateArray=dateString.split('/');
+	return new Date(dateArray[2] + '-' + dateArray[1] + '-' + dateArray[0] + ' UTC-0300');
+}
+
 function padTwo(num) {
     return pad(num,2);
 }
@@ -165,4 +170,10 @@ function updateTable(tableId){
 	else{
 		$('#'+tableId).show();
 	}
+}
+
+function getCanonicalDate(date){
+	var meses = new Array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+	var diasSemana = new Array("Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado");
+	return diasSemana[date.getDay()] + ", " + date.getDate() + " de " + meses[date.getMonth()] + " de " + date.getFullYear();
 }

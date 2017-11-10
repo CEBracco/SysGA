@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h4 class="title">Agenda Diaria</h4>
+
+	{% if is_granted('ROLE_GESTION') %}
+		<div class="row" style="margin-bottom:0">
+
+			<div class="col m6">
+				<div class="input-field">
+					<input id="dateInput" type="text" class="datepicker" name="date">
+					<label>Fecha</label>
+				</div>
+			</div>
+
+			<div class="col m6">
+				<div class="input-field">
+					<select id="userInput" name="usuario" value="{{ app.user.id }}">
+						{# <option value="" {% if filtro.concesionaria == '' %}selected{% endif %}>TODAS</option> #}
+						{% for usuario in usuarios %}
+							<option value="{{ usuario.id }}" {% if usuario.id == app.user.id %}selected{% endif %}>{{ usuario.toString() }}</option>
+						{% endfor %}
+					</select>
+					<label>Usuarios</label>
+				</div>
+			</div>
+
+		</div>
+		<div class="row">
+			<div class="col m12">
+				<button id="searchButton" class="btn right waves-effect">Buscar</button>
+			</div>
+		</div>
+		<br>
+	{% endif %}
+
+	<div class="row" style="margin-bottom:0">
+		<div class="col m3">
+			<button id="backButton" class="btn waves-effect">Anterior</button>
+		</div>
+		<div class="col m6">
+			<p class="center-align dateTitle" style="font-size: 1.15re; margin-top:10px; margin-bottom:10px"></p>
+		</div>
+		<div class="col m3">
+			<button id="nextButton" class="btn right waves-effect">Siguiente</button>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col m12">
+		    <table id="tareasTable" class="striped highlight">
+		        <thead>
+		            <tr>
+		                <th>Titulo</th>
+						<th>Descripcion</th>
+		                <th>Acciones</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+				{#
+		        {% for tarea in tareas %}
+		            <tr>
+		                <td>{{ tarea.titulo }}</td>
+						<td>{{ tarea.Descripcion }}</td>
+		                <td class="fit">
+		                    <a href="{{ path('tarea_edit', { 'id': tarea.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
+		                    <a onclick="confirmModal('{{ path('tarea_delete', { 'id': tarea.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
+		                </td>
+		            </tr>
+		        {% endfor %} #}
+		        </tbody>
+		    </table>
+		</div>
+	</div>
+{% endblock %}
+
+{% block modals %}
+	{% if is_granted('ROLE_ADMIN') %}
+	    <div class="fixed-action-btn">
+	        <a href="{{ path('tarea_new') }}" class="btn-floating btn-large waves-effect waves-light teal darken-2">
+	            <i class="large material-icons">add</i>
+	        </a>
+	    </div>
+	{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		var editarTareaPath="{{ path('tarea_edit',{ 'id': 'idTarea' }) }}";
+		var eliminarTareaPath="{{ path('tarea_delete',{ 'id': 'idTarea' }) }}";
+		var selectedUser={{app.user.id}};
+	</script>
+	<script src="{{ asset('js/tarea/index.js') }}"></script>
+{% endblock %}
