@@ -134,10 +134,15 @@ class User extends BaseUser{
 
 	public function serializar(){
 		return array(
+			'id' => $this->getId(),
 			'apellido' => $this->getApellido(),
 			'nombre' => $this->getNombre(),
 			'rol' => $this->getRol(),
 			'username' => $this->getUsername());
+	}
+
+	public function serializarJSON(){
+		return json_encode($this->serializar(),true);
 	}
 
 	function getRolAImprimir(){
@@ -160,5 +165,9 @@ class User extends BaseUser{
 			case "ROLE_CONCESIONARIA": return 1;
 			default: throw new \Exception("El rol '$rol' no tiene una entrada en el switch del método getNivelDeJerarquia() de la clase User");
 		}
+	}
+
+	function toString(){
+		return $this->getNombre()." ".$this->getApellido()." (".$this->getUsername().") -- ".$this->getRolAImprimir();
 	}
 }

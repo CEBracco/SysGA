@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if edit is not defined or edit == false %}
+        <h4 class="title">Nueva Tarea</h4>
+    {% else %}
+        <h4 class="title">Editar Tarea</h4>
+    {% endif %}
+
+    {{ form_start(form) }}
+
+        <div class="row">
+			<div class="col m6">
+				<div class="input-field">
+					{% if edit is not defined or edit == false %}
+						{{ form_widget(form.fecha, {'attr': {'class': 'datepicker'}}) }}
+					{% else %}
+						{{ form_widget(form.fecha, {'attr': {'class': 'datepickerEmpty'}}) }}
+					{% endif %}
+					{{ form_label(form.fecha) }}
+				</div>
+			</div>
+			<div class="col m6">
+                <div class="input-field">
+                    {{ form_widget(form.user) }}
+                    {{ form_label(form.user) }}
+                </div>
+            </div>
+        </div>
+
+		<div class="row">
+			<div class="col s12">
+				<div class="input-field">
+					{{ form_widget(form.titulo) }}
+					{{ form_label(form.titulo) }}
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col s12">
+				<div class="input-field">
+					{{ form_widget(form.descripcion, {'attr': {'class': 'materialize-textarea'}}) }}
+					{{ form_label(form.descripcion) }}
+				</div>
+			</div>
+		</div>
+
+        <div class="center-align">
+            <button class="btn waves-effect waves-light" type="submit"><i class="material-icons left">save</i>Guardar</button>
+            <a href="{{ path('tarea_index') }}"><button type="button" class="btn-flat waves-effect waves-light">Cancelar</button></a>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

@@ -39,6 +39,9 @@
 					<a><span class="white-text email">{{ app.user.getRolAImprimir() }}{% if app.user.concesionaria is not null %} ({{ app.user.concesionaria.nombre }}){% endif %}</span></a>
 				</div></li>
 				{% if is_granted('ROLE_GESTION') %}
+					<li><a href="{{ path('tarea_index') }}"><i class="material-icons"<i class="material-icons">event_available</i></i> Agenda Diaria</a></li>
+				{% endif %}
+				{% if is_granted('ROLE_GESTION') %}
 					<li><a href="{{ path('concesionaria_index') }}"><i class="material-icons">store</i> Concesionarias</a></li>
 				{% endif %}
 				{% if app.user.getRol() == 'ROLE_CONCESIONARIA' %}
