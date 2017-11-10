@@ -39,7 +39,7 @@
 			<button id="backButton" class="btn waves-effect">Anterior</button>
 		</div>
 		<div class="col m6">
-			<p class="center-align dateTitle" style="font-size: 1.15re; margin-top:10px; margin-bottom:10px"></p>
+			<p class="center-align dateTitle" style="font-size: 1.20re; margin-top:10px; margin-bottom:10px"></p>
 		</div>
 		<div class="col m3">
 			<button id="nextButton" class="btn right waves-effect">Siguiente</button>
@@ -48,7 +48,7 @@
 
 	<div class="row">
 		<div class="col m12">
-		    <table id="tareasTable" class="striped highlight">
+		    <table id="tareasTable" class="striped highlight collapse">
 		        <thead>
 		            <tr>
 		                <th>Titulo</th>
@@ -57,21 +57,19 @@
 		            </tr>
 		        </thead>
 		        <tbody>
-				{#
-		        {% for tarea in tareas %}
-		            <tr>
-		                <td>{{ tarea.titulo }}</td>
-						<td>{{ tarea.Descripcion }}</td>
-		                <td class="fit">
-		                    <a href="{{ path('tarea_edit', { 'id': tarea.id }) }}" class="btn waves-effect waves-light no-lateral-padding"><i class="material-icons">mode_edit</i></a>
-		                    <a onclick="confirmModal('{{ path('tarea_delete', { 'id': tarea.id }) }}')" class="btn waves-effect waves-light no-lateral-padding red"><i class="material-icons">delete</i></a>
-		                </td>
-		            </tr>
-		        {% endfor %} #}
 		        </tbody>
 		    </table>
 		</div>
 	</div>
+
+	<div id="msgEmptyTable" class="collapse">
+		<div class="card z-depth-2">
+			<div class="card-content">
+				<p class="center-align">No existen Tareas cargadas para esta fecha.</p>
+			</div>
+		</div>
+	</div>
+
 {% endblock %}
 
 {% block modals %}
@@ -82,6 +80,38 @@
 	        </a>
 	    </div>
 	{% endif %}
+
+	<div id="detailsModal" class="modal">
+		<div class="modal-content">
+			<h4>Detalles de tarea</h4>
+			<div class="card">
+				<div class="card-content">
+					<div class="row">
+						<div class="col s12">
+							<p><b>Titulo</b></p>
+							<p class="taskTitle"></p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col s12">
+							<p><b>Descripción</b></p>
+							<p class="taskDescription"></p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col s12">
+							<p><b>Estado</b></p>
+							<p class="taskDone"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<a class="modal-action modal-close waves-effect waves-green btn-flat">Cerrar</a>
+		</div>
+	</div>
+
 {% endblock %}
 
 {% block javascripts %}
