@@ -112,6 +112,11 @@ function deleteGastoAdicional(gastoAdicional){
 			$('#gasto-'+gastoAdicional.id).remove();
 			updateTable('gastosAdicionalesTable');
 			updateTotalGestoria(gastoAdicional.monto,false);
+
+			//para modal resumen
+			gastosPersistidos=_.remove(gastosPersistidos,function(gasto){
+				gasto.id==gastoAdicional.id;
+			})
 		});
 	}
 	else{
@@ -182,4 +187,25 @@ function isDiferenciaApplied(){
 	return $('#gastosAdicionalesTable td').filter(function() {
     	return $(this).text().toLowerCase() == 'Diferencia de gastos y depósito en Registro'.toLowerCase();
 	}).length == 1;
+}
+
+
+//modal resumen
+var gastosPersistidos=tramiteActual.gastosAdicionalesEnGestoria;
+
+function openModalResumen(){
+	var baseId="#appbundle_tramite_";
+	tramiteActual.otros=$(baseId+'otros').val();
+	tramiteActual.gastosArancel=$(baseId+'gastoArancel').val();
+	tramiteActual.honorarios=$(baseId+'honorarios').val();
+	tramiteActual.impuestosPatente=$(baseId+'impuestosPatente').val();
+	tramiteActual.selladosGestoria=$(baseId+'selladosGestoria').val();
+	tramiteActual.selladosRegistro=$(baseId+'selladosRegistro').val();
+	tramiteActual.restoEnRegistro=totalDepositado - totalEnRegistro - tramiteActual.restoTransferidoAGestoria;
+	tramiteActual.gastosAdicionalesEnGestoria=_.union(gastosPersistidos,gastosAdicionalesNuevos);
+	tramiteActual.totalDepositadoEnRegistro=totalDepositado;
+	tramiteActual.total=totalEnRegistro + totalGestoria;
+	tramiteActual.totalEnRegistro=totalEnRegistro;
+	tramiteActual.totalGestoria=totalGestoria;
+	modalPago(tramiteActual);
 }

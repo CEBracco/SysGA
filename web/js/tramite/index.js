@@ -42,11 +42,6 @@ function modalPago(tramiteJson){
 		$('#tranferRestoButton').prop('disabled', true);
 	}
 
-    $('#payModal').modal({
-		complete: function(){
-			$('.gastoAdicional').remove();
-		}
-	});
 	$('#payModal').modal('open');
 }
 
@@ -65,11 +60,11 @@ function doAddStatus(){
     }).done(function(response) {
         addStatusItem({estado:valueInputEstadoVal,observacion:valueInputObservacion,fecha:new Date()});
         $('#status-'+selectedTramite).html(valueInputEstadoVal);
-        resetInputs();
+        resetInputsStatus();
     });
 }
 
-function resetInputs(){
+function resetInputsStatus(){
     $('#inputEstado').val('Pendiente');
     $('#inputEstado').material_select();
     $('#inputObservacion').val('');
@@ -113,6 +108,12 @@ $(document).ready(function(){
 		},
 		minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
 	});
+
+	$('#payModal').modal({
+		complete: function(){
+			$('.gastoAdicional').remove();
+		}
+	});
 });
 
 ajaxAutoComplete({
@@ -152,7 +153,9 @@ function resetInputs(){
 }
 
 function doAddResto(){
+	refreshSpinner=true;
 	ajaxCall(selectedTramite + '/addResto',{},function(){
+		refreshSpinner=false;
 		$("#tramite-" + selectedTramite).addClass('transfered');
 		$('#tranferRestoButton').prop('disabled', true);
 		showToast("¡La operacion se completo exitosamente!");

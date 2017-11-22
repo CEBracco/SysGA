@@ -863,7 +863,7 @@ class Tramite
 	}
 
 	public function getRestoEnRegistro(){
-		return $this->getTotalDepositadoEnRegistro() - $this->getTotalEnRegistro();
+		return $this->getTotalDepositadoEnRegistro() - $this->getTotalEnRegistro() - $this->restoRegistroTrasferidoAGestoria;
 	}
 
 	public function addRestoRegistroAGestoria(){
