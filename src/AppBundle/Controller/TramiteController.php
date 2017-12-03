@@ -218,7 +218,7 @@ class TramiteController extends Controller
 		$gastosAdicionales=array();
 		if($gastosAdicionalesDTO != null){
 			foreach ($gastosAdicionalesDTO as $gastoAdicionalDTO) {
-				$gastosAdicionales[]=Gasto::enGestoria($gastoAdicionalDTO['concepto'],$gastoAdicionalDTO['monto']);
+				$gastosAdicionales[]=Gasto::enGestoria($gastoAdicionalDTO['concepto'],$gastoAdicionalDTO['monto'],$gastoAdicionalDTO['isDiferencia']);
 			}
 		}
 		return $gastosAdicionales;

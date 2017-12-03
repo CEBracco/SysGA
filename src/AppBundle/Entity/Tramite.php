@@ -863,7 +863,7 @@ class Tramite
 	}
 
 	public function getRestoEnRegistro(){
-		return $this->getTotalDepositadoEnRegistro() - $this->getTotalEnRegistro() - $this->restoRegistroTrasferidoAGestoria;
+		return $this->getTotalDepositadoEnRegistro() - ($this->getTotalEnRegistro() + $this->restoRegistroTrasferidoAGestoria) + $this->getTotalDiferenciaGastosAdicionales();
 	}
 
 	public function addRestoRegistroAGestoria(){
@@ -882,6 +882,16 @@ class Tramite
 		return $gastosAdicionales;
 	}
 
+	public function getTotalDiferenciaGastosAdicionales(){
+		$total=0;
+		foreach ($this->gastosAdicionales as $gasto) {
+			if($gasto->getIsDiferencia()){
+				$total=$total+$gasto->getMonto();
+			}
+		}
+		return $total;
+	}
+
 	public function serialize(){
 		$data = array(
 			'id' => $this->id,
@@ -898,7 +908,7 @@ class Tramite
 			'restoTransferidoAGestoria' => $this->restoRegistroTrasferidoAGestoria,
 			'totalEnRegistro' => $this->getTotalEnRegistro(),
 			'totalGestoria' => $this->getTotalGestoria(),
-			'total' => $this->getTotalGestoria()+$this->getTotalEnRegistro(),
+			'total' => $this->getTotalGestoria()+$this->getTotalEnRegistro()
 		);
 
 		return json_encode($data);

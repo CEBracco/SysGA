@@ -82,12 +82,14 @@ function initValues(){
 
 var gastosAdicionalesNuevos=[];
 var indexGastosAdicionalesNuevos=0;
+var cargandoDiferencia=false;
 
 function addGastoAdicional(){
 	var nuevoGasto={
 		id: ++indexGastosAdicionalesNuevos,
 		concepto:$('#conceptoNuevoGasto').val(),
-		monto:$('#montoNuevoGasto').val()
+		monto:$('#montoNuevoGasto').val(),
+		isDiferencia: isDiferencia
 	}
 	gastosAdicionalesNuevos.push(nuevoGasto);
 
@@ -157,6 +159,7 @@ function updateTotalGestoria(monto,sum){
 }
 
 function resetModalAddGastoAdicional(){
+	isDiferencia=false;
 	$.each($('.newGastoAdicionalField'),function(index, input){
 		input.value = '';
 	});
@@ -174,6 +177,7 @@ function deleteDeposito(deposito) {
 
 function cargarDiferencia(){
 	if(totalEnRegistro > totalDepositado){
+		isDiferencia=true;
 		var diferencia=totalEnRegistro - totalDepositado;
 		$('#montoNuevoGasto').val(Math.round(diferencia * 100) / 100);
 		$('#conceptoNuevoGasto').val("Diferencia de gastos y depósito en Registro");
@@ -201,11 +205,21 @@ function openModalResumen(){
 	tramiteActual.impuestosPatente=$(baseId+'impuestosPatente').val();
 	tramiteActual.selladosGestoria=$(baseId+'selladosGestoria').val();
 	tramiteActual.selladosRegistro=$(baseId+'selladosRegistro').val();
-	tramiteActual.restoEnRegistro=totalDepositado - totalEnRegistro - tramiteActual.restoTransferidoAGestoria;
 	tramiteActual.gastosAdicionalesEnGestoria=_.union(gastosPersistidos,gastosAdicionalesNuevos);
+	tramiteActual.restoEnRegistro=totalDepositado - (tramiteActual.restoTransferidoAGestoria + totalEnRegistro) + getTotalDiferenciaGastosAdicionales(tramiteActual.gastosAdicionalesEnGestoria);
 	tramiteActual.totalDepositadoEnRegistro=totalDepositado;
 	tramiteActual.total=totalEnRegistro + totalGestoria;
 	tramiteActual.totalEnRegistro=totalEnRegistro;
 	tramiteActual.totalGestoria=totalGestoria;
 	modalPago(tramiteActual);
+}
+
+function getTotalDiferenciaGastosAdicionales(gastos){
+	var totalDiferenciaGastosAdicionales=0;
+	$.each(gastos,function(index, gasto){
+		if(gasto.isDiferencia){
+			totalDiferenciaGastosAdicionales=totalDiferenciaGastosAdicionales+parseFloat(gasto.monto);
+		};
+	});
+	return totalDiferenciaGastosAdicionales;
 }
