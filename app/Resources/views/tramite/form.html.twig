@@ -266,6 +266,12 @@
 				</div>
 			</div>
 
+			{% if edit is defined and edit == true %}
+				<div class="center-align">
+					<button type="button" class="waves-effect waves-light btn-flat" onclick="openModalResumen()">Ver Resumen</button>
+				</div>
+			{% endif %}
+
 		</div>
 	</div>
 </div>
@@ -282,6 +288,7 @@
 
 {% block javascripts %}
 <script type="text/javascript">
+	var tramiteActual={{tramite.serialize() | raw}};
 	var deleteGastoPath="{{ path('remove_gasto_tramite',{'id':'idGasto'}) }}"
 	var deleteDepositoPath="{{ path('remove_deposito_tramite',{'id':'idDeposito'}) }}"
 	var totalGastosAdicionalesGestoria={{ tramite.getTotalGastosAdicionalesEnGestoria() }}
@@ -295,6 +302,11 @@
 		var urlAddStatus="{{ path('tramite_addEstado',{'id':tramite.id}) }}"
 	</script>
 	<script type="text/javascript" src="{{ asset('js/tramite/component/modalTramiteStatus.js') }}"></script>
+
+	<script type="text/javascript">
+		var urlAddResto="{{ path('tramite_addResto',{'id':tramite.id}) }}"
+	</script>
+	<script type="text/javascript" src="{{ asset('js/tramite/component/modalTramiteResumen.js') }}"></script>
 {% endif %}
 {% endblock %}
 
@@ -327,6 +339,7 @@
 
 {% if edit is defined and edit == true %}
 	{% include 'tramite/components/modalTramiteStatus.html.twig' %}
+	{% include 'tramite/components/modalTramiteResumen.html.twig' %}
 {% endif %}
 
 {% endblock %}

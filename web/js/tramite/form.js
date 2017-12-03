@@ -82,12 +82,14 @@ function initValues(){
 
 var gastosAdicionalesNuevos=[];
 var indexGastosAdicionalesNuevos=0;
+var cargandoDiferencia=false;
 
 function addGastoAdicional(){
 	var nuevoGasto={
 		id: ++indexGastosAdicionalesNuevos,
 		concepto:$('#conceptoNuevoGasto').val(),
-		monto:$('#montoNuevoGasto').val()
+		monto:$('#montoNuevoGasto').val(),
+		isDiferencia: isDiferencia
 	}
 	gastosAdicionalesNuevos.push(nuevoGasto);
 
@@ -112,6 +114,11 @@ function deleteGastoAdicional(gastoAdicional){
 			$('#gasto-'+gastoAdicional.id).remove();
 			updateTable('gastosAdicionalesTable');
 			updateTotalGestoria(gastoAdicional.monto,false);
+
+			//para modal resumen
+			gastosPersistidos=_.remove(gastosPersistidos,function(gasto){
+				gasto.id==gastoAdicional.id;
+			})
 		});
 	}
 	else{
@@ -152,6 +159,7 @@ function updateTotalGestoria(monto,sum){
 }
 
 function resetModalAddGastoAdicional(){
+	isDiferencia=false;
 	$.each($('.newGastoAdicionalField'),function(index, input){
 		input.value = '';
 	});
@@ -169,6 +177,7 @@ function deleteDeposito(deposito) {
 
 function cargarDiferencia(){
 	if(totalEnRegistro > totalDepositado){
+		isDiferencia=true;
 		var diferencia=totalEnRegistro - totalDepositado;
 		$('#montoNuevoGasto').val(Math.round(diferencia * 100) / 100);
 		$('#conceptoNuevoGasto').val("Diferencia de gastos y depósito en Registro");
@@ -182,4 +191,35 @@ function isDiferenciaApplied(){
 	return $('#gastosAdicionalesTable td').filter(function() {
     	return $(this).text().toLowerCase() == 'Diferencia de gastos y depósito en Registro'.toLowerCase();
 	}).length == 1;
+}
+
+
+//modal resumen
+var gastosPersistidos=tramiteActual.gastosAdicionalesEnGestoria;
+
+function openModalResumen(){
+	var baseId="#appbundle_tramite_";
+	tramiteActual.otros=$(baseId+'otros').val();
+	tramiteActual.gastosArancel=$(baseId+'gastoArancel').val();
+	tramiteActual.honorarios=$(baseId+'honorarios').val();
+	tramiteActual.impuestosPatente=$(baseId+'impuestosPatente').val();
+	tramiteActual.selladosGestoria=$(baseId+'selladosGestoria').val();
+	tramiteActual.selladosRegistro=$(baseId+'selladosRegistro').val();
+	tramiteActual.gastosAdicionalesEnGestoria=_.union(gastosPersistidos,gastosAdicionalesNuevos);
+	tramiteActual.restoEnRegistro=totalDepositado - (tramiteActual.restoTransferidoAGestoria + totalEnRegistro) + getTotalDiferenciaGastosAdicionales(tramiteActual.gastosAdicionalesEnGestoria);
+	tramiteActual.totalDepositadoEnRegistro=totalDepositado;
+	tramiteActual.total=totalEnRegistro + totalGestoria;
+	tramiteActual.totalEnRegistro=totalEnRegistro;
+	tramiteActual.totalGestoria=totalGestoria;
+	modalPago(tramiteActual);
+}
+
+function getTotalDiferenciaGastosAdicionales(gastos){
+	var totalDiferenciaGastosAdicionales=0;
+	$.each(gastos,function(index, gasto){
+		if(gasto.isDiferencia){
+			totalDiferenciaGastosAdicionales=totalDiferenciaGastosAdicionales+parseFloat(gasto.monto);
+		};
+	});
+	return totalDiferenciaGastosAdicionales;
 }

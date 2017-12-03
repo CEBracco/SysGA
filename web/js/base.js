@@ -1,8 +1,12 @@
 var spinnerOff=false;
+var refreshSpinner=false;
 var $loading = $('#loadingSpinner');
 $(document)
 	.ajaxStart(function () {
 		if(!spinnerOff){
+			if(refreshSpinner){
+				$("#loadingSpinner").modal({dismissible: false});
+			}
 			$loading.modal('open');
 		}
 	})
@@ -15,7 +19,7 @@ $(document)
 
 $(document).ready(function() {
     $(".button-collapse").sideNav();
-    $(".modal").modal();
+    $(".modal").not('#confirmationModal,#payModal').modal();
     $("#loadingSpinner").modal({dismissible: false});
     $('.datepicker').pickadate({
         labelMonthNext: 'Mes Siguiente',
@@ -118,6 +122,8 @@ function confirmModal(param, functionParams = null){
 	else{
 		confirmParam=emptyFunction;
 	}
+
+	$('#confirmationModal').modal();
 	$('#confirmationModal').modal('open');
 }
 

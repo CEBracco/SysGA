@@ -48,17 +48,26 @@ class Gasto
 	 */
 	 private $isGastoEnRegistro;
 
+	 /**
+	 * @var bool
+	 *
+	 * @ORM\Column(name="isdiferencia", type="boolean")
+	 */
+	 private $isDiferencia;
+
 
 	function __construct($concepto,$monto) {
 		$this->isGastoEnRegistro=false;
+		$this->isDiferencia=false;
 		$this->monto=$monto;
 		$this->concepto=$concepto;
 	}
 
-	public static function enGestoria($concepto,$monto)
+	public static function enGestoria($concepto,$monto,$isDiferencia)
 	{
 		$gasto=new Gasto($concepto,$monto);
 		$gasto->setIsGastoEnRegistro(false);
+		$gasto->setIsDiferencia($isDiferencia);
 		return $gasto;
 	}
 
@@ -172,7 +181,28 @@ class Gasto
 		return $this->isGastoEnRegistro;
 	}
 
+	/**
+	 * Set isDiferencia
+	 *
+	 * @param boolean $isDiferencia
+	 *
+	 * @return Gasto
+	 */
+	public function setIsDiferencia($isDiferencia){
+		$this->isDiferencia = $isDiferencia;
+		return $this;
+	}
+
+	/**
+	 * Get isDiferencia
+	 *
+	 * @return bool
+	 */
+	public function getIsDiferencia(){
+		return $this->isDiferencia;
+	}
+
 	public function toArray(){
-		return array('concepto' => $this->concepto, 'monto' => $this->monto);
+		return array('concepto' => $this->concepto, 'monto' => $this->monto, 'isDiferencia' => $this->isDiferencia);
 	}
 }
