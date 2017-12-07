@@ -158,6 +158,7 @@ function numberValidation(event){
 }
 
 function printMoney(mount){
+	var value=(mount+'').replace(',','.');
 	return '$' + round(mount);
 }
 
