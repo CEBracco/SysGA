@@ -159,13 +159,8 @@ function numberValidation(event){
 
 function printMoney(mount){
 	var value=mount;
-	if((value+'').includes(',')){
-		if((value+'').includes('.')){
-			value=(mount+'').replace(',','');
-		}
-		else{
-			value=(mount+'').replace(',','.');
-		}
+	if((value+'').includes('.')){
+		value=(mount+'').replace(',','.');
 	}
 	return '$' + round(value);
 }
