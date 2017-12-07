@@ -158,8 +158,11 @@ function numberValidation(event){
 }
 
 function printMoney(mount){
-	var value=(mount+'').replace(',','.');
-	return '$' + round(mount);
+	var value=mount;
+	if((value+'').includes('.')){
+		value=(mount+'').replace(',','.');
+	}
+	return '$' + round(value);
 }
 
 function round(mount){
