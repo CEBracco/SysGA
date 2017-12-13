@@ -171,16 +171,21 @@ function printMoney(mount){
 }
 
 function getFloat(mount){
-	var value=mount;
-	if((value+'').includes(',')){
-		if((value+'').includes('.')){
-			value=(mount+'').replace(',','');
-		}
-		else{
-			value=(mount+'').replace(',','.');
-		}
+	if(mount == null || mount == 'null'){
+		return 0;
 	}
-	return round(parseFloat(value));
+	else{
+		var value=mount;
+		if((value+'').includes(',')){
+			if((value+'').includes('.')){
+				value=(mount+'').replace(',','');
+			}
+			else{
+				value=(mount+'').replace(',','.');
+			}
+		}
+		return round(parseFloat(value));
+	}
 }
 
 function round(mount){
