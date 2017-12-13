@@ -14,7 +14,7 @@ $(document).ready(function(){
 		});
 		total=totalEnRegistro + totalGestoria;
 		$('.showTotalEnRegistro').text(totalEnRegistro);
-		$('.showTotal').text(round(parseFloat(total)));
+		$('.showTotal').text(round(getFloat(total)));
 	});
 
 	$('.totalGestoria').on('change keyup',function(){
@@ -26,7 +26,7 @@ $(document).ready(function(){
 		});
 		total=totalEnRegistro + totalGestoria;
 		$('.showTotalGestoria').text(totalGestoria);
-		$('.showTotal').text(round(parseFloat(total)));
+		$('.showTotal').text(round(getFloat(total)));
 	});
 
 	$('.newGastoAdicionalField').on('change keyup', function(){
@@ -60,7 +60,7 @@ $(document).ready(function(){
 });
 
 function getValue(value){
-	var integerVal=parseFloat(value);
+	var integerVal=getFloat(value);
 	if(isNaN(integerVal)){
 		return 0;
 	}
@@ -155,7 +155,7 @@ function updateTotalGestoria(monto,sum){
 	total=totalGestoria + totalEnRegistro;
 
 	$('.showTotalGestoria').text(totalGestoria);
-	$('.showTotal').text(round(parseFloat(total)));
+	$('.showTotal').text(round(getFloat(total)));
 }
 
 function resetModalAddGastoAdicional(){
@@ -206,7 +206,7 @@ function openModalResumen(){
 	tramiteActual.selladosGestoria=$(baseId+'selladosGestoria').val();
 	tramiteActual.selladosRegistro=$(baseId+'selladosRegistro').val();
 	tramiteActual.gastosAdicionalesEnGestoria=_.union(gastosPersistidos,gastosAdicionalesNuevos);
-	tramiteActual.restoEnRegistro=totalDepositado - (tramiteActual.restoTransferidoAGestoria + totalEnRegistro) + getTotalDiferenciaGastosAdicionales(tramiteActual.gastosAdicionalesEnGestoria);
+	tramiteActual.restoEnRegistro=totalDepositado - (getFloat(tramiteActual.restoTransferidoAGestoria) + totalEnRegistro) + getTotalDiferenciaGastosAdicionales(tramiteActual.gastosAdicionalesEnGestoria);
 	tramiteActual.totalDepositadoEnRegistro=totalDepositado;
 	tramiteActual.total=totalEnRegistro + totalGestoria;
 	tramiteActual.totalEnRegistro=totalEnRegistro;
@@ -218,7 +218,7 @@ function getTotalDiferenciaGastosAdicionales(gastos){
 	var totalDiferenciaGastosAdicionales=0;
 	$.each(gastos,function(index, gasto){
 		if(gasto.isDiferencia){
-			totalDiferenciaGastosAdicionales=totalDiferenciaGastosAdicionales+parseFloat(gasto.monto);
+			totalDiferenciaGastosAdicionales=totalDiferenciaGastosAdicionales+getFloat(gasto.monto);
 		};
 	});
 	return totalDiferenciaGastosAdicionales;

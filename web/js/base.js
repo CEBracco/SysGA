@@ -170,6 +170,19 @@ function printMoney(mount){
 	return '$' + round(value);
 }
 
+function getFloat(mount){
+	var value=mount;
+	if((value+'').includes(',')){
+		if((value+'').includes('.')){
+			value=(mount+'').replace(',','');
+		}
+		else{
+			value=(mount+'').replace(',','.');
+		}
+	}
+	return round(parseFloat(value));
+}
+
 function round(mount){
 	return Math.round(mount * 100) / 100;
 }
