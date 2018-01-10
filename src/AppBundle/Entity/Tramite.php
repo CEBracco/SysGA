@@ -747,7 +747,9 @@ class Tramite
 	}
 
     public function getTotalEnRegistro(){
-        return $this->gastoArancel + $this->impuestosPatente + $this->selladosRegistro;
+        $total=bcadd($this->gastoArancel, $this->impuestosPatente, 2);
+		$total=bcadd($total, $this->selladosRegistro, 2);
+		return $total;
     }
 
     public function getTotalGestoria(){
@@ -857,12 +859,15 @@ class Tramite
 	public function getTotalDepositadoEnRegistro(){
 		$total=0;
 		foreach ($this->getDepositos() as $deposito) {
-			$total=$total+$deposito->getMonto();
+			$total=bcadd($total,$deposito->getMonto(),2);
 		}
 		return $total;
 	}
 
 	public function getRestoEnRegistro(){
+		if ($this->restoRegistroTrasferidoAGestoria == null) {
+			return $this->getTotalDepositadoEnRegistro() - $this->getTotalEnRegistro() + $this->getTotalDiferenciaGastosAdicionales();
+		}
 		return $this->getTotalDepositadoEnRegistro() - ($this->getTotalEnRegistro() + $this->restoRegistroTrasferidoAGestoria) + $this->getTotalDiferenciaGastosAdicionales();
 	}
 
@@ -886,7 +891,7 @@ class Tramite
 		$total=0;
 		foreach ($this->gastosAdicionales as $gasto) {
 			if($gasto->getIsDiferencia()){
-				$total=$total+$gasto->getMonto();
+				$total=bcadd($total,$gasto->getMonto(),2);
 			}
 		}
 		return $total;
