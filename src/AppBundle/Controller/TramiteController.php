@@ -343,14 +343,14 @@ class TramiteController extends Controller
         // ));
 
 		$titular = $em->getRepository('AppBundle:Titular')->findOneByDni($dni);
-
         if($titular == null){
             $titular=new Titular($nombre);
-			$titular->setDni($dni);
-            $titular->setNombre($nombre);
-            $titular->setApellido($apellido);
-            $titular->setProvincia($provincia);
-        }
+		}
+
+		$titular->setDni($dni);
+        $titular->setNombre($nombre);
+        $titular->setApellido($apellido);
+        $titular->setProvincia($provincia);
 
         return $titular;
     }
