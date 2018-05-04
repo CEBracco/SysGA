@@ -1,6 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block defaultBody %}
+<style>
+.autocomplete-content {
+	position: absolute;
+	width: 100%;
+}
+</style>
+
 {{ form_start(form) }}
 
 <div class="row">
@@ -50,12 +57,20 @@
                         {{ form_label(form.concesionaria) }}
                     </div>
                 </div>
-                <div class="col m6">
+                <div class="col m6 collapse">
                     <div class="input-field">
                         {{ form_widget(form.registroDelAutomotor) }}
                         {{ form_label(form.registroDelAutomotor) }}
                     </div>
                 </div>
+				<div class="col m6">
+					<div class="row">
+						<div class="input-field">
+							<input type="text" id="registrodelautomotor-autofill-input" value="{{tramite.registroDelAutomotor ? tramite.registroDelAutomotor.nombre : ''}}" class="autocomplete" autocomplete="off">
+							<label for="registrodelautomotor-autofill-input">Registro del Automotor</label>
+						</div>
+					</div>
+				</div>
             </div>
         </div>
     </div>
@@ -288,6 +303,7 @@
 
 {% block javascripts %}
 <script type="text/javascript">
+	var registrosDelAutomotor = {{registrosDelAutomotor | raw}};
 	var tramiteActual={{tramite.serialize() | raw}};
 	var deleteGastoPath="{{ path('remove_gasto_tramite',{'id':'idGasto'}) }}"
 	var deleteDepositoPath="{{ path('remove_deposito_tramite',{'id':'idDeposito'}) }}"

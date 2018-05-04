@@ -62,5 +62,13 @@ class RegistroDelAutomotor
     {
         return $this->nombre;
     }
-}
+	
+	public function serialize(){
+		$data = array(
+			'id' => $this->getId(),
+			'nombre' => $this->getNombre()
+		);
 
+		return json_encode($data);
+	}
+}
