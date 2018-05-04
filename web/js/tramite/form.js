@@ -2,6 +2,8 @@ var totalEnRegistro=0;
 var totalGestoria=0;
 var total=0;
 
+var registrosDelAutomotorIds = _.fromPairs(_.map(registrosDelAutomotor, function(o){return [o.nombre,o.id]}));
+
 $(document).ready(function(){
 	initValues();
 
@@ -57,6 +59,16 @@ $(document).ready(function(){
 
 	updateTable('gastosAdicionalesTable');
 	updateTable('depositosTable');
+	
+	$('input.autocomplete').autocomplete({
+		data: _.fromPairs(_.map(registrosDelAutomotor, function(o){return [o.nombre,null]})),
+		limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+		onAutocomplete: function(val) {
+			$('#appbundle_tramite_registroDelAutomotor').val(registrosDelAutomotorIds[val]);
+			$('#appbundle_tramite_registroDelAutomotor').material_select();
+		},
+		minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+	});
 });
 
 function getValue(value){

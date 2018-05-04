@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
@@ -148,9 +149,12 @@ class TramiteController extends Controller
             return $this->redirectToRoute('tramite_index');
         }
 
+		$registrosDelAutomotor = $this->getSerializedRegistrosDelAutomotor();
+
         return $this->render('tramite/form.html.twig', array(
             'tramite' => $tramite,
             'form' => $form->createView(),
+			'registrosDelAutomotor' => $registrosDelAutomotor,
         ));
     }
 
@@ -202,6 +206,8 @@ class TramiteController extends Controller
 		if($request->query->get('status') == 'ok'){
 			$msg="Los cambios han sido guardados";
 		}
+		
+		$registrosDelAutomotor = $this->getSerializedRegistrosDelAutomotor();
 
 		return $this->render('tramite/form.html.twig', array(
 			'tramite' => $tramite,
@@ -209,6 +215,7 @@ class TramiteController extends Controller
 			'edit' => true,
 			'estados' => $this->getEstados(),
 			'msg' => $msg,
+			'registrosDelAutomotor' => $registrosDelAutomotor,
 		));
     }
 
@@ -364,5 +371,16 @@ class TramiteController extends Controller
 			"Retirado",
 			"Enviado",
 		];
+	}
+	
+	private function getSerializedRegistrosDelAutomotor(){
+		$registrosDelAutomotor = $this->getDoctrine()->getManager()->getRepository('AppBundle:RegistroDelAutomotor')->findAll();
+		
+		$normalizer = new ObjectNormalizer();
+		$encoder = new JsonEncoder();
+
+		$serializer = new Serializer(array($normalizer), array($encoder));
+		$content=$serializer->serialize($registrosDelAutomotor, 'json');
+		return $content;
 	}
 }
