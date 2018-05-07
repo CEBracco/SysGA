@@ -57,13 +57,13 @@
                         {{ form_label(form.concesionaria) }}
                     </div>
                 </div>
-                <div class="col m6 collapse">
+                <div class="col m6">
                     <div class="input-field">
                         {{ form_widget(form.registroDelAutomotor) }}
                         {{ form_label(form.registroDelAutomotor) }}
                     </div>
                 </div>
-				<div class="col m6">
+				<div class="col m6 collapse">
 					<div class="row">
 						<div class="input-field">
 							<input type="text" id="registrodelautomotor-autofill-input" value="{{tramite.registroDelAutomotor ? tramite.registroDelAutomotor.nombre : ''}}" class="autocomplete" autocomplete="off">
